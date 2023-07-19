@@ -9,12 +9,14 @@ export default function Header(
 ) {
   return (
     <header class="SiteBar">
-      <div class="flex flex-row gap-4">
+      <div class="SiteIdentification">
         <a href="/">
           <Logo height="48" />
         </a>
         <div>
-          <h1 class="text-3xl">{SITE_NAME}</h1>
+          <h1>
+            <a href="/">{SITE_NAME}</a>
+          </h1>
           <h2>{SITE_DESCRIPTION}</h2>
         </div>
       </div>
@@ -27,10 +29,8 @@ export default function Header(
           href="/account/notifications"
           aria-label="Notifications"
         >
-          <Bell class="w-6 h-6" />
-          {props.hasNotifications && (
-            <CircleFilled class="absolute top-0.5 right-0.5 text-pink-700 w-2 h-2" />
-          )}
+          <Bell />
+          {props.hasNotifications && <CircleFilled class="NotificationIcon" />}
         </a>
         <a href="/submit">Submit</a>
       </nav>

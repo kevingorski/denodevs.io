@@ -5,6 +5,7 @@ export function GitHub(props: JSX.SVGAttributes<SVGSVGElement>) {
   return (
     <svg
       {...props}
+      class="Icon"
       fill="currentColor"
       viewBox="0 0 24 24"
     >
@@ -21,6 +22,7 @@ export function Bell(props: JSX.SVGAttributes<SVGSVGElement>) {
   return (
     <svg
       {...props}
+      class="Icon"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       stroke-width="2"
@@ -40,6 +42,7 @@ export function CircleFilled(props: JSX.SVGAttributes<SVGSVGElement>) {
   return (
     <svg
       {...props}
+      class="Icon"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       stroke-width="2"
@@ -61,6 +64,7 @@ export function Check(props: JSX.SVGAttributes<SVGSVGElement>) {
   return (
     <svg
       {...props}
+      class="Icon"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

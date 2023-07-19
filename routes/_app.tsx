@@ -17,17 +17,14 @@ export default function App(props: AppProps) {
           description={props.data?.description ?? SITE_DESCRIPTION}
           href={props.url.href}
         />
+        <link href="/styles.css" rel="stylesheet" />
       </Head>
-      <div class="dark:bg-gray-900">
-        <div class="flex flex-col min-h-screen mx-auto max-w-7xl w-full dark:text-white">
-          <Header
-            sessionId={props.data?.sessionId}
-            hasNotifications={props.data?.hasNotifications}
-          />
-          <props.Component />
-          <Footer />
-        </div>
-      </div>
+      <Header
+        sessionId={props.data?.sessionId}
+        hasNotifications={props.data?.hasNotifications}
+      />
+      <props.Component />
+      <Footer />
     </>
   );
 }
