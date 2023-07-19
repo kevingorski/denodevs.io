@@ -3,7 +3,6 @@ import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { State } from "@/routes/_middleware.ts";
 import ItemSummary from "@/components/ItemSummary.tsx";
 import PageSelector from "@/components/PageSelector.tsx";
-import { BUTTON_STYLES, INPUT_STYLES } from "@/utils/constants.ts";
 import { calcLastPage, calcPageNum, PAGE_LENGTH } from "@/utils/pagination.ts";
 import {
   type Comment,
@@ -121,12 +120,11 @@ function CommentInput() {
   return (
     <form method="post">
       <textarea
-        class={`${INPUT_STYLES} w-full`}
         type="text"
         name="text"
         required
       />
-      <button type="submit" class={BUTTON_STYLES}>Comment</button>
+      <button type="submit">Comment</button>
     </form>
   );
 }

@@ -1,7 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { State } from "@/routes/_middleware.ts";
-import { BUTTON_STYLES } from "@/utils/constants.ts";
 import {
   formatAmountForDisplay,
   isProductWithPrice,
@@ -88,10 +87,7 @@ function FreePlanCard() {
       </div>
 
       <div class="text-center">
-        <a
-          href="/account/manage"
-          class={`${BUTTON_STYLES} w-full rounded-md block`}
-        >
+        <a href="/account/manage">
           Manage
         </a>
       </div>
@@ -140,18 +136,12 @@ function PremiumPlanCard(
       <div class="text-center">
         {props.isSubscribed
           ? (
-            <a
-              class={`${BUTTON_STYLES} w-full rounded-md block`}
-              href="/account/manage"
-            >
+            <a href="/account/manage">
               Manage
             </a>
           )
           : (
-            <a
-              class={`${BUTTON_STYLES} w-full rounded-md block`}
-              href="/account/upgrade"
-            >
+            <a href="/account/upgrade">
               Upgrade
             </a>
           )}
@@ -192,10 +182,7 @@ function EnterprisePricingCard() {
       </div>
 
       <div class="text-center">
-        <a
-          href="mailto:andy@deno.com"
-          class={`${BUTTON_STYLES} w-full rounded-md block`}
-        >
+        <a href="mailto:andy@deno.com">
           Contact us
         </a>
       </div>

@@ -12,7 +12,7 @@ export default function App(props: AppProps) {
       <Head>
         <Meta
           title={props.data?.title
-            ? `${props.data.title} ▲ ${SITE_NAME}`
+            ? `${props.data.title} 🦕💼 ${SITE_NAME}`
             : SITE_NAME}
           description={props.data?.description ?? SITE_DESCRIPTION}
           href={props.url.href}

@@ -1,6 +1,5 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Handlers } from "$fresh/server.ts";
-import { BUTTON_STYLES, INPUT_STYLES } from "@/utils/constants.ts";
 import type { State } from "@/routes/_middleware.ts";
 import {
   createItem,
@@ -64,20 +63,18 @@ export default function SubmitPage() {
       </h1>
       <form class="space-y-2" method="post">
         <input
-          class={`${INPUT_STYLES} w-full`}
           type="text"
           name="title"
           required
           placeholder="Title"
         />
         <input
-          class={`${INPUT_STYLES} w-full`}
           type="url"
           name="url"
           required
           placeholder="URL"
         />
-        <button class={`${BUTTON_STYLES} block w-full`} type="submit">
+        <button type="submit">
           Submit
         </button>
       </form>

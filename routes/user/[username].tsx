@@ -15,7 +15,6 @@ import {
 } from "@/utils/db.ts";
 import { pluralize } from "@/utils/display.ts";
 import { GitHub } from "@/components/Icons.tsx";
-import { LINK_STYLES } from "@/utils/constants.ts";
 
 export interface UserData extends State {
   user: User;
@@ -110,7 +109,6 @@ export default function UserPage(props: PageProps<UserData>) {
           href={`https://github.com/${props.data.user.login}`}
           alt={`to ${props.data.user.login}'s GitHub profile`}
           aria-label={`${props.data.user.login}'s GitHub profile`}
-          class={LINK_STYLES}
           target="_blank"
         >
           <GitHub class="text-sm w-6" />

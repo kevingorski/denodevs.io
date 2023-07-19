@@ -1,13 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import { INPUT_STYLES } from "@/utils/constants.ts";
-
 export default function PageInput(
   props: { lastPage: number; currentPage: number },
 ) {
   return (
     <input
       id="current_page"
-      class={INPUT_STYLES}
       type="number"
       name="page"
       min="1"

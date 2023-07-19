@@ -1,10 +1,7 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Handlers, PageProps } from "$fresh/server.ts";
-import { INPUT_STYLES } from "@/utils/constants.ts";
 import { calcLastPage, calcPageNum, PAGE_LENGTH } from "@/utils/pagination.ts";
 import type { State } from "./_middleware.ts";
-import ItemSummary from "@/components/ItemSummary.tsx";
-import PageSelector from "@/components/PageSelector.tsx";
 import {
   compareScore,
   getAllItems,
@@ -57,35 +54,33 @@ export const handler: Handlers<HomePageData, State> = {
   },
 };
 
-function TimeSelector() {
-  return (
-    <div class="flex justify-center my-4 gap-2">
-      {/* These links do not preserve current URL queries. E.g. if ?page=2, that'll be removed once one of these links is clicked */}
-      <a class={INPUT_STYLES} href="/?time-ago=week">Last Week</a>
-      <a class={INPUT_STYLES} href="/?time-ago=month">Last Month</a>
-      <a class={INPUT_STYLES} href="/?time-ago=all">All time</a>
-    </div>
-  );
-}
-
 export default function HomePage(props: PageProps<HomePageData>) {
   return (
     <main class="flex-1 p-4">
-      <TimeSelector />
-      {props.data.items.map((item, index) => (
-        <ItemSummary
-          item={item}
-          isVoted={props.data.areVoted[index]}
-          user={props.data.itemsUsers[index]}
-        />
-      ))}
-      {props.data.lastPage > 1 && (
-        <PageSelector
-          currentPage={calcPageNum(props.url)}
-          lastPage={props.data.lastPage}
-          timeSelector={calcTimeAgoFilter(props.url) ?? undefined}
-        />
-      )}
+      <h1 class="text-2xl">Welcome to the Deno Devs reverse job board beta!</h1>
+      <h2 class="text-xl">What is Deno?</h2>
+      <p>
+        Deno is a modern JavaScript runtime built on Chrome's V8 JavaScript
+        engine.
+      </p>
+      <h2 class="text-xl">What is a reverse job board?</h2>
+      <p>
+        Instead of employers posting job openings, developers fill out their
+        profiles and employers apply to them.
+      </p>
+      <h2 class="text-xl">What is a beta?</h2>
+      <p>
+        While in beta, the product is still in active development and may be
+        missing key features.
+      </p>
+      <p>
+        Your feedback will help set the direction for the product as those
+        features are built.
+      </p>
+      <h2 class="text-xl">What can I expect if I sign up as a developer?</h2>
+      <p>A great experience</p>
+      <h2 class="text-xl">What can I expect if I sign up as an employer?</h2>
+      <p>A great experience</p>
     </main>
   );
 }

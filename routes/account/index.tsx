@@ -1,7 +1,6 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
-import { BUTTON_STYLES } from "@/utils/constants.ts";
 import { ComponentChild } from "preact";
 import { stripe } from "@/utils/payments.ts";
 
@@ -65,10 +64,7 @@ export default function AccountPage(props: PageProps<AccountState>) {
           )}
         </Row>
       </ul>
-      <a
-        href="/signout"
-        class={`${BUTTON_STYLES} block text-center mt-8`}
-      >
+      <a href="/signout">
         Sign out
       </a>
     </main>
