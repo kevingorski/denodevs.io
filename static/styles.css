@@ -1,19 +1,32 @@
+:root {
+  --background-h: 157;
+  --background-s: 33%;
+  --background-l: 30%;
+  --background-color: hsl(var(--background-h), var(--background-s), var(--background-l));
+  --text-color: hsl(0, 0%, 93%);
+  --highlight-h: 43;
+  --highlight-s: 84%;
+  --highlight-l: 70%;
+  --highlight-color: hsl(var(--highlight-h), var(--highlight-s), var(--highlight-l));
+  --highlight-active-color: hsl(var(--highlight-h), var(--highlight-s), 50%);
+}
+
 body {
-  background-color: #3B755F;
-  color: #eee;
+  background-color: var(--background-color);
+  color: var(--text-color);
   margin: 1rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #F2CB6C;
+h1 {
+  color: var(--highlight-color);
 }
 
 a, a:link, a:visited {
-  color: #F2CB6C;
+  color: var(--highlight-color);
 }
 
 a:hover, a:focus, a:active {
-  color: #D2CB9C;
+  color: var(--highlight-active-color);
 }
 
 h1 a {
