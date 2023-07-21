@@ -57,30 +57,23 @@ export const handler: Handlers<HomePageData, State> = {
 export default function HomePage(props: PageProps<HomePageData>) {
   return (
     <main>
-      <h1>Welcome to the Deno Devs reverse job board beta!</h1>
-      <h2>What is Deno?</h2>
+      <h1>
+        The reverse job board for <a href="https://deno.com">Deno</a> developers
+      </h1>
+
       <p>
-        Deno is a modern JavaScript runtime built on Chrome's V8 JavaScript
-        engine.
-      </p>
-      <h2>What is a reverse job board?</h2>
-      <p>
-        Instead of employers posting job openings, developers fill out their
-        profiles and employers apply to them.
-      </p>
-      <h2>What is a beta?</h2>
-      <p>
-        While in beta, the product is still in active development and may be
-        missing key features.
+        DenoDevs helps developers find their next job, gig, or project working
+        with Deno.
       </p>
       <p>
-        Your feedback will help set the direction for the product as those
-        features are built.
+        Just fill out a profile about yourself and what you're looking for and
+        interested companies and projects will reach out to you.
       </p>
-      <h2>What can I expect if I sign up as a developer?</h2>
-      <p>A great experience</p>
-      <h2>What can I expect if I sign up as an employer?</h2>
-      <p>A great experience</p>
+
+      <div>
+        <button>Get started</button>
+        <button>Learn more</button>
+      </div>
     </main>
   );
 }

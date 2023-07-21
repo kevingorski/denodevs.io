@@ -1,20 +1,39 @@
 :root {
   --background-h: 157;
   --background-s: 33%;
-  --background-l: 30%;
+  --background-l: 90%;
   --background-color: hsl(var(--background-h), var(--background-s), var(--background-l));
-  --text-color: hsl(0, 0%, 93%);
+  --text-color: hsl(0, 0%, 20%);
+
   --highlight-h: 43;
-  --highlight-s: 84%;
-  --highlight-l: 70%;
+  --highlight-s: 90%;
+  --highlight-l: 40%;
   --highlight-color: hsl(var(--highlight-h), var(--highlight-s), var(--highlight-l));
-  --highlight-active-color: hsl(var(--highlight-h), var(--highlight-s), 50%);
+  --highlight-active-color: hsl(var(--highlight-h), var(--highlight-s), calc(var(--highlight-l) + 20%)); 
+
+
+  --bar-background-h: 157;
+  --bar-background-s: 33%;
+  --bar-background-l: 30%;
+  --bar-background-color: hsl(var(--bar-background-h), var(--bar-background-s), var(--bar-background-l));
+  --bar-text-color: hsl(0, 0%, 93%);
+  --bar-highlight-l: calc(var(--highlight-l) + 30%);
+
+  --block-spacing: 1rem 2rem;
 }
 
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+  margin: var(--block-spacing);
 }
 
 h1 {
@@ -26,25 +45,31 @@ a, a:link, a:visited {
 }
 
 a:hover, a:focus, a:active {
+  background-color: var(--bar-background-color);
+  outline: 0.25rem solid var(--bar-background-color);
   color: var(--highlight-active-color);
 }
 
-h1 a {
+.SiteBar h1 a {
   text-decoration: none;
 }
 
 .SiteBar {
+  background-color: var(--bar-background-color);
+  color: var(--bar-text-color);
   display: flex;
   justify-content: space-between;
+  padding: var(--block-spacing);
 }
 
-.SiteIdentification, .SiteNav {
+.SiteNav {
+  align-items: center;
   display: flex;
   gap: 1rem;
 }
 
-.Logo {
-  margin: 1rem;
+header h1 {
+  margin: 0;
 }
 
 .Icon {
