@@ -51,6 +51,10 @@ export default function AccountPage(props: PageProps<AccountState>) {
           text={props.data.user.login}
         />
         <Row
+          title="Email"
+          text={props.data.user.email}
+        />
+        <Row
           title="Subscription"
           text={props.data.user.isSubscribed ? "Premium 🦕" : "Free"}
         >
