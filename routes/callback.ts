@@ -21,6 +21,12 @@ interface GitHubUser {
   id: number;
   login: string;
   avatar_url: string;
+  html_url: string;
+  gravatar_id: string | null;
+  name: string | null;
+  company: string | null;
+  location: string | null;
+  bio: string | null;
   email: string;
 }
 
@@ -60,6 +66,7 @@ export const handler: Handlers<any, State> = {
       const user: User = {
         id: githubUser.id.toString(),
         login: githubUser.login,
+        email: githubUser.email,
         avatarUrl: githubUser.avatar_url,
         stripeCustomerId,
         sessionId,

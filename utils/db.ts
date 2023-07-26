@@ -431,6 +431,7 @@ export async function getVotedItemsByUser(userId: string) {
 export interface User {
   id: string;
   login: string;
+  email: string;
   avatarUrl: string;
   sessionId: string;
   stripeCustomerId?: string;
