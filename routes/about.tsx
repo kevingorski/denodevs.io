@@ -20,22 +20,61 @@ export default function AboutPage() {
         Deno.
       </h2>
       <p>
-        The community of Deno developers is growing, but it's still rare to find
-        job listings and contracts to work with Deno. This is an attempt to
-        solve one part of the chicken and egg situation by gathering developer
-        profiles.
+        The Deno developer community is growing, but it's still rare to find
+        relevant jobs and contracts. Stop searching for a needle in a haystack,
+        let DenoDevs help!
       </p>
+      <ol>
+        <li>
+          <a href="/start/developer">Create your free developer profile</a>
+        </li>
+        <li>
+          DenoDevs promotes your profile to employers that match your
+          preferences
+        </li>
+        <li>
+          Employers reach out to you with jobs or contracts
+        </li>
+      </ol>
       <p>
-        Inspired by <a href="https://railsdevs.com/">RailsDevs</a>.
+        <a href="/start/developer">Create your free developer profile now!</a>
       </p>
-      <p>Built with Deno/Fresh/DenoDeploy.</p>
 
       <h2>Are you looking to hire a Deno developer?</h2>
       <p>Find out more here!</p>
 
       <div>
-        <a href="/start">Get started</a>
+        <a href="/start/employer">
+          Sign up to get matched with your ideal Deno developers!
+        </a>
       </div>
+
+      <h2>Made with Deno goodness</h2>
+
+      <p>
+        <a href="https://github.com/kevingorski/denodevs_com">
+          DenoDevs is open source!
+        </a>
+      </p>
+
+      <ol>
+        <li>
+          <a href="https://fresh.deno.dev">
+            <img
+              width="197"
+              height="37"
+              src="https://fresh.deno.dev/fresh-badge.svg"
+              alt="Made with Fresh"
+            />
+          </a>
+        </li>
+        <li>
+          <a href="https://deno.com/saaskit">Deno SaaSKit</a>
+        </li>
+        <li>
+          <a href="https://deno.com/deploy">Deno Deploy</a>
+        </li>
+      </ol>
     </main>
   );
 }

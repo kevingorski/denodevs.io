@@ -2,12 +2,17 @@
 import { SITE_NAME } from "@/utils/constants.ts";
 import { GitHub } from "./Icons.tsx";
 
-export default function Footer() {
+export default function Footer(
+  props: { sessionId?: string },
+) {
   return (
     <footer class="SiteBar">
       <p>© {SITE_NAME}</p>
       <nav class="SiteNav">
-        <a href="/stats">Stats</a>
+        {props.sessionId
+          ? <a href="/account">Account</a>
+          : <a href="/start">Sign in</a>}
+        <a href="/about">About</a>
         <a href="/blog">Blog</a>
         <a
           href="https://github.com/denoland/saaskit"
@@ -15,14 +20,6 @@ export default function Footer() {
           aria-label="Deno SaaSKit repo on GitHub"
         >
           <GitHub />
-        </a>
-        <a href="https://fresh.deno.dev">
-          <img
-            width="197"
-            height="37"
-            src="https://fresh.deno.dev/fresh-badge.svg"
-            alt="Made with Fresh"
-          />
         </a>
       </nav>
     </footer>

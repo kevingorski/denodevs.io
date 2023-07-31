@@ -21,10 +21,9 @@ export default function App(props: AppProps) {
       </Head>
       <Header
         sessionId={props.data?.sessionId}
-        hasNotifications={props.data?.hasNotifications}
       />
       <props.Component />
-      <Footer />
+      <Footer sessionId={props.data?.sessionId} />
     </>
   );
 }

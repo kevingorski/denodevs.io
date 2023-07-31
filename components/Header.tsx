@@ -1,10 +1,9 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { SITE_NAME } from "@/utils/constants.ts";
 import { stripe } from "@/utils/payments.ts";
-import { Bell, CircleFilled } from "./Icons.tsx";
 
 export default function Header(
-  props: { sessionId?: string; hasNotifications: boolean },
+  props: { sessionId?: string },
 ) {
   return (
     <header class="SiteBar">
@@ -16,6 +15,7 @@ export default function Header(
         {props.sessionId
           ? <a href="/account">Account</a>
           : <a href="/start">Sign in</a>}
+        <a href="/about">About</a>
       </nav>
     </header>
   );
