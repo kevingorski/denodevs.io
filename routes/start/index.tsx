@@ -1,13 +1,17 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
-import type { Handlers } from "$fresh/server.ts";
+import type { Handlers, PageProps } from "$fresh/server.ts";
+import { State } from "@/routes/_middleware.ts";
 
-export const handler: Handlers = {
+export const handler: Handlers<State, State> = {
   async GET(req, ctx) {
-    return ctx.render();
+    return ctx.render(ctx.state);
   },
 };
 
-export default function StartPage() {
+export default function StartPage(props: PageProps<State>) {
+  const devMessage = (
+    <a href="/start/developer">I'm a Deno developer looking for work</a>
+  );
   return (
     <main>
       <h1>
@@ -15,7 +19,7 @@ export default function StartPage() {
       </h1>
 
       <h2>
-        <a href="/start/developer">I'm a Deno developer looking for work</a>
+        {props.state.sessionId ? <del>{devMessage}</del> : devMessage}
       </h2>
 
       <h2>

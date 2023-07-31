@@ -433,6 +433,11 @@ export interface User {
   login: string;
   email: string;
   avatarUrl: string;
+  gravatarId: string | null;
+  name: string | null;
+  company: string | null;
+  location: string | null;
+  bio: string | null;
   sessionId: string;
   stripeCustomerId?: string;
   // The below properties can be automatically generated upon comment creation

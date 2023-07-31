@@ -1,9 +1,10 @@
 // Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { Handlers } from "$fresh/server.ts";
+import type { State } from "@/routes/_middleware.ts";
 
-export const handler: Handlers = {
+export const handler: Handlers<State, State> = {
   async GET(req, ctx) {
-    return ctx.render();
+    return ctx.render(ctx.state);
   },
 };
 

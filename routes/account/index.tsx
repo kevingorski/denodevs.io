@@ -20,8 +20,8 @@ interface RowProps {
 
 function Row(props: RowProps) {
   return (
-    <li class="py-4">
-      <div class="flex flex-wrap justify-between">
+    <li>
+      <div>
         <span>
           <strong>{props.title}</strong>
         </span>
@@ -38,12 +38,15 @@ export default function AccountPage(props: PageProps<AccountState>) {
   const action = props.data.user.isSubscribed ? "Manage" : "Upgrade";
 
   return (
-    <main class="max-w-lg m-auto w-full flex-1 p-4 flex flex-col justify-center">
+    <main>
+      <aside>
+        <h1>Welcome to your DenoDevs profile!</h1>
+        <p>Soon you'll be able to update all of this.</p>
+      </aside>
       <img
         src={props.data.user?.avatarUrl}
         alt="User Avatar"
         crossOrigin="anonymous"
-        class="max-w-[50%] self-center rounded-full aspect-square mb-4 md:mb-6"
       />
       <ul>
         <Row
@@ -67,6 +70,26 @@ export default function AccountPage(props: PageProps<AccountState>) {
             </a>
           )}
         </Row>
+        <Row
+          title="Name"
+          text={props.data.user.name || "N/A"}
+        />
+        <Row
+          title="Company"
+          text={props.data.user.company || "N/A"}
+        />
+        <Row
+          title="Location"
+          text={props.data.user.location || "N/A"}
+        />
+        <Row
+          title="Bio"
+          text={props.data.user.bio || "N/A"}
+        />
+        <Row
+          title="Gravatar Id"
+          text={props.data.user.gravatarId || "N/A"}
+        />
       </ul>
       <a href="/signout">
         Sign out

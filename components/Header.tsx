@@ -15,15 +15,7 @@ export default function Header(
         {stripe ? <a href="/pricing">Pricing</a> : null}
         {props.sessionId
           ? <a href="/account">Account</a>
-          : <a href="/signin">Sign in</a>}
-        <a
-          href="/account/notifications"
-          aria-label="Notifications"
-        >
-          <Bell />
-          {props.hasNotifications && <CircleFilled class="NotificationIcon" />}
-        </a>
-        <a href="/submit">Submit</a>
+          : <a href="/start">Sign in</a>}
       </nav>
     </header>
   );
