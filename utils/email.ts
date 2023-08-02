@@ -1,5 +1,5 @@
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
-const defaultFromAddress = "contact@oi.denodevs.io";
+const defaultFromAddress = "DenoDevs <notifications@oi.denodevs.io>";
 
 export interface EmailMessage {
   from?: string;
