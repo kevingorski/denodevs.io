@@ -16,6 +16,7 @@ import {
   deleteRedirectUrlCookie,
   getRedirectUrlCookie,
 } from "@/utils/redirect.ts";
+import { sendEmail } from "@/utils/email.ts";
 
 interface GitHubUser {
   id: number;
@@ -78,6 +79,12 @@ export const handler: Handlers<any, State> = {
         ...newUserProps(),
       };
       await createUser(user);
+      await sendEmail({
+        to: "kevin.gorski@gmail.com",
+        subject: "Hello From DenoDevs",
+        html:
+          "<h1>Header</h1><p>Congrats on sending your <strong>first email</strong>!</p>",
+      });
     } else {
       await deleteUserBySession(sessionId);
       await updateUser({ ...user, sessionId });
