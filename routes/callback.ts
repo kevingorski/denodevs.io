@@ -80,10 +80,10 @@ export const handler: Handlers<any, State> = {
       };
       await createUser(user);
       await sendEmail({
-        to: "kevin.gorski@gmail.com",
-        subject: "Hello From DenoDevs",
+        to: user.email,
+        subject: "Welcome to DenoDevs",
         html:
-          "<h1>Header</h1><p>Congrats on sending your <strong>first email</strong>!</p>",
+          "<h1>Welcome to DenoDevs</h1><p>You're account has been creaated...</p>",
       });
     } else {
       await deleteUserBySession(sessionId);
