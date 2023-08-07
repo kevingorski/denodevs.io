@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
 import {

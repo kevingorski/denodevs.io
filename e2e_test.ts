@@ -1,5 +1,3 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
-
 import { createHandler } from "$fresh/server.ts";
 import manifest from "@/fresh.gen.ts";
 import {

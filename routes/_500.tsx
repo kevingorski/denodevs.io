@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { ErrorPageProps } from "$fresh/server.ts";
 
 export default function Error500Page(props: ErrorPageProps) {

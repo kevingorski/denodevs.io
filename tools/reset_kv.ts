@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { kv } from "@/utils/db.ts";
 
 export async function resetKv() {

@@ -1,4 +1,3 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import { SITE_NAME } from "@/utils/constants.ts";
 import { stripe } from "@/utils/payments.ts";
 

@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 // Description: Prints kv to stdout
 // Usage: deno run -A --unstable tools/dump_kv.ts
 import { kv } from "@/utils/db.ts";

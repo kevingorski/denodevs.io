@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { AppProps } from "$fresh/server.ts";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";

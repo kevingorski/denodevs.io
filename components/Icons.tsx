@@ -1,4 +1,3 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import type { JSX } from "preact";
 
 export function GitHub(props: JSX.SVGAttributes<SVGSVGElement>) {

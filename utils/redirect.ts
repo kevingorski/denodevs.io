@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import type { RedirectStatus, Status } from "std/http/http_status.ts";
 import { deleteCookie, getCookies, setCookie } from "std/http/cookie.ts";
 

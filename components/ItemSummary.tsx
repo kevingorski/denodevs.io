@@ -1,4 +1,3 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
 import VoteButton from "@/islands/VoteButton.tsx";
 import type { Item, User } from "@/utils/db.ts";
 import UserPostedAt from "./UserPostedAt.tsx";

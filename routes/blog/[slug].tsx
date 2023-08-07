@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { CSS, render } from "$gfm";
 import { getPost, Post } from "@/utils/posts.ts";

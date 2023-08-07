@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import PageInput from "@/islands/PageInput.tsx";
 
 export default function PageSelector(

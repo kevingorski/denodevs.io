@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { calcLastPage, calcPageNum } from "./pagination.ts";
 import { assertEquals } from "std/testing/asserts.ts";
 

@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 export default function NotFoundPage() {
   return (
     <main class="flex-1 flex flex-col justify-center p-4 text-center space-y-4">

@@ -1,4 +1,4 @@
-// Copyright 2023 the Deno authors. All rights reserved. MIT license.
+
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { getSessionId } from "kv_oauth";
 import { getUserBySession, ifUserHasNotifications } from "@/utils/db.ts";
