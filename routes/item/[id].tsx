@@ -21,7 +21,7 @@ import {
   type User,
 } from "@/utils/db.ts";
 import UserPostedAt from "@/components/UserPostedAt.tsx";
-import { redirect, redirectToLogin } from "@/utils/redirect.ts";
+import { redirect, redirectToDevLogin } from "@/utils/redirect.ts";
 
 interface ItemPageData extends State {
   user: User;
@@ -75,7 +75,7 @@ export const handler: Handlers<ItemPageData, State> = {
   },
   async POST(req, ctx) {
     if (!ctx.state.sessionId) {
-      return redirectToLogin(req.url);
+      return redirectToDevLogin(req.url);
     }
 
     const form = await req.formData();

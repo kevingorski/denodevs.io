@@ -85,3 +85,7 @@ header h1 {
   height: 0.25rem;
   width: 0.25rem;
 }
+
+label {
+  display: block;
+}

@@ -3,7 +3,7 @@ import type { Handlers } from "$fresh/server.ts";
 import type { State } from "@/routes/_middleware.ts";
 
 export const handler: Handlers<State, State> = {
-  async GET(req, ctx) {
+  GET(_, ctx) {
     return ctx.render(ctx.state);
   },
 };

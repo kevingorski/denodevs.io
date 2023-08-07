@@ -16,7 +16,7 @@ import {
   deleteRedirectUrlCookie,
   getRedirectUrlCookie,
 } from "@/utils/redirect.ts";
-import { sendEmail } from "@/utils/email.ts";
+import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
 
 interface GitHubUser {
   id: number;
@@ -79,12 +79,7 @@ export const handler: Handlers<any, State> = {
         ...newUserProps(),
       };
       await createUser(user);
-      await sendEmail({
-        to: user.email,
-        subject: "Welcome to DenoDevs",
-        html:
-          "<h1>Welcome to DenoDevs</h1><p>You're account has been creaated...</p>",
-      });
+      await sendWelcomeDevEmailMessage(user);
     } else {
       await deleteUserBySession(sessionId);
       await updateUser({ ...user, sessionId });

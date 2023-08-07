@@ -427,6 +427,128 @@ export async function getVotedItemsByUser(userId: string) {
   return await getValues<Item>({ prefix: ["voted_items_by_user", userId] });
 }
 
+// Employer
+export interface Employer {
+  email: string;
+  name: string;
+  company: string;
+  sessionId: string;
+  sessionGenerated: number;
+}
+
+export type NewEmployer =
+  & Omit<
+    Employer,
+    "sessionId" | "sessionGenerated"
+  >
+  & { sessionId?: string; sessionGenerated?: number };
+
+export interface EmployerLoginToken {
+  token: string;
+  sessionId: string;
+  expires: number;
+}
+
+const TopLevelKeys = {
+  employers: "employers",
+  employers_by_session: "employers_by_session",
+  employer_login_tokens: "employer_login_tokens",
+};
+
+function generateSessionId(): { sessionId: string; sessionGenerated: number } {
+  return {
+    sessionId: crypto.randomUUID(),
+    sessionGenerated: Date.now(),
+  };
+}
+
+export async function createEmployer(
+  newEmployer: NewEmployer,
+): Promise<Employer> {
+  const employersKey = [TopLevelKeys.employers, newEmployer.email];
+  const employer = {
+    ...newEmployer,
+    ...generateSessionId(),
+  };
+  const employersBySessionKey = [
+    TopLevelKeys.employers_by_session,
+    employer.sessionId,
+  ];
+
+  const atomicOp = kv.atomic();
+  const res = await atomicOp
+    .check({ key: employersKey, versionstamp: null })
+    .check({ key: employersBySessionKey, versionstamp: null })
+    .set(employersKey, employer)
+    .set(employersBySessionKey, employer)
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to create employer: ${employer}`);
+  return employer;
+}
+
+export async function getEmployer(email: string) {
+  return await getValue<Employer>([TopLevelKeys.employers, email]);
+}
+
+export async function updateEmployerSession(employer: Employer) {
+  const atomicOp = kv.atomic();
+  const updatedEmployer = {
+    ...employer,
+    ...generateSessionId(),
+  };
+
+  const res = await atomicOp
+    .set([TopLevelKeys.employers, employer.email], updatedEmployer)
+    .set(
+      [TopLevelKeys.employers_by_session, employer.sessionId],
+      updatedEmployer,
+    )
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to update user: ${employer}`);
+}
+
+export async function getEmployerBySession(sessionId: string) {
+  const employersBySessionKey = [TopLevelKeys.employers_by_session, sessionId];
+  return await getValue<Employer>(employersBySessionKey, {
+    consistency: "eventual",
+  }) ?? await getValue<Employer>(employersBySessionKey);
+}
+
+export async function createEmployerLoginToken(
+  employer: Employer,
+): Promise<EmployerLoginToken> {
+  const loginToken = {
+    token: crypto.randomUUID(),
+    sessionId: employer.sessionId,
+    expires: Date.now() + (10 * 60 * 1000),
+  };
+  const employerLoginTokensKey = [
+    TopLevelKeys.employer_login_tokens,
+    loginToken.token,
+  ];
+  const res = await kv.set(employerLoginTokensKey, loginToken);
+  if (!res.ok) {
+    throw new Error(`Failed to create employer login token: ${loginToken}`);
+  }
+  return loginToken;
+}
+
+export async function getEmployerLoginToken(token: string) {
+  const employerLoginTokensKey = [
+    TopLevelKeys.employer_login_tokens,
+    token,
+  ];
+  return await getValue<EmployerLoginToken>(employerLoginTokensKey, {
+    consistency: "eventual",
+  }) ?? await getValue<EmployerLoginToken>(employerLoginTokensKey);
+}
+
+export async function deleteEmployerLoginToken(token: string) {
+  await kv.delete([TopLevelKeys.employer_login_tokens, token]);
+}
+
 // User
 export interface User {
   id: string;

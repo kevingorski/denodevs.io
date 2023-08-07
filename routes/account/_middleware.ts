@@ -2,7 +2,7 @@
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { getUserBySession, User } from "@/utils/db.ts";
-import { redirectToLogin } from "@/utils/redirect.ts";
+import { redirectToDevLogin } from "@/utils/redirect.ts";
 
 export interface AccountState extends State {
   sessionId: string;
@@ -13,7 +13,7 @@ export async function handler(
   req: Request,
   ctx: MiddlewareHandlerContext<AccountState>,
 ) {
-  const redirectResponse = redirectToLogin(req.url);
+  const redirectResponse = redirectToDevLogin(req.url);
   if (!ctx.state.sessionId) return redirectResponse;
   const user = await getUserBySession(ctx.state.sessionId);
   if (!user) return redirectResponse;

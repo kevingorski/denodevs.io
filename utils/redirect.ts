@@ -21,8 +21,12 @@ export function redirect(
   });
 }
 
-export function redirectToLogin(url: string) {
+export function redirectToDevLogin(url: string) {
   return redirect(`/signin?from=${url}`);
+}
+
+export function redirectToEmployerLogin(url = "/employer") {
+  return redirect(`/employerSignIn?from=${url}`);
 }
 
 export function setRedirectUrlCookie(req: Request, res: Response) {
