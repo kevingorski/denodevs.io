@@ -1,4 +1,3 @@
-
 import type { Handlers } from "$fresh/server.ts";
 import type { State } from "./_middleware.ts";
 import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";

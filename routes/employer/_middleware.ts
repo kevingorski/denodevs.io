@@ -1,4 +1,3 @@
-
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import {
@@ -7,7 +6,7 @@ import {
   updateEmployerSession,
 } from "@/utils/db.ts";
 import { redirectToEmployerLogin } from "@/utils/redirect.ts";
-import { EMPLOYER_SESSION_COOKIE_LIFETIME } from "@/utils/constants.ts";
+import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 
 export interface EmployerState extends State {
   employerSessionId: string;
@@ -25,7 +24,7 @@ export async function handler(
   const employer = await getEmployerBySession(ctx.state.employerSessionId);
   if (!employer) return redirectResponse;
   if (
-    employer.sessionGenerated + EMPLOYER_SESSION_COOKIE_LIFETIME < Date.now()
+    employer.sessionGenerated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
   ) {
     await updateEmployerSession(employer);
     // TODO: message for expired session

@@ -1,14 +1,11 @@
-
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { getSessionId } from "kv_oauth";
-import { getUserBySession, ifUserHasNotifications } from "@/utils/db.ts";
 import type { MetaProps } from "@/components/Meta.tsx";
 import { EMPLOYER_SESSION_COOKIE_NAME } from "@/utils/constants.ts";
 import { getCookies } from "std/http/cookie.ts";
 
 export interface State extends MetaProps {
   sessionId?: string;
-  hasNotifications?: boolean;
   employerSessionId?: string;
 }
 
@@ -17,11 +14,6 @@ async function setState(req: Request, ctx: MiddlewareHandlerContext<State>) {
 
   const sessionId = await getSessionId(req);
   ctx.state.sessionId = sessionId;
-
-  if (sessionId) {
-    const user = await getUserBySession(sessionId);
-    ctx.state.hasNotifications = await ifUserHasNotifications(user!.id);
-  }
 
   const employerSessionId =
     getCookies(req.headers)[EMPLOYER_SESSION_COOKIE_NAME];

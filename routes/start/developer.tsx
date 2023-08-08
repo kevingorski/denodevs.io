@@ -1,4 +1,3 @@
-
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 

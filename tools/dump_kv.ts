@@ -1,4 +1,3 @@
-
 // Description: Prints kv to stdout
 // Usage: deno run -A --unstable tools/dump_kv.ts
 import { kv } from "@/utils/db.ts";

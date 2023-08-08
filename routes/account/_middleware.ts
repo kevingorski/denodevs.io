@@ -1,4 +1,3 @@
-
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { getUserBySession, User } from "@/utils/db.ts";

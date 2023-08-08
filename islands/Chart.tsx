@@ -1,4 +1,3 @@
-
 import {
   Chart as ChartJS,
   type ChartConfiguration,

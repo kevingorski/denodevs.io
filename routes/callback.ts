@@ -1,4 +1,3 @@
-
 import type { Handlers } from "$fresh/server.ts";
 import {
   createUser,
@@ -65,9 +64,8 @@ export const handler: Handlers<any, State> = {
         stripeCustomerId = customer.id;
       }
       const user: User = {
-        id: githubUser.id.toString(),
-        login: githubUser.login,
         email: githubUser.email,
+        login: githubUser.login,
         name: githubUser.name,
         company: githubUser.company,
         location: githubUser.location,

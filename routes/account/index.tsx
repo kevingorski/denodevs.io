@@ -1,8 +1,8 @@
-
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
 import { ComponentChild } from "preact";
 import { stripe } from "@/utils/payments.ts";
+import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 
 export const handler: Handlers<AccountState, AccountState> = {
   GET(_request, ctx) {
@@ -43,11 +43,7 @@ export default function AccountPage(props: PageProps<AccountState>) {
         <h1>Welcome to your DenoDevs profile!</h1>
         <p>Soon you'll be able to update all of this.</p>
       </aside>
-      <img
-        src={props.data.user?.avatarUrl}
-        alt="User Avatar"
-        crossOrigin="anonymous"
-      />
+      <GitHubAvatarImg login={props.data.user.login} size={24} />
       <ul>
         <Row
           title="Username"

@@ -9,7 +9,7 @@ import {
 import { deleteEmployerLoginToken, getEmployerLoginToken } from "@/utils/db.ts";
 import { setCookie } from "https://deno.land/std@0.192.0/http/cookie.ts";
 import {
-  EMPLOYER_SESSION_COOKIE_LIFETIME,
+  EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
   EMPLOYER_SESSION_COOKIE_NAME,
 } from "@/utils/constants.ts";
 
@@ -46,7 +46,7 @@ export const handler: Handlers<any, State> = {
         path: "/",
         httpOnly: true,
         secure: employerSessionCookieSecure,
-        maxAge: EMPLOYER_SESSION_COOKIE_LIFETIME,
+        maxAge: EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
         sameSite: "Lax",
         name: EMPLOYER_SESSION_COOKIE_NAME,
         value: loginToken.sessionId,

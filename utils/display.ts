@@ -1,4 +1,3 @@
-
 import { difference } from "std/datetime/difference.ts";
 
 export function pluralize(unit: number, label: string) {

@@ -1,4 +1,3 @@
-
 import type { Handlers } from "$fresh/server.ts";
 import { stripe } from "@/utils/payments.ts";
 import type { AccountState } from "./_middleware.ts";

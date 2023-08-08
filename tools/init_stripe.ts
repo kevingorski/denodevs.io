@@ -1,4 +1,3 @@
-
 import type Stripe from "stripe";
 import { SITE_DESCRIPTION } from "@/utils/constants.ts";
 import "std/dotenv/load.ts";

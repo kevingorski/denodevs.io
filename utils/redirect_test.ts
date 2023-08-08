@@ -1,4 +1,3 @@
-
 import {
   deleteRedirectUrlCookie,
   getRedirectUrlCookie,
