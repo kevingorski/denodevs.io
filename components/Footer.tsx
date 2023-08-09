@@ -1,16 +1,18 @@
 import { SITE_NAME } from "@/utils/constants.ts";
 import { GitHub } from "./Icons.tsx";
+import AuthenticationLinks from "@/components/AuthenticationLinks.tsx";
 
 export default function Footer(
-  props: { sessionId?: string },
+  props: {
+    employerSessionId?: string;
+    sessionId?: string;
+  },
 ) {
   return (
     <footer class="SiteBar">
       <p>© {SITE_NAME}</p>
       <nav class="SiteNav">
-        {props.sessionId
-          ? <a href="/account">Account</a>
-          : <a href="/start">Sign in</a>}
+        <AuthenticationLinks {...props} />
         <a href="/about">About</a>
         <a href="/blog">Blog</a>
         <a

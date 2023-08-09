@@ -19,10 +19,14 @@ export default function App(props: AppProps) {
         <link href="/styles.css" rel="stylesheet" />
       </Head>
       <Header
+        employerSessionId={props.data?.employerSessionId}
         sessionId={props.data?.sessionId}
       />
       <props.Component />
-      <Footer sessionId={props.data?.sessionId} />
+      <Footer
+        employerSessionId={props.data?.employerSessionId}
+        sessionId={props.data?.sessionId}
+      />
     </>
   );
 }

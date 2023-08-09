@@ -53,6 +53,10 @@ export default function EmployerSignUpPage() {
       </p>
 
       <p>
+        Already got an account? <a href="/employerSignIn">Sign in here</a>.
+      </p>
+
+      <p>
         DenoDevs is still in its early stages, which presents some unique
         challenges and opportunities for employers like yourself:
       </p>

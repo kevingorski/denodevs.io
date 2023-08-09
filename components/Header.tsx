@@ -1,8 +1,9 @@
 import { SITE_NAME } from "@/utils/constants.ts";
 import { stripe } from "@/utils/payments.ts";
+import AuthenticationLinks from "@/components/AuthenticationLinks.tsx";
 
 export default function Header(
-  props: { sessionId?: string },
+  props: { employerSessionId?: string; sessionId?: string },
 ) {
   return (
     <header class="SiteBar">
@@ -11,9 +12,7 @@ export default function Header(
       </h1>
       <nav class="SiteNav">
         {stripe ? <a href="/pricing">Pricing</a> : null}
-        {props.sessionId
-          ? <a href="/account">Account</a>
-          : <a href="/start">Sign in</a>}
+        <AuthenticationLinks {...props} />
         <a href="/about">About</a>
       </nav>
     </header>
