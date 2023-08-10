@@ -50,6 +50,27 @@ export function formatDate(date: Date) {
   return date.toISOString().split("T")[0];
 }
 
+enum TopLevelKeys {
+  employers = "employers",
+  employers_by_session = "employers_by_session",
+  employer_login_tokens = "employer_login_tokens",
+  employers_created_count = "employers_created_count",
+  employers_created_count_by_day = "employers_created_count_by_day",
+  users = "users",
+  users_by_session = "users_by_session",
+  users_by_stripe_customer = "users_by_stripe_customer",
+  users_created_count = "users_created_count",
+  users_created_count_by_day = "users_created_count_by_day",
+}
+
+export type AllTimeMetric =
+  | TopLevelKeys.employers_created_count
+  | TopLevelKeys.users_created_count;
+
+export type DailyMetric =
+  | TopLevelKeys.employers_created_count_by_day
+  | TopLevelKeys.users_created_count_by_day;
+
 // Employer
 export interface Employer {
   email: string;
@@ -72,12 +93,6 @@ export interface EmployerLoginToken {
   expires: number;
 }
 
-const TopLevelKeys = {
-  employers: "employers",
-  employers_by_session: "employers_by_session",
-  employer_login_tokens: "employer_login_tokens",
-};
-
 function generateSessionId(): { sessionId: string; sessionGenerated: number } {
   return {
     sessionId: crypto.randomUUID(),
@@ -93,6 +108,13 @@ export async function createEmployer(
     TopLevelKeys.employers_by_session,
     employer.sessionId,
   ];
+  const employersCreatedCountKey = [
+    TopLevelKeys.employers_created_count,
+  ];
+  const employersCreatedCountByDayKey = [
+    TopLevelKeys.employers_created_count_by_day,
+    formatDate(new Date()),
+  ];
 
   const atomicOp = kv.atomic();
   const res = await atomicOp
@@ -100,6 +122,8 @@ export async function createEmployer(
     .check({ key: employersBySessionKey, versionstamp: null })
     .set(employersKey, employer)
     .set(employersBySessionKey, employer)
+    .sum(employersCreatedCountKey, 1n)
+    .sum(employersCreatedCountByDayKey, 1n)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to create employer: ${employer}`);
@@ -208,14 +232,21 @@ export function newUserProps(): Pick<User, "isSubscribed"> {
  * ```
  */
 export async function createUser(user: User) {
-  const usersKey = ["users", user.email];
-  const usersBySessionKey = ["users_by_session", user.sessionId];
+  const usersKey = [TopLevelKeys.users, user.email];
+  const usersBySessionKey = [TopLevelKeys.users_by_session, user.sessionId];
+  const usersCreatedCountKey = [
+    TopLevelKeys.users_created_count,
+  ];
+  const usersCreatedCountByDayKey = [
+    TopLevelKeys.users_created_count_by_day,
+    formatDate(new Date()),
+  ];
 
   const atomicOp = kv.atomic();
 
   if (user.stripeCustomerId !== undefined) {
     const usersByStripeCustomerKey = [
-      "users_by_stripe_customer",
+      TopLevelKeys.users_by_stripe_customer,
       user.stripeCustomerId,
     ];
     atomicOp
@@ -228,20 +259,22 @@ export async function createUser(user: User) {
     .check({ key: usersBySessionKey, versionstamp: null })
     .set(usersKey, user)
     .set(usersBySessionKey, user)
+    .sum(usersCreatedCountKey, 1n)
+    .sum(usersCreatedCountByDayKey, 1n)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to create user: ${user}`);
 }
 
 export async function updateUser(user: User) {
-  const usersKey = ["users", user.email];
-  const usersBySessionKey = ["users_by_session", user.sessionId];
+  const usersKey = [TopLevelKeys.users, user.email];
+  const usersBySessionKey = [TopLevelKeys.users_by_session, user.sessionId];
 
   const atomicOp = kv.atomic();
 
   if (user.stripeCustomerId !== undefined) {
     const usersByStripeCustomerKey = [
-      "users_by_stripe_customer",
+      TopLevelKeys.users_by_stripe_customer,
       user.stripeCustomerId,
     ];
     atomicOp
@@ -257,15 +290,15 @@ export async function updateUser(user: User) {
 }
 
 export async function deleteUserBySession(sessionId: string) {
-  await kv.delete(["users_by_session", sessionId]);
+  await kv.delete([TopLevelKeys.users_by_session, sessionId]);
 }
 
 export async function getUser(email: string) {
-  return await getValue<User>(["users", email]);
+  return await getValue<User>([TopLevelKeys.users, email]);
 }
 
 export async function getUserBySession(sessionId: string) {
-  const usersBySessionKey = ["users_by_session", sessionId];
+  const usersBySessionKey = [TopLevelKeys.users_by_session, sessionId];
   return await getValue<User>(usersBySessionKey, {
     consistency: "eventual",
   }) ?? await getValue<User>(usersBySessionKey);
@@ -273,13 +306,22 @@ export async function getUserBySession(sessionId: string) {
 
 export async function getUserByStripeCustomer(stripeCustomerId: string) {
   return await getValue<User>([
-    "users_by_stripe_customer",
+    TopLevelKeys.users_by_stripe_customer,
     stripeCustomerId,
   ]);
 }
 
 export async function getManyUsers(emails: string[]) {
-  const keys = emails.map((email) => ["users", email]);
+  const keys = emails.map((email) => [TopLevelKeys.users, email]);
   const res = await getManyValues<User>(keys);
   return res.filter(Boolean) as User[];
+}
+
+export async function getManyMetricsByDay(
+  metric: DailyMetric,
+  dates: Date[],
+) {
+  const keys = dates.map((date) => [metric, formatDate(date)]);
+  const res = await getManyValues<bigint>(keys);
+  return res.map((value) => value?.valueOf() ?? 0n);
 }
