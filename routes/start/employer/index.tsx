@@ -1,7 +1,11 @@
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirect } from "@/utils/redirect.ts";
-import { createEmployer, createEmployerLoginToken } from "@/utils/db.ts";
+import {
+  createEmployer,
+  createEmployerLoginToken,
+  newEmployerProps,
+} from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
 
 export const handler: Handlers<State, State> = {
@@ -26,6 +30,7 @@ export const handler: Handlers<State, State> = {
         email,
         name,
         company,
+        ...newEmployerProps(),
       });
     } catch (e) {
       // TODO: handle duplicate email

@@ -59,12 +59,12 @@ export interface Employer {
   sessionGenerated: number;
 }
 
-export type NewEmployer =
-  & Omit<
-    Employer,
-    "sessionId" | "sessionGenerated"
-  >
-  & { sessionId?: string; sessionGenerated?: number };
+export function newEmployerProps(): Pick<
+  Employer,
+  "sessionId" | "sessionGenerated"
+> {
+  return generateSessionId();
+}
 
 export interface EmployerLoginToken {
   token: string;
@@ -86,13 +86,9 @@ function generateSessionId(): { sessionId: string; sessionGenerated: number } {
 }
 
 export async function createEmployer(
-  newEmployer: NewEmployer,
+  employer: Employer,
 ): Promise<Employer> {
-  const employersKey = [TopLevelKeys.employers, newEmployer.email];
-  const employer = {
-    ...newEmployer,
-    ...generateSessionId(),
-  };
+  const employersKey = [TopLevelKeys.employers, employer.email];
   const employersBySessionKey = [
     TopLevelKeys.employers_by_session,
     employer.sessionId,
