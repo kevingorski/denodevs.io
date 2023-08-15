@@ -50,8 +50,16 @@ a:hover, a:focus, a:active {
   color: var(--highlight-active-color);
 }
 
-.SiteBar h1 a {
+.SiteBar h1 a, a.button {
   text-decoration: none;
+}
+
+.button {
+  align-items: center;
+  border: solid 1px var(--highlight-color);
+  border-radius: 0.25rem;
+  display: inline-flex;
+  padding: 0.5rem;
 }
 
 .SiteBar {
