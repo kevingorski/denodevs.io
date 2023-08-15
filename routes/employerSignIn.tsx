@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { setRedirectUrlCookie } from "@/utils/redirect.ts";
-import { createEmployerLoginToken, getEmployer } from "@/utils/db.ts";
+import { createEmployerLoginToken, getEmployerByEmail } from "@/utils/db.ts";
 import { sendEmployerLoginEmailMessage } from "@/utils/email.ts";
 
 interface EmployerSignInPageData extends State {
@@ -22,7 +22,7 @@ export const handler: Handlers<EmployerSignInPageData, State> = {
       return new Response(null, { status: 400 });
     }
 
-    const employer = await getEmployer(email);
+    const employer = await getEmployerByEmail(email);
     let signInResult = false;
 
     if (employer) {

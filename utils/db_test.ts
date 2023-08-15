@@ -3,6 +3,7 @@ import {
   deleteUserBySession,
   getManyUsers,
   getUser,
+  getUserByEmail,
   getUserBySession,
   getUserByStripeCustomer,
   newUserProps,
@@ -34,19 +35,21 @@ function genNewUser(): User {
 Deno.test("[db] user", async () => {
   const user = genNewUser();
 
-  assertEquals(await getUser(user.email), null);
+  assertEquals(await getUser(user.id), null);
+  assertEquals(await getUserByEmail(user.email), null);
   assertEquals(await getUserBySession(user.sessionId), null);
   assertEquals(await getUserByStripeCustomer(user.stripeCustomerId!), null);
 
   await createUser(user);
   await assertRejects(async () => await createUser(user));
-  assertEquals(await getUser(user.email), user);
+  assertEquals(await getUser(user.id), user);
+  assertEquals(await getUserByEmail(user.email), user);
   assertEquals(await getUserBySession(user.sessionId), user);
   assertEquals(await getUserByStripeCustomer(user.stripeCustomerId!), user);
 
   const user1 = genNewUser();
   await createUser(user1);
-  assertArrayIncludes(await getManyUsers([user.email, user1.email]), [
+  assertArrayIncludes(await getManyUsers([user.id, user1.id]), [
     user,
     user1,
   ]);
@@ -56,7 +59,8 @@ Deno.test("[db] user", async () => {
 
   const newUser: User = { ...user, sessionId: crypto.randomUUID() };
   await updateUser(newUser);
-  assertEquals(await getUser(newUser.email), newUser);
+  assertEquals(await getUser(newUser.id), newUser);
+  assertEquals(await getUserByEmail(newUser.email), newUser);
   assertEquals(await getUserBySession(newUser.sessionId), newUser);
   assertEquals(
     await getUserByStripeCustomer(newUser.stripeCustomerId!),

@@ -2,7 +2,7 @@ import type { Handlers } from "$fresh/server.ts";
 import {
   createUser,
   deleteUserBySession,
-  getUser,
+  getUserByEmail,
   newUserProps,
   updateUser,
   type User,
@@ -54,7 +54,7 @@ export const handler: Handlers<any, State> = {
 
     const githubUser = await getGitHubUser(accessToken);
 
-    const user = await getUser(githubUser.id.toString());
+    const user = await getUserByEmail(githubUser.email);
     if (!user) {
       let stripeCustomerId = undefined;
       if (stripe) {
