@@ -1,14 +1,13 @@
 import { AppProps } from "$fresh/server.ts";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
-import { Head } from "$fresh/runtime.ts";
 import Meta from "@/components/Meta.tsx";
 import { SITE_DESCRIPTION, SITE_NAME } from "../utils/constants.ts";
 
 export default function App(props: AppProps) {
   return (
-    <>
-      <Head>
+    <html lang="en">
+      <head>
         <Meta
           title={props.data?.title
             ? `${props.data.title} 🦕💼 ${SITE_NAME}`
@@ -17,16 +16,18 @@ export default function App(props: AppProps) {
           href={props.url.href}
         />
         <link href="/styles.css" rel="stylesheet" />
-      </Head>
-      <Header
-        employerSessionId={props.data?.employerSessionId}
-        sessionId={props.data?.sessionId}
-      />
-      <props.Component />
-      <Footer
-        employerSessionId={props.data?.employerSessionId}
-        sessionId={props.data?.sessionId}
-      />
-    </>
+      </head>
+      <body>
+        <Header
+          employerSessionId={props.data?.employerSessionId}
+          sessionId={props.data?.sessionId}
+        />
+        <props.Component />
+        <Footer
+          employerSessionId={props.data?.employerSessionId}
+          sessionId={props.data?.sessionId}
+        />
+      </body>
+    </html>
   );
 }
