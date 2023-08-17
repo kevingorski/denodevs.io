@@ -3,3 +3,5 @@
 cov/
 cov.lcov
 .idea
+# Ignore fresh build directory
+_fresh/
