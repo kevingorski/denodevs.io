@@ -9,8 +9,8 @@
     "test": "KV_PATH=:memory: deno test -A --unstable --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",
-    "build": "deno run -A dev.ts build",
-    "preview": "deno run -A main.ts"
+    "build": "deno run --unstable -A dev.ts build",
+    "preview": "deno run --unstable -A main.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -18,7 +18,7 @@
   },
   "imports": {
     "@/": "./",
-    "$fresh/": "https://deno.land/x/fresh@1.4.1/",
+    "$fresh/": "https://deno.land/x/fresh@1.4.2/",
     "$gfm": "https://deno.land/x/gfm@0.2.4/mod.ts",
     "preact": "https://esm.sh/preact@10.15.1",
     "preact/": "https://esm.sh/preact@10.15.1/",
@@ -40,6 +40,14 @@
         "fresh",
         "recommended"
       ]
-    }
+    },
+    "exclude": [
+      "_fresh"
+    ]
+  },
+  "fmt": {
+    "exclude": [
+      "_fresh"
+    ]
   }
 }
