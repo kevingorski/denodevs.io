@@ -20,7 +20,8 @@ jobs:
       with:
         urls: |
           $URL
-          $URL/blog
+          $URL/about
+          $URL/start/developer
         temporaryPublicStorage: true
       env:
         LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
