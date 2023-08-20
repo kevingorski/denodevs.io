@@ -29,5 +29,5 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "kevingorski-denodevs.io"
-          entrypoint: "./main.ts" # 📝 Update the entrypoint if necessary
+          project: "denodevs-io"
+          entrypoint: "./main.ts"
