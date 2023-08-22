@@ -78,6 +78,7 @@ export type DailyMetric =
 export interface Employer {
   id: string;
   email: string;
+  emailConfirmed: boolean;
   name: string;
   company: string;
   sessionId: string;
@@ -86,10 +87,11 @@ export interface Employer {
 
 export function newEmployerProps(): Pick<
   Employer,
-  "id" | "sessionId" | "sessionGenerated"
+  "id" | "emailConfirmed" | "sessionId" | "sessionGenerated"
 > {
   return {
     id: ulid(),
+    emailConfirmed: false,
     ...generateSessionId(),
   };
 }
@@ -138,6 +140,23 @@ export async function createEmployer(
 
   if (!res.ok) throw new Error(`Failed to create employer: ${employer}`);
   return employer;
+}
+
+export async function updateEmployer(employer: Employer) {
+  const employersKey = [TopLevelKeys.employers, employer.id];
+  const employersByEmailKey = [TopLevelKeys.employers_by_email, employer.email];
+  const employersBySessionKey = [
+    TopLevelKeys.employers_by_session,
+    employer.sessionId,
+  ];
+
+  const res = await kv.atomic()
+    .set(employersKey, employer)
+    .set(employersByEmailKey, employer)
+    .set(employersBySessionKey, employer)
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to update employer: ${employer}`);
 }
 
 export async function getEmployer(id: string) {

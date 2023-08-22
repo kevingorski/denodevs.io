@@ -3,6 +3,7 @@ import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import {
   Employer,
   getEmployerBySession,
+  updateEmployer,
   updateEmployerSession,
 } from "@/utils/db.ts";
 import { redirectToEmployerLogin } from "@/utils/redirect.ts";
@@ -29,6 +30,11 @@ export async function handler(
     await updateEmployerSession(employer);
     // TODO: message for expired session
     return redirectResponse;
+  }
+
+  if (!employer.emailConfirmed) {
+    employer.emailConfirmed = true;
+    await updateEmployer(employer);
   }
 
   ctx.state.employer = employer;
