@@ -29,7 +29,7 @@
     "stripe": "./stripe.ts",
     "kv_oauth": "https://deno.land/x/deno_kv_oauth@v0.2.5/mod.ts",
     "chart.js": "https://esm.sh/stable/chart.js@4.3.0/auto?target=es2022",
-    "ulid": "https://deno.land/x/ulid/mod.ts"
+    "ulid": "https://deno.land/x/ulid@v0.2.2/mod.ts"
   },
   "exclude": [
     "cov/"
