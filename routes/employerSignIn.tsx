@@ -30,7 +30,7 @@ export const handler: Handlers<EmployerSignInPageData, State> = {
 
       const loginToken = await createEmployerLoginToken(employer);
 
-      await sendEmployerLoginEmailMessage(employer, loginToken.token);
+      await sendEmployerLoginEmailMessage(employer, loginToken.uuid);
     }
 
     const response = await ctx.render({

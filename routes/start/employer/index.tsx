@@ -39,7 +39,7 @@ export const handler: Handlers<State, State> = {
 
     const loginToken = await createEmployerLoginToken(employer);
 
-    await sendWelcomeEmployerEmailMessage(employer, loginToken.token);
+    await sendWelcomeEmployerEmailMessage(employer, loginToken.uuid);
 
     return redirect("/start/employer/thanks");
   },

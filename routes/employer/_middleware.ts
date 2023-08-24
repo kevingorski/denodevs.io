@@ -1,10 +1,11 @@
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import {
+  deleteEmployerSession,
   Employer,
-  getEmployerBySession,
+  getEmployer,
+  getEmployerSession,
   updateEmployer,
-  updateEmployerSession,
 } from "@/utils/db.ts";
 import { redirectToEmployerLogin } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
@@ -19,16 +20,36 @@ export async function handler(
   ctx: MiddlewareHandlerContext<EmployerState>,
 ) {
   const redirectResponse = redirectToEmployerLogin(req.url);
-  const employerSessionId = ctx.state.employerSessionId;
-  if (!employerSessionId) return redirectResponse;
+  const { employerSessionId } = ctx.state;
+  if (!employerSessionId) {
+    console.error(`no employerSessionId found`);
+    return redirectResponse;
+  }
 
-  const employer = await getEmployerBySession(ctx.state.employerSessionId);
-  if (!employer) return redirectResponse;
+  const session = await getEmployerSession(employerSessionId);
+  if (!session) {
+    console.error(`employerSessionId ${employerSessionId} not found`);
+    return redirectResponse;
+  }
+
   if (
-    employer.sessionGenerated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
+    session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
   ) {
-    await updateEmployerSession(employer);
+    console.error(
+      `employerSessionId ${employerSessionId} too old (${
+        session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS
+      } < ${Date.now()})`,
+    );
+    await deleteEmployerSession(employerSessionId);
     // TODO: message for expired session
+    return redirectResponse;
+  }
+
+  const employer = await getEmployer(session.entityId);
+
+  // TODO: message for employer not found
+  if (!employer) {
+    console.error(`employer ${session.entityId} not found`);
     return redirectResponse;
   }
 

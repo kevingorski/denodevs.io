@@ -1,7 +1,13 @@
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { getUserBySession, User } from "@/utils/db.ts";
+import {
+  deleteUserSession,
+  getUser,
+  getUserSession,
+  User,
+} from "@/utils/db.ts";
 import { redirectToDevLogin } from "@/utils/redirect.ts";
+import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 
 export interface AccountState extends State {
   sessionId: string;
@@ -13,9 +19,26 @@ export async function handler(
   ctx: MiddlewareHandlerContext<AccountState>,
 ) {
   const redirectResponse = redirectToDevLogin(req.url);
-  if (!ctx.state.sessionId) return redirectResponse;
-  const user = await getUserBySession(ctx.state.sessionId);
+  const { sessionId } = ctx.state;
+  if (!sessionId) return redirectResponse;
+
+  const session = await getUserSession(sessionId);
+  if (!session) return redirectResponse;
+
+  // TODO: Separate value or generic name?
+  if (
+    session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
+  ) {
+    await deleteUserSession(sessionId);
+    // TODO: message for expired session
+    return redirectResponse;
+  }
+
+  const user = await getUser(session.entityId);
+
+  // TODO: message for user not found?
   if (!user) return redirectResponse;
+
   ctx.state.user = user;
   return await ctx.next();
 }

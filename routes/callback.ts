@@ -1,11 +1,9 @@
 import type { Handlers } from "$fresh/server.ts";
 import {
   createUser,
-  deleteUserBySession,
+  createUserSession,
   getUserByEmail,
   newUserProps,
-  updateUser,
-  type User,
 } from "@/utils/db.ts";
 import { stripe } from "@/utils/payments.ts";
 import { State } from "./_middleware.ts";
@@ -54,7 +52,7 @@ export const handler: Handlers<any, State> = {
 
     const githubUser = await getGitHubUser(accessToken);
 
-    const user = await getUserByEmail(githubUser.email);
+    let user = await getUserByEmail(githubUser.email);
     if (!user) {
       let stripeCustomerId = undefined;
       if (stripe) {
@@ -63,7 +61,7 @@ export const handler: Handlers<any, State> = {
         });
         stripeCustomerId = customer.id;
       }
-      const user: User = {
+      user = {
         email: githubUser.email,
         login: githubUser.login,
         name: githubUser.name,
@@ -73,15 +71,13 @@ export const handler: Handlers<any, State> = {
         avatarUrl: githubUser.avatar_url,
         gravatarId: githubUser.gravatar_id,
         stripeCustomerId,
-        sessionId,
         ...newUserProps(),
       };
       await createUser(user);
       await sendWelcomeDevEmailMessage(user);
-    } else {
-      await deleteUserBySession(sessionId);
-      await updateUser({ ...user, sessionId });
     }
+    // TODO: confirm email flow
+    await createUserSession(user.id, sessionId);
     return response;
   },
 };

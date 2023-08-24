@@ -54,13 +54,12 @@ export function formatDate(date: Date) {
 enum TopLevelKeys {
   employers = "employers",
   employers_by_email = "employers_by_email",
-  employers_by_session = "employers_by_session",
-  employer_login_tokens = "employer_login_tokens",
   employers_created_count = "employers_created_count",
   employers_created_count_by_day = "employers_created_count_by_day",
+  login_tokens = "login_tokens",
+  sessions = "sessions",
   users = "users",
   users_by_email = "users_by_email",
-  users_by_session = "users_by_session",
   users_by_stripe_customer = "users_by_stripe_customer",
   users_created_count = "users_created_count",
   users_created_count_by_day = "users_created_count_by_day",
@@ -74,6 +73,11 @@ export type DailyMetric =
   | TopLevelKeys.employers_created_count_by_day
   | TopLevelKeys.users_created_count_by_day;
 
+enum TokenEntityType {
+  employer = "employer",
+  user = "user",
+}
+
 // Employer
 export interface Employer {
   id: string;
@@ -81,31 +85,37 @@ export interface Employer {
   emailConfirmed: boolean;
   name: string;
   company: string;
-  sessionId: string;
-  sessionGenerated: number;
 }
 
 export function newEmployerProps(): Pick<
   Employer,
-  "id" | "emailConfirmed" | "sessionId" | "sessionGenerated"
+  "id" | "emailConfirmed"
 > {
   return {
     id: ulid(),
     emailConfirmed: false,
-    ...generateSessionId(),
   };
 }
 
-export interface EmployerLoginToken {
-  token: string;
-  sessionId: string;
-  expires: number;
+export interface LoginToken {
+  entityId: string;
+  entityType: TokenEntityType;
+  generated: number;
+  uuid: string;
 }
 
-function generateSessionId(): { sessionId: string; sessionGenerated: number } {
+// deno-lint-ignore no-empty-interface
+export interface Session extends LoginToken {}
+
+interface ExpringUUID {
+  generated: number;
+  uuid: string;
+}
+
+function generateExpiringUUID(): ExpringUUID {
   return {
-    sessionId: crypto.randomUUID(),
-    sessionGenerated: Date.now(),
+    uuid: crypto.randomUUID(),
+    generated: Date.now(),
   };
 }
 
@@ -114,10 +124,6 @@ export async function createEmployer(
 ): Promise<Employer> {
   const employersKey = [TopLevelKeys.employers, employer.id];
   const employersByEmailKey = [TopLevelKeys.employers_by_email, employer.email];
-  const employersBySessionKey = [
-    TopLevelKeys.employers_by_session,
-    employer.sessionId,
-  ];
   const employersCreatedCountKey = [
     TopLevelKeys.employers_created_count,
   ];
@@ -130,10 +136,8 @@ export async function createEmployer(
   const res = await atomicOp
     .check({ key: employersKey, versionstamp: null })
     .check({ key: employersByEmailKey, versionstamp: null })
-    .check({ key: employersBySessionKey, versionstamp: null })
     .set(employersKey, employer)
     .set(employersByEmailKey, employer)
-    .set(employersBySessionKey, employer)
     .sum(employersCreatedCountKey, 1n)
     .sum(employersCreatedCountByDayKey, 1n)
     .commit();
@@ -145,15 +149,10 @@ export async function createEmployer(
 export async function updateEmployer(employer: Employer) {
   const employersKey = [TopLevelKeys.employers, employer.id];
   const employersByEmailKey = [TopLevelKeys.employers_by_email, employer.email];
-  const employersBySessionKey = [
-    TopLevelKeys.employers_by_session,
-    employer.sessionId,
-  ];
 
   const res = await kv.atomic()
     .set(employersKey, employer)
     .set(employersByEmailKey, employer)
-    .set(employersBySessionKey, employer)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to update employer: ${employer}`);
@@ -167,62 +166,116 @@ export async function getEmployerByEmail(email: string) {
   return await getValue<Employer>([TopLevelKeys.employers_by_email, email]);
 }
 
-export async function updateEmployerSession(employer: Employer) {
-  const atomicOp = kv.atomic();
-  const updatedEmployer = {
-    ...employer,
-    ...generateSessionId(),
+async function createSession(
+  entityType: TokenEntityType,
+  entityId: string,
+  token: ExpringUUID,
+) {
+  const session = {
+    entityId,
+    entityType,
+    ...token,
   };
-
-  const res = await atomicOp
-    .set([TopLevelKeys.employers, employer.email], updatedEmployer)
-    .set(
-      [TopLevelKeys.employers_by_session, employer.sessionId],
-      updatedEmployer,
-    )
-    .commit();
-
-  if (!res.ok) throw new Error(`Failed to update user: ${employer}`);
-}
-
-export async function getEmployerBySession(sessionId: string) {
-  const employersBySessionKey = [TopLevelKeys.employers_by_session, sessionId];
-  return await getValue<Employer>(employersBySessionKey, {
-    consistency: "eventual",
-  }) ?? await getValue<Employer>(employersBySessionKey);
-}
-
-export async function createEmployerLoginToken(
-  employer: Employer,
-): Promise<EmployerLoginToken> {
-  const loginToken = {
-    token: crypto.randomUUID(),
-    sessionId: employer.sessionId,
-    expires: Date.now() + (10 * 60 * 1000),
-  };
-  const employerLoginTokensKey = [
-    TopLevelKeys.employer_login_tokens,
-    loginToken.token,
-  ];
-  const res = await kv.set(employerLoginTokensKey, loginToken);
+  const sessionsKey = [TopLevelKeys.sessions, entityType, token.uuid];
+  const res = await kv.set(sessionsKey, session);
   if (!res.ok) {
-    throw new Error(`Failed to create employer login token: ${loginToken}`);
+    throw new Error(`Failed to create session: ${session}`);
+  }
+  return session;
+}
+
+export async function createEmployerSession(employerId: string) {
+  return await createSession(
+    TokenEntityType.employer,
+    employerId,
+    generateExpiringUUID(),
+  );
+}
+
+export async function createUserSession(userId: string, sessionId: string) {
+  return await createSession(TokenEntityType.user, userId, {
+    generated: Date.now(),
+    uuid: sessionId,
+  });
+}
+
+async function getSession(sessionId: string, tokenEntityType: TokenEntityType) {
+  const sessionsKey = [TopLevelKeys.sessions, tokenEntityType, sessionId];
+
+  return await getValue<Session>(sessionsKey, {
+    consistency: "eventual",
+  });
+}
+
+export function getEmployerSession(sessionId: string) {
+  return getSession(sessionId, TokenEntityType.employer);
+}
+
+export function getUserSession(sessionId: string) {
+  return getSession(sessionId, TokenEntityType.user);
+}
+
+export async function deleteEmployerSession(sessionId: string) {
+  await kv.delete([TopLevelKeys.sessions, TokenEntityType.employer, sessionId]);
+}
+
+export async function deleteUserSession(sessionId: string) {
+  await kv.delete([TopLevelKeys.sessions, TokenEntityType.user, sessionId]);
+}
+
+async function createLoginToken(
+  entity: Employer | User,
+  entityType: TokenEntityType,
+): Promise<LoginToken> {
+  const token = generateExpiringUUID();
+  const loginToken = {
+    entityId: entity.id,
+    entityType,
+    ...token,
+  };
+  const loginTokensKey = [
+    TopLevelKeys.login_tokens,
+    token.uuid,
+  ];
+  const res = await kv.set(loginTokensKey, loginToken);
+  if (!res.ok) {
+    throw new Error(`Failed to create login token: ${loginToken}`);
   }
   return loginToken;
 }
 
-export async function getEmployerLoginToken(token: string) {
-  const employerLoginTokensKey = [
-    TopLevelKeys.employer_login_tokens,
-    token,
-  ];
-  return await getValue<EmployerLoginToken>(employerLoginTokensKey, {
-    consistency: "eventual",
-  }) ?? await getValue<EmployerLoginToken>(employerLoginTokensKey);
+export function createEmployerLoginToken(
+  employer: Employer,
+): Promise<LoginToken> {
+  return createLoginToken(employer, TokenEntityType.employer);
 }
 
-export async function deleteEmployerLoginToken(token: string) {
-  await kv.delete([TopLevelKeys.employer_login_tokens, token]);
+export function createUserLoginToken(
+  user: User,
+): Promise<LoginToken> {
+  return createLoginToken(user, TokenEntityType.user);
+}
+
+async function getLoginToken(uuid: string) {
+  const loginTokensKey = [
+    TopLevelKeys.login_tokens,
+    uuid,
+  ];
+  return await getValue<LoginToken>(loginTokensKey, {
+    consistency: "eventual",
+  }) ?? await getValue<LoginToken>(loginTokensKey);
+}
+
+export async function getEmployerLoginToken(uuid: string) {
+  const loginToken = await getLoginToken(uuid);
+  if (loginToken && loginToken.entityType !== TokenEntityType.employer) {
+    return null;
+  }
+  return loginToken;
+}
+
+export async function deleteLoginToken(uuid: string) {
+  await kv.delete([TopLevelKeys.login_tokens, uuid]);
 }
 
 // User
@@ -236,7 +289,6 @@ export interface User {
   company: string | null;
   location: string | null;
   bio: string | null;
-  sessionId: string;
   stripeCustomerId?: string;
   isSubscribed: boolean;
 }
@@ -268,7 +320,6 @@ export function newUserProps(): Pick<User, "id" | "isSubscribed"> {
 export async function createUser(user: User) {
   const usersKey = [TopLevelKeys.users, user.id];
   const usersByEmailKey = [TopLevelKeys.users_by_email, user.email];
-  const usersBySessionKey = [TopLevelKeys.users_by_session, user.sessionId];
   const usersCreatedCountKey = [
     TopLevelKeys.users_created_count,
   ];
@@ -292,10 +343,8 @@ export async function createUser(user: User) {
   const res = await atomicOp
     .check({ key: usersKey, versionstamp: null })
     .check({ key: usersByEmailKey, versionstamp: null })
-    .check({ key: usersBySessionKey, versionstamp: null })
     .set(usersKey, user)
     .set(usersByEmailKey, user)
-    .set(usersBySessionKey, user)
     .sum(usersCreatedCountKey, 1n)
     .sum(usersCreatedCountByDayKey, 1n)
     .commit();
@@ -306,7 +355,6 @@ export async function createUser(user: User) {
 export async function updateUser(user: User) {
   const usersKey = [TopLevelKeys.users, user.id];
   const usersByEmailKey = [TopLevelKeys.users_by_email, user.email];
-  const usersBySessionKey = [TopLevelKeys.users_by_session, user.sessionId];
 
   const atomicOp = kv.atomic();
 
@@ -322,14 +370,9 @@ export async function updateUser(user: User) {
   const res = await atomicOp
     .set(usersKey, user)
     .set(usersByEmailKey, user)
-    .set(usersBySessionKey, user)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to update user: ${user}`);
-}
-
-export async function deleteUserBySession(sessionId: string) {
-  await kv.delete([TopLevelKeys.users_by_session, sessionId]);
 }
 
 export async function getUser(id: string) {
@@ -338,13 +381,6 @@ export async function getUser(id: string) {
 
 export async function getUserByEmail(email: string) {
   return await getValue<User>([TopLevelKeys.users_by_email, email]);
-}
-
-export async function getUserBySession(sessionId: string) {
-  const usersBySessionKey = [TopLevelKeys.users_by_session, sessionId];
-  return await getValue<User>(usersBySessionKey, {
-    consistency: "eventual",
-  }) ?? await getValue<User>(usersBySessionKey);
 }
 
 export async function getUserByStripeCustomer(stripeCustomerId: string) {
