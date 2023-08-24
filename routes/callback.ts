@@ -1,8 +1,9 @@
 import type { Handlers } from "$fresh/server.ts";
 import {
+  createGitHubProfile,
   createUser,
   createUserSession,
-  getUserByEmail,
+  getGitHubProfile,
   newUserProps,
 } from "@/utils/db.ts";
 import { stripe } from "@/utils/payments.ts";
@@ -50,34 +51,49 @@ export const handler: Handlers<any, State> = {
 
     deleteRedirectUrlCookie(response.headers);
 
-    const githubUser = await getGitHubUser(accessToken);
-
-    let user = await getUserByEmail(githubUser.email);
-    if (!user) {
+    const gitHubUser = await getGitHubUser(accessToken);
+    const gitHubProfile = await getGitHubProfile(gitHubUser.id);
+    let userId;
+    if (!gitHubProfile) {
       let stripeCustomerId = undefined;
       if (stripe) {
         const customer = await stripe.customers.create({
-          email: githubUser.email,
+          email: gitHubUser.email,
         });
         stripeCustomerId = customer.id;
       }
-      user = {
-        email: githubUser.email,
-        login: githubUser.login,
-        name: githubUser.name,
-        company: githubUser.company,
-        location: githubUser.location,
-        bio: githubUser.bio,
-        avatarUrl: githubUser.avatar_url,
-        gravatarId: githubUser.gravatar_id,
+      const user = {
+        email: gitHubUser.email,
+        login: gitHubUser.login,
+        name: gitHubUser.name,
+        company: gitHubUser.company,
+        location: gitHubUser.location,
+        bio: gitHubUser.bio,
+        avatarUrl: gitHubUser.avatar_url,
+        gravatarId: gitHubUser.gravatar_id,
         stripeCustomerId,
         ...newUserProps(),
       };
       await createUser(user);
+      await createGitHubProfile({
+        userId: user.id,
+        gitHubId: gitHubUser.id,
+        email: gitHubUser.email,
+        login: gitHubUser.login,
+        avatarUrl: gitHubUser.avatar_url,
+        gravatarId: gitHubUser.gravatar_id,
+        name: gitHubUser.name,
+        company: gitHubUser.company,
+        location: gitHubUser.location,
+        bio: gitHubUser.bio,
+      });
       await sendWelcomeDevEmailMessage(user);
+      userId = user.id;
+    } else {
+      userId = gitHubProfile.userId;
     }
     // TODO: confirm email flow
-    await createUserSession(user.id, sessionId);
+    await createUserSession(userId, sessionId);
     return response;
   },
 };

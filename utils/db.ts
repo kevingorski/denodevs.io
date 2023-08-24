@@ -56,6 +56,8 @@ enum TopLevelKeys {
   employers_by_email = "employers_by_email",
   employers_created_count = "employers_created_count",
   employers_created_count_by_day = "employers_created_count_by_day",
+  github_profiles = "github_profiles",
+  github_profiles_by_user = "github_profiles_by_user",
   login_tokens = "login_tokens",
   sessions = "sessions",
   users = "users",
@@ -394,6 +396,49 @@ export async function getManyUsers(ids: string[]) {
   const keys = ids.map((id) => [TopLevelKeys.users, id]);
   const res = await getManyValues<User>(keys);
   return res.filter(Boolean) as User[];
+}
+
+export interface GitHubProfile {
+  userId: string;
+  gitHubId: number;
+  email: string;
+  login: string;
+  avatarUrl: string;
+  gravatarId: string | null;
+  name: string | null;
+  company: string | null;
+  location: string | null;
+  bio: string | null;
+}
+
+export async function createGitHubProfile(profile: GitHubProfile) {
+  const gitHubProfileKey = [TopLevelKeys.github_profiles, profile.gitHubId];
+  const gitHubProfileByUserKey = [
+    TopLevelKeys.github_profiles_by_user,
+    profile.userId,
+  ];
+  const res = await kv.atomic()
+    .check({ key: gitHubProfileKey, versionstamp: null })
+    .check({ key: gitHubProfileByUserKey, versionstamp: null })
+    .set(gitHubProfileKey, profile)
+    .set(gitHubProfileByUserKey, profile)
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to create GitHub profile: ${profile}`);
+}
+
+export async function getGitHubProfile(gitHubId: number) {
+  return await getValue<GitHubProfile>([
+    TopLevelKeys.github_profiles,
+    gitHubId,
+  ]);
+}
+
+export async function getGitHubProfileByUser(userId: string) {
+  return await getValue<GitHubProfile>([
+    TopLevelKeys.github_profiles_by_user,
+    userId,
+  ]);
 }
 
 export async function getManyMetricsByDay(
