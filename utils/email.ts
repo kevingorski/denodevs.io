@@ -31,15 +31,34 @@ const sendEmail = (
 
 export const renderWelcomeDevEmailMessage = (
   user: User,
+  token: string,
 ): EmailMessage => ({
   to: user.email,
   subject: `${user.name}, welcome to DenoDevs!`,
-  html: `<h1>Welcome to DenoDevs</h1><p>Your account has been created...</p>`,
+  html: `<h1>Welcome to DenoDevs</h1>
+<p>Your account has been created...</p>
+<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
 });
 
 export const sendWelcomeDevEmailMessage = (
   user: User,
-) => sendEmail(renderWelcomeDevEmailMessage(user));
+  token: string,
+) => sendEmail(renderWelcomeDevEmailMessage(user, token));
+
+export const renderDevEmailVerificationMessage = (
+  user: User,
+  token: string,
+): EmailMessage => ({
+  to: user.email,
+  subject: `Please verify your email`,
+  html:
+    `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
+});
+
+export const sendDevEmailVerificationMessage = (
+  user: User,
+  token: string,
+) => sendEmail(renderDevEmailVerificationMessage(user, token));
 
 export const renderWelcomeEmployerEmailMessage = (
   employer: Employer,

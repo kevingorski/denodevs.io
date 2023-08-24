@@ -3,6 +3,7 @@ import type { AccountState } from "./_middleware.ts";
 import { ComponentChild } from "preact";
 import { stripe } from "@/utils/payments.ts";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
+import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 
 export const handler: Handlers<AccountState, AccountState> = {
   GET(_request, ctx) {
@@ -34,8 +35,17 @@ function Row(props: RowProps) {
   );
 }
 
+function VerifyEmailPrompt(props: { email: string }) {
+  return (
+    <div>
+      <VerifyEmailButton email={props.email} />
+    </div>
+  );
+}
+
 export default function AccountPage(props: PageProps<AccountState>) {
-  const action = props.data.user.isSubscribed ? "Manage" : "Upgrade";
+  const { user } = props.data;
+  const action = user.isSubscribed ? "Manage" : "Upgrade";
 
   return (
     <main>
@@ -43,19 +53,22 @@ export default function AccountPage(props: PageProps<AccountState>) {
         <h1>Welcome to your DenoDevs profile!</h1>
         <p>Soon you'll be able to update all of this.</p>
       </aside>
-      <GitHubAvatarImg login={props.data.user.login} size={24} />
+      {!user.emailConfirmed && <VerifyEmailPrompt email={user.email} />}
+      <div>
+      </div>
+      <GitHubAvatarImg login={user.login} size={24} />
       <ul>
         <Row
           title="Username"
-          text={props.data.user.login}
+          text={user.login}
         />
         <Row
           title="Email"
-          text={props.data.user.email}
+          text={user.email}
         />
         <Row
           title="Subscription"
-          text={props.data.user.isSubscribed ? "Premium 🦕" : "Free"}
+          text={user.isSubscribed ? "Premium 🦕" : "Free"}
         >
           {stripe && (
             <a
@@ -68,23 +81,23 @@ export default function AccountPage(props: PageProps<AccountState>) {
         </Row>
         <Row
           title="Name"
-          text={props.data.user.name || "N/A"}
+          text={user.name || "N/A"}
         />
         <Row
           title="Company"
-          text={props.data.user.company || "N/A"}
+          text={user.company || "N/A"}
         />
         <Row
           title="Location"
-          text={props.data.user.location || "N/A"}
+          text={user.location || "N/A"}
         />
         <Row
           title="Bio"
-          text={props.data.user.bio || "N/A"}
+          text={user.bio || "N/A"}
         />
         <Row
           title="Gravatar Id"
-          text={props.data.user.gravatarId || "N/A"}
+          text={user.gravatarId || "N/A"}
         />
       </ul>
       <a href="/signout">

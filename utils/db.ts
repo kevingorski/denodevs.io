@@ -276,6 +276,14 @@ export async function getEmployerLoginToken(uuid: string) {
   return loginToken;
 }
 
+export async function getUserLoginToken(uuid: string) {
+  const loginToken = await getLoginToken(uuid);
+  if (loginToken && loginToken.entityType !== TokenEntityType.user) {
+    return null;
+  }
+  return loginToken;
+}
+
 export async function deleteLoginToken(uuid: string) {
   await kv.delete([TopLevelKeys.login_tokens, uuid]);
 }
@@ -284,6 +292,7 @@ export async function deleteLoginToken(uuid: string) {
 export interface User {
   id: string;
   email: string;
+  emailConfirmed: boolean;
   login: string;
   avatarUrl: string;
   gravatarId: string | null;
@@ -295,8 +304,12 @@ export interface User {
   isSubscribed: boolean;
 }
 
-export function newUserProps(): Pick<User, "id" | "isSubscribed"> {
+export function newUserProps(): Pick<
+  User,
+  "emailConfirmed" | "id" | "isSubscribed"
+> {
   return {
+    emailConfirmed: false,
     id: ulid(),
     isSubscribed: false,
   };

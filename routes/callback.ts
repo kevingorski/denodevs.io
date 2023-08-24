@@ -2,6 +2,7 @@ import type { Handlers } from "$fresh/server.ts";
 import {
   createGitHubProfile,
   createUser,
+  createUserLoginToken,
   createUserSession,
   getGitHubProfile,
   newUserProps,
@@ -53,7 +54,6 @@ export const handler: Handlers<any, State> = {
 
     const gitHubUser = await getGitHubUser(accessToken);
     const gitHubProfile = await getGitHubProfile(gitHubUser.id);
-    let userId;
     if (!gitHubProfile) {
       let stripeCustomerId = undefined;
       if (stripe) {
@@ -75,25 +75,28 @@ export const handler: Handlers<any, State> = {
         ...newUserProps(),
       };
       await createUser(user);
-      await createGitHubProfile({
-        userId: user.id,
-        gitHubId: gitHubUser.id,
-        email: gitHubUser.email,
-        login: gitHubUser.login,
-        avatarUrl: gitHubUser.avatar_url,
-        gravatarId: gitHubUser.gravatar_id,
-        name: gitHubUser.name,
-        company: gitHubUser.company,
-        location: gitHubUser.location,
-        bio: gitHubUser.bio,
-      });
-      await sendWelcomeDevEmailMessage(user);
-      userId = user.id;
+      const [token, _] = await Promise.all([
+        createUserLoginToken(user),
+        createGitHubProfile({
+          userId: user.id,
+          gitHubId: gitHubUser.id,
+          email: gitHubUser.email,
+          login: gitHubUser.login,
+          avatarUrl: gitHubUser.avatar_url,
+          gravatarId: gitHubUser.gravatar_id,
+          name: gitHubUser.name,
+          company: gitHubUser.company,
+          location: gitHubUser.location,
+          bio: gitHubUser.bio,
+        }),
+      ]);
+      await Promise.all([
+        sendWelcomeDevEmailMessage(user, token.uuid),
+        createUserSession(user.id, sessionId),
+      ]);
     } else {
-      userId = gitHubProfile.userId;
+      await createUserSession(gitHubProfile.userId, sessionId);
     }
-    // TODO: confirm email flow
-    await createUserSession(userId, sessionId);
     return response;
   },
 };
