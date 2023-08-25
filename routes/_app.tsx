@@ -15,6 +15,7 @@ export default function App(props: AppProps) {
           description={props.data?.description ?? SITE_DESCRIPTION}
           href={props.url.href}
         />
+        <meta name="viewport" content="width=device-width" />
         <link href="/styles.css" rel="stylesheet" />
       </head>
       <body>
