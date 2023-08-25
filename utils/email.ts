@@ -25,7 +25,14 @@ const sendEmail = (
       Authorization: `Bearer ${resendApiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: defaultFromAddress, ...message }),
+    body: JSON.stringify({
+      from: defaultFromAddress,
+      headers: {
+        // Prevents email threading
+        "X-Entity-Ref-ID": crypto.randomUUID(),
+      },
+      ...message,
+    }),
   });
 };
 
