@@ -4,7 +4,7 @@ import { createUserLoginToken } from "@/utils/db.ts";
 import { sendDevEmailVerificationMessage } from "@/utils/email.ts";
 
 async function postHandler(
-  req: Request,
+  _req: Request,
   ctx: HandlerContext<PageProps<undefined>, AccountState>,
 ) {
   const { user } = ctx.state;
