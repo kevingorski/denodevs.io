@@ -1,12 +1,16 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import { getSessionId } from "kv_oauth";
 import type { MetaProps } from "@/components/Meta.tsx";
-import { EMPLOYER_SESSION_COOKIE_NAME } from "@/utils/constants.ts";
+import {
+  ADMIN_SESSION_COOKIE_NAME,
+  EMPLOYER_SESSION_COOKIE_NAME,
+} from "@/utils/constants.ts";
 import { getCookies } from "std/http/cookie.ts";
 
 export interface State extends MetaProps {
-  sessionId?: string;
+  adminSessionId?: string;
   employerSessionId?: string;
+  sessionId?: string;
 }
 
 async function setState(req: Request, ctx: MiddlewareHandlerContext<State>) {
@@ -20,6 +24,12 @@ async function setState(req: Request, ctx: MiddlewareHandlerContext<State>) {
 
   if (employerSessionId) {
     ctx.state.employerSessionId = employerSessionId;
+  }
+
+  const adminSessionId = getCookies(req.headers)[ADMIN_SESSION_COOKIE_NAME];
+
+  if (adminSessionId) {
+    ctx.state.adminSessionId = adminSessionId;
   }
 
   return await ctx.next();

@@ -12,20 +12,22 @@ import * as $6 from "./routes/account/index.tsx";
 import * as $7 from "./routes/account/manage.ts";
 import * as $8 from "./routes/account/sendVerificationEmail.ts";
 import * as $9 from "./routes/account/upgrade.ts";
-import * as $10 from "./routes/api/stripe-webhooks.ts";
-import * as $11 from "./routes/callback.ts";
-import * as $12 from "./routes/employer/_middleware.ts";
-import * as $13 from "./routes/employer/index.tsx";
-import * as $14 from "./routes/employerCallback.ts";
-import * as $15 from "./routes/employerSignIn.tsx";
-import * as $16 from "./routes/index.tsx";
-import * as $17 from "./routes/signin.ts";
-import * as $18 from "./routes/signout.ts";
-import * as $19 from "./routes/start/developer.tsx";
-import * as $20 from "./routes/start/employer/index.tsx";
-import * as $21 from "./routes/start/employer/thanks.tsx";
-import * as $22 from "./routes/start/index.tsx";
-import * as $23 from "./routes/verifyEmail.tsx";
+import * as $10 from "./routes/admin/_middleware.ts";
+import * as $11 from "./routes/admin/index.tsx";
+import * as $12 from "./routes/api/stripe-webhooks.ts";
+import * as $13 from "./routes/callback.ts";
+import * as $14 from "./routes/employer/_middleware.ts";
+import * as $15 from "./routes/employer/index.tsx";
+import * as $16 from "./routes/employerCallback.ts";
+import * as $17 from "./routes/employerSignIn.tsx";
+import * as $18 from "./routes/index.tsx";
+import * as $19 from "./routes/signin.ts";
+import * as $20 from "./routes/signout.ts";
+import * as $21 from "./routes/start/developer.tsx";
+import * as $22 from "./routes/start/employer/index.tsx";
+import * as $23 from "./routes/start/employer/thanks.tsx";
+import * as $24 from "./routes/start/index.tsx";
+import * as $25 from "./routes/verifyEmail.tsx";
 import * as $$0 from "./islands/Chart.tsx";
 import * as $$1 from "./islands/VerifyEmailButton.tsx";
 
@@ -41,20 +43,22 @@ const manifest = {
     "./routes/account/manage.ts": $7,
     "./routes/account/sendVerificationEmail.ts": $8,
     "./routes/account/upgrade.ts": $9,
-    "./routes/api/stripe-webhooks.ts": $10,
-    "./routes/callback.ts": $11,
-    "./routes/employer/_middleware.ts": $12,
-    "./routes/employer/index.tsx": $13,
-    "./routes/employerCallback.ts": $14,
-    "./routes/employerSignIn.tsx": $15,
-    "./routes/index.tsx": $16,
-    "./routes/signin.ts": $17,
-    "./routes/signout.ts": $18,
-    "./routes/start/developer.tsx": $19,
-    "./routes/start/employer/index.tsx": $20,
-    "./routes/start/employer/thanks.tsx": $21,
-    "./routes/start/index.tsx": $22,
-    "./routes/verifyEmail.tsx": $23,
+    "./routes/admin/_middleware.ts": $10,
+    "./routes/admin/index.tsx": $11,
+    "./routes/api/stripe-webhooks.ts": $12,
+    "./routes/callback.ts": $13,
+    "./routes/employer/_middleware.ts": $14,
+    "./routes/employer/index.tsx": $15,
+    "./routes/employerCallback.ts": $16,
+    "./routes/employerSignIn.tsx": $17,
+    "./routes/index.tsx": $18,
+    "./routes/signin.ts": $19,
+    "./routes/signout.ts": $20,
+    "./routes/start/developer.tsx": $21,
+    "./routes/start/employer/index.tsx": $22,
+    "./routes/start/employer/thanks.tsx": $23,
+    "./routes/start/index.tsx": $24,
+    "./routes/verifyEmail.tsx": $25,
   },
   islands: {
     "./islands/Chart.tsx": $$0,

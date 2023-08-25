@@ -76,6 +76,7 @@ export type DailyMetric =
   | TopLevelKeys.users_created_count_by_day;
 
 enum TokenEntityType {
+  admin = "admin",
   employer = "employer",
   user = "user",
 }
@@ -186,6 +187,14 @@ async function createSession(
   return session;
 }
 
+export async function createAdminSession() {
+  return await createSession(
+    TokenEntityType.admin,
+    "",
+    generateExpiringUUID(),
+  );
+}
+
 export async function createEmployerSession(employerId: string) {
   return await createSession(
     TokenEntityType.employer,
@@ -209,12 +218,20 @@ async function getSession(sessionId: string, tokenEntityType: TokenEntityType) {
   });
 }
 
+export function getAdminSession(sessionId: string) {
+  return getSession(sessionId, TokenEntityType.admin);
+}
+
 export function getEmployerSession(sessionId: string) {
   return getSession(sessionId, TokenEntityType.employer);
 }
 
 export function getUserSession(sessionId: string) {
   return getSession(sessionId, TokenEntityType.user);
+}
+
+export async function deleteAdminSession(sessionId: string) {
+  await kv.delete([TopLevelKeys.sessions, TokenEntityType.admin, sessionId]);
 }
 
 export async function deleteEmployerSession(sessionId: string) {

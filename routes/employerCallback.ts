@@ -16,10 +16,8 @@ import {
   EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
   EMPLOYER_SESSION_COOKIE_NAME,
   LOGIN_TOKEN_LIFETIME_MS,
+  USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
-
-const employerSessionCookieSecure =
-  Deno.env.get("EMPLOYER_SESSION_COOKIE_SECURE") !== "false";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
@@ -51,9 +49,9 @@ export const handler: Handlers<any, State> = {
       {
         path: "/",
         httpOnly: true,
-        secure: employerSessionCookieSecure,
+        secure: USE_SECURE_COOKIES,
         maxAge: EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
-        sameSite: "Lax",
+        sameSite: "Strict",
         name: EMPLOYER_SESSION_COOKIE_NAME,
         value: session.uuid,
       },
