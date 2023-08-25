@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { AdminState } from "@/routes/admin/_middleware.ts";
+import { AdminState } from "@/utils/adminAccessHandler.ts";
 
 export const handler: Handlers<AdminState, AdminState> = {
   GET(_, ctx) {
