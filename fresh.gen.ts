@@ -21,15 +21,17 @@ import * as $15 from "./routes/employer/index.tsx";
 import * as $16 from "./routes/employerCallback.ts";
 import * as $17 from "./routes/employerSignIn.tsx";
 import * as $18 from "./routes/index.tsx";
-import * as $19 from "./routes/signin.ts";
-import * as $20 from "./routes/signout.ts";
-import * as $21 from "./routes/start/developer.tsx";
-import * as $22 from "./routes/start/employer/index.tsx";
-import * as $23 from "./routes/start/employer/thanks.tsx";
-import * as $24 from "./routes/start/index.tsx";
-import * as $25 from "./routes/verifyEmail.tsx";
+import * as $19 from "./routes/kv-insights/_middleware.ts";
+import * as $20 from "./routes/signin.ts";
+import * as $21 from "./routes/signout.ts";
+import * as $22 from "./routes/start/developer.tsx";
+import * as $23 from "./routes/start/employer/index.tsx";
+import * as $24 from "./routes/start/employer/thanks.tsx";
+import * as $25 from "./routes/start/index.tsx";
+import * as $26 from "./routes/verifyEmail.tsx";
 import * as $$0 from "./islands/Chart.tsx";
-import * as $$1 from "./islands/VerifyEmailButton.tsx";
+import * as $$1 from "./islands/EntriesManagement.tsx";
+import * as $$2 from "./islands/VerifyEmailButton.tsx";
 
 const manifest = {
   routes: {
@@ -52,17 +54,19 @@ const manifest = {
     "./routes/employerCallback.ts": $16,
     "./routes/employerSignIn.tsx": $17,
     "./routes/index.tsx": $18,
-    "./routes/signin.ts": $19,
-    "./routes/signout.ts": $20,
-    "./routes/start/developer.tsx": $21,
-    "./routes/start/employer/index.tsx": $22,
-    "./routes/start/employer/thanks.tsx": $23,
-    "./routes/start/index.tsx": $24,
-    "./routes/verifyEmail.tsx": $25,
+    "./routes/kv-insights/_middleware.ts": $19,
+    "./routes/signin.ts": $20,
+    "./routes/signout.ts": $21,
+    "./routes/start/developer.tsx": $22,
+    "./routes/start/employer/index.tsx": $23,
+    "./routes/start/employer/thanks.tsx": $24,
+    "./routes/start/index.tsx": $25,
+    "./routes/verifyEmail.tsx": $26,
   },
   islands: {
     "./islands/Chart.tsx": $$0,
-    "./islands/VerifyEmailButton.tsx": $$1,
+    "./islands/EntriesManagement.tsx": $$1,
+    "./islands/VerifyEmailButton.tsx": $$2,
   },
   baseUrl: import.meta.url,
 };

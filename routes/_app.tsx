@@ -5,6 +5,10 @@ import Meta from "@/components/Meta.tsx";
 import { SITE_DESCRIPTION, SITE_NAME } from "../utils/constants.ts";
 
 export default function App(props: AppProps) {
+  if (props.url.pathname === "/kv-insights") {
+    return <props.Component />;
+  }
+
   return (
     <html lang="en">
       <head>
