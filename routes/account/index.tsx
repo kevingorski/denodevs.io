@@ -1,9 +1,10 @@
-import type { Handlers, PageProps } from "$fresh/server.ts";
+import type { Handlers, PageProps, RouteConfig } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
 import { ComponentChild } from "preact";
 import { stripe } from "@/utils/payments.ts";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
+import { useCSP } from "$fresh/src/runtime/csp.ts";
 
 export const handler: Handlers<AccountState, AccountState> = {
   GET(_request, ctx) {
@@ -46,6 +47,28 @@ function VerifyEmailPrompt(props: { email: string }) {
 export default function AccountPage(props: PageProps<AccountState>) {
   const { user } = props.data;
   const action = user.isSubscribed ? "Manage" : "Upgrade";
+
+  // TODO: refactor this to something reusable when it drops
+  // https://github.com/denoland/fresh/issues/1705
+  useCSP((csp) => {
+    csp.directives.baseUri = ["'none'"];
+    if (!csp.directives.scriptSrc) {
+      csp.directives.scriptSrc = [];
+    }
+    csp.directives.scriptSrc.push("'strict-dynamic'");
+    csp.directives.scriptSrc.push("'unsafe-inline'");
+    csp.directives.scriptSrc.push("http:");
+    csp.directives.scriptSrc.push("https:");
+    if (!csp.directives.styleSrc) {
+      csp.directives.styleSrc = [];
+    }
+    csp.directives.styleSrc.push("'self'");
+    if (!csp.directives.imgSrc) {
+      csp.directives.imgSrc = [];
+    }
+    csp.directives.imgSrc.push("'self'");
+    csp.directives.imgSrc.push("avatars.githubusercontent.com");
+  });
 
   return (
     <main>
@@ -106,3 +129,7 @@ export default function AccountPage(props: PageProps<AccountState>) {
     </main>
   );
 }
+
+export const config: RouteConfig = {
+  csp: true,
+};
