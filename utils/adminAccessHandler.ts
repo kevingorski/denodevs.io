@@ -25,20 +25,13 @@ export async function adminAccessHandler(
 
   if (adminSessionId) {
     const session = await getAdminSession(adminSessionId);
-    const deniedResponse = new Response(null, { status: 401 });
-    if (!session) {
-      console.error(`adminSessionId ${adminSessionId} not found`);
-      return deniedResponse;
-    }
-
-    if (
-      session.generated + ADMIN_SESSION_COOKIE_LIFETIME_MS < Date.now()
-    ) {
+    if (session) {
+      if (Date.now() < session.generated + ADMIN_SESSION_COOKIE_LIFETIME_MS) {
+        return await ctx.next();
+      }
+      // Clear expired session
       await deleteAdminSession(adminSessionId);
-      return deniedResponse;
     }
-
-    return await ctx.next();
   }
 
   const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
