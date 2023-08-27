@@ -16,9 +16,9 @@ export default function Footer(
         <a href="/about">About</a>
         <a href="/blog">Blog</a>
         <a
-          href="https://github.com/denoland/saaskit"
+          href="https://github.com/kevingorski/denodev.io"
           target="_blank"
-          aria-label="Deno SaaSKit repo on GitHub"
+          aria-label="Deno Devs repo on GitHub"
         >
           <GitHub />
         </a>
