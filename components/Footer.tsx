@@ -14,7 +14,6 @@ export default function Footer(
       <nav class="SiteNav">
         <AuthenticationLinks {...props} />
         <a href="/about">About</a>
-        <a href="/blog">Blog</a>
         <a
           href="https://github.com/kevingorski/denodev.io"
           target="_blank"
