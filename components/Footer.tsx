@@ -15,7 +15,7 @@ export default function Footer(
         <AuthenticationLinks {...props} />
         <a href="/about">About</a>
         <a
-          href="https://github.com/kevingorski/denodev.io"
+          href="https://github.com/kevingorski/denodevs.io"
           target="_blank"
           aria-label="Deno Devs repo on GitHub"
         >
