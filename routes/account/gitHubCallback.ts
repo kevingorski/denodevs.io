@@ -1,21 +1,12 @@
 import type { Handlers } from "$fresh/server.ts";
 import {
   createGitHubProfile,
-  createUser,
-  createUserLoginToken,
-  createUserSession,
   getGitHubProfile,
-  newUserProps,
   upgradeUserOAuthSession,
 } from "@/utils/db.ts";
 import { AccountState } from "./_middleware.ts";
 import { handleCallback } from "kv_oauth";
 import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
-import {
-  deleteRedirectUrlCookie,
-  getRedirectUrlCookie,
-} from "@/utils/redirect.ts";
-import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
 
 interface GitHubUser {
   id: number;
@@ -48,10 +39,7 @@ export const handler: Handlers<any, AccountState> = {
     const { response, accessToken, sessionId } = await handleCallback(
       req,
       gitHubOAuth2Client,
-      getRedirectUrlCookie(req.headers),
     );
-
-    deleteRedirectUrlCookie(response.headers);
 
     const gitHubUser = await getGitHubUser(accessToken);
     const gitHubProfile = await getGitHubProfile(gitHubUser.id);

@@ -43,21 +43,6 @@ Deno.test("[http]", async (test) => {
     assertEquals(response.status, 303);
   });
 
-  await test.step("GET /callback", async () => {
-    const response = await handler(
-      new Request("http://localhost/callback"),
-      CONN_INFO,
-    );
-
-    assertFalse(response.ok);
-    assertInstanceOf(response.body, ReadableStream);
-    assertEquals(
-      response.headers.get("content-type"),
-      "text/html; charset=utf-8",
-    );
-    assertEquals(response.status, 500);
-  });
-
   await test.step("GET /signin", async () => {
     const response = await handler(
       new Request("http://localhost/signin"),

@@ -16,16 +16,13 @@ import {
 
 function genNewUser(): User {
   return {
+    ...newUserProps(),
     email: `${crypto.randomUUID()}@example.com`,
-    login: crypto.randomUUID(),
-    avatarUrl: `http://${crypto.randomUUID()}`,
     stripeCustomerId: crypto.randomUUID(),
-    gravatarId: null,
     name: null,
     company: null,
     location: null,
     bio: null,
-    ...newUserProps(),
   };
 }
 
