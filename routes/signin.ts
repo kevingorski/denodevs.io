@@ -2,7 +2,7 @@ import type { Handlers } from "$fresh/server.ts";
 import type { State } from "./_middleware.ts";
 import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
 import { signIn } from "kv_oauth";
-import { oauth2Client } from "@/utils/oauth2_client.ts";
+import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
@@ -13,7 +13,7 @@ export const handler: Handlers<any, State> = {
   async GET(req, ctx) {
     if (ctx.state.sessionId !== undefined) return redirect("/");
 
-    const resp = await signIn(req, oauth2Client);
+    const resp = await signIn(req, gitHubOAuth2Client);
     setRedirectUrlCookie(req, resp);
     return resp;
   },

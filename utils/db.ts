@@ -203,11 +203,23 @@ export async function createEmployerSession(employerId: string) {
   );
 }
 
-export async function createUserSession(userId: string, sessionId: string) {
-  return await createSession(TokenEntityType.user, userId, {
-    generated: Date.now(),
-    uuid: sessionId,
-  });
+export async function createUserSession(userId: string) {
+  return await createSession(
+    TokenEntityType.user,
+    userId,
+    generateExpiringUUID(),
+  );
+}
+
+export async function upgradeUserOAuthSession(
+  userId: string,
+  sessionId: string,
+) {
+  return await createSession(
+    TokenEntityType.user,
+    userId,
+    { generated: Date.now(), uuid: sessionId },
+  );
 }
 
 async function getSession(sessionId: string, tokenEntityType: TokenEntityType) {
@@ -306,29 +318,31 @@ export async function deleteLoginToken(uuid: string) {
 }
 
 // User
-export interface User {
-  id: string;
+interface UserRequiredFields {
   email: string;
   emailConfirmed: boolean;
-  login: string;
-  avatarUrl: string;
-  gravatarId: string | null;
-  name: string | null;
-  company: string | null;
-  location: string | null;
-  bio: string | null;
-  stripeCustomerId?: string;
+  id: string;
   isSubscribed: boolean;
 }
 
-export function newUserProps(): Pick<
-  User,
-  "emailConfirmed" | "id" | "isSubscribed"
-> {
+export interface User extends UserRequiredFields {
+  bio: string | null;
+  company: string | null;
+  location: string | null;
+  name: string | null;
+  stripeCustomerId?: string;
+}
+
+export function newUserProps(): User {
   return {
+    bio: null,
+    company: null,
+    email: "",
     emailConfirmed: false,
     id: ulid(),
     isSubscribed: false,
+    location: null,
+    name: null,
   };
 }
 
@@ -431,7 +445,7 @@ export async function getManyUsers(ids: string[]) {
 export interface GitHubProfile {
   userId: string;
   gitHubId: number;
-  email: string;
+  email: string | null;
   login: string;
   avatarUrl: string;
   gravatarId: string | null;

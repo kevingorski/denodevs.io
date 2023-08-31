@@ -6,9 +6,9 @@ import {
   createUserSession,
   getGitHubProfile,
   newUserProps,
+  upgradeUserOAuthSession,
 } from "@/utils/db.ts";
-import { stripe } from "@/utils/payments.ts";
-import { State } from "./_middleware.ts";
+import { AccountState } from "./_middleware.ts";
 import { handleCallback } from "kv_oauth";
 import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
 import {
@@ -42,8 +42,9 @@ async function getGitHubUser(accessToken: string): Promise<GitHubUser> {
 }
 
 // deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, State> = {
-  async GET(req) {
+export const handler: Handlers<any, AccountState> = {
+  async GET(req, ctx) {
+    const { user } = ctx.state;
     const { response, accessToken, sessionId } = await handleCallback(
       req,
       gitHubOAuth2Client,
@@ -55,48 +56,20 @@ export const handler: Handlers<any, State> = {
     const gitHubUser = await getGitHubUser(accessToken);
     const gitHubProfile = await getGitHubProfile(gitHubUser.id);
     if (!gitHubProfile) {
-      let stripeCustomerId = undefined;
-      if (stripe && gitHubUser.email !== null) {
-        const customer = await stripe.customers.create({
-          email: gitHubUser.email,
-        });
-        stripeCustomerId = customer.id;
-      }
-      const user = {
+      await createGitHubProfile({
+        userId: user.id,
+        gitHubId: gitHubUser.id,
         email: gitHubUser.email,
         login: gitHubUser.login,
+        avatarUrl: gitHubUser.avatar_url,
+        gravatarId: gitHubUser.gravatar_id,
         name: gitHubUser.name,
         company: gitHubUser.company,
         location: gitHubUser.location,
         bio: gitHubUser.bio,
-        avatarUrl: gitHubUser.avatar_url,
-        gravatarId: gitHubUser.gravatar_id,
-        stripeCustomerId,
-        ...newUserProps(),
-      };
-      await createUser(user);
-      const [token, _] = await Promise.all([
-        createUserLoginToken(user),
-        createGitHubProfile({
-          userId: user.id,
-          gitHubId: gitHubUser.id,
-          email: gitHubUser.email,
-          login: gitHubUser.login,
-          avatarUrl: gitHubUser.avatar_url,
-          gravatarId: gitHubUser.gravatar_id,
-          name: gitHubUser.name,
-          company: gitHubUser.company,
-          location: gitHubUser.location,
-          bio: gitHubUser.bio,
-        }),
-      ]);
-      await Promise.all([
-        sendWelcomeDevEmailMessage(user, token.uuid),
-        createUserSession(user.id, sessionId),
-      ]);
-    } else {
-      await createUserSession(gitHubProfile.userId, sessionId);
+      });
     }
+    await upgradeUserOAuthSession(user.id, sessionId);
     return response;
   },
 };

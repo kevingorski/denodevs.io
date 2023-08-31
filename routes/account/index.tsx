@@ -2,15 +2,28 @@ import type { Handlers, PageProps, RouteConfig } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
 import { ComponentChild } from "preact";
 import { stripe } from "@/utils/payments.ts";
+import { GitHub } from "@/components/Icons.tsx";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 import { useCSP } from "$fresh/src/runtime/csp.ts";
+import {
+  getGitHubProfile,
+  getGitHubProfileByUser,
+  GitHubProfile,
+} from "@/utils/db.ts";
+import { OAuthProvider } from "@/routes/account/connectOAuth.ts";
 
-export const handler: Handlers<AccountState, AccountState> = {
-  GET(_request, ctx) {
+interface Props extends AccountState {
+  gitHubProfile: GitHubProfile | null;
+}
+
+export const handler: Handlers<Props, AccountState> = {
+  async GET(_request, ctx) {
     ctx.state.title = "Account";
 
-    return ctx.render(ctx.state);
+    const gitHubProfile = await getGitHubProfileByUser(ctx.state.user.id);
+
+    return ctx.render({ ...ctx.state, gitHubProfile });
   },
 };
 
@@ -44,8 +57,8 @@ function VerifyEmailPrompt(props: { email: string }) {
   );
 }
 
-export default function AccountPage(props: PageProps<AccountState>) {
-  const { user } = props.data;
+export default function AccountPage(props: PageProps<Props>) {
+  const { user, gitHubProfile } = props.data;
   const action = user.isSubscribed ? "Manage" : "Upgrade";
 
   // TODO: refactor this to something reusable when it drops
@@ -70,6 +83,9 @@ export default function AccountPage(props: PageProps<AccountState>) {
     csp.directives.imgSrc.push("avatars.githubusercontent.com");
   });
 
+  const gitHubSignInUrl =
+    `/account/connectOAuth?provider=${OAuthProvider.GITHUB}&`;
+
   return (
     <main>
       <aside>
@@ -79,12 +95,21 @@ export default function AccountPage(props: PageProps<AccountState>) {
       {!user.emailConfirmed && <VerifyEmailPrompt email={user.email} />}
       <div>
       </div>
-      <GitHubAvatarImg login={user.login} size={24} />
+
+      {/* TODO: show GH already connected */}
+      {!gitHubProfile && (
+        <div>
+          <a class="button" href={gitHubSignInUrl}>
+            <GitHub /> Connect with GitHub
+          </a>
+        </div>
+      )}
+
+      <p>More authentication options coming soon.</p>
+      {gitHubProfile && (
+        <GitHubAvatarImg login={gitHubProfile.login} size={24} />
+      )}
       <ul>
-        <Row
-          title="Username"
-          text={user.login}
-        />
         <Row
           title="Email"
           text={user.email}
@@ -117,10 +142,6 @@ export default function AccountPage(props: PageProps<AccountState>) {
         <Row
           title="Bio"
           text={user.bio || "N/A"}
-        />
-        <Row
-          title="Gravatar Id"
-          text={user.gravatarId || "N/A"}
         />
       </ul>
       <a href="/signout">
