@@ -51,9 +51,17 @@ export default function AboutPage() {
       <h2>Made with Deno goodness</h2>
 
       <p>
-        <a href="https://github.com/kevingorski/denodevs_com">
+        <a href="https://github.com/kevingorski/denodevs.io" target="_blank">
           DenoDevs is open source!
         </a>
+        <iframe
+          src="https://github.com/sponsors/kevingorski/button"
+          title="Sponsor kevingorski"
+          height="32"
+          width="114"
+          style="border: 0; border-radius: 6px;"
+        >
+        </iframe>
       </p>
 
       <ol>
