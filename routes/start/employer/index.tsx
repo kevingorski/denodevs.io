@@ -7,8 +7,13 @@ import {
   newEmployerProps,
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
+import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
 
-export const handler: Handlers<State, State> = {
+interface Props extends State {
+  existingEmail?: string;
+}
+
+export const handler: Handlers<Props, State> = {
   GET(_, ctx) {
     return ctx.render(ctx.state);
   },
@@ -32,9 +37,8 @@ export const handler: Handlers<State, State> = {
         company,
         ...newEmployerProps(),
       });
-    } catch (e) {
-      // TODO: handle duplicate email
-      return new Response(null, { status: 500 });
+    } catch (_error) {
+      return ctx.render({ ...ctx.state, existingEmail: email });
     }
 
     const loginToken = await createEmployerLoginToken(employer);
@@ -45,7 +49,8 @@ export const handler: Handlers<State, State> = {
   },
 };
 
-export default function EmployerSignUpPage() {
+export default function EmployerSignUpPage(props: PageProps<Props>) {
+  const { existingEmail } = props.data;
   return (
     <main>
       <h1>
@@ -107,6 +112,17 @@ export default function EmployerSignUpPage() {
         </label>
         <button type="submit">Sign up</button>
       </form>
+
+      {existingEmail && (
+        <div>
+          An employer account already exists for this email address, please{" "}
+          <a href="/signin">sign in</a> or{" "}
+          <ExistingEmailSupportLink
+            accountType="employer"
+            existingEmail={existingEmail}
+          />.
+        </div>
+      )}
 
       <h2>
         <a href="/">Home</a>

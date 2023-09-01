@@ -145,7 +145,9 @@ export async function createEmployer(
     .sum(employersCreatedCountByDayKey, 1n)
     .commit();
 
-  if (!res.ok) throw new Error(`Failed to create employer: ${employer}`);
+  if (!res.ok) {
+    throw new Error(`Failed to create employer with email: ${employer.email}`);
+  }
   return employer;
 }
 
