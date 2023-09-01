@@ -6,7 +6,7 @@ import {
   getUserSession,
   User,
 } from "@/utils/db.ts";
-import { redirectToDevLogin } from "@/utils/redirect.ts";
+import { redirectToDevSignIn } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 
 export interface AccountState extends State {
@@ -18,7 +18,7 @@ export async function handler(
   req: Request,
   ctx: MiddlewareHandlerContext<AccountState>,
 ) {
-  const redirectResponse = redirectToDevLogin(req.url);
+  const redirectResponse = redirectToDevSignIn(req.url);
   const { sessionId } = ctx.state;
   if (!sessionId) return redirectResponse;
 

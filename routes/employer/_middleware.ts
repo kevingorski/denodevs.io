@@ -7,7 +7,7 @@ import {
   getEmployerSession,
   updateEmployer,
 } from "@/utils/db.ts";
-import { redirectToEmployerLogin } from "@/utils/redirect.ts";
+import { redirectToEmployerSignIn } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 
 export interface EmployerState extends State {
@@ -19,7 +19,7 @@ export async function handler(
   req: Request,
   ctx: MiddlewareHandlerContext<EmployerState>,
 ) {
-  const redirectResponse = redirectToEmployerLogin(req.url);
+  const redirectResponse = redirectToEmployerSignIn(req.url);
   const { employerSessionId } = ctx.state;
   if (!employerSessionId) {
     console.error(`no employerSessionId found`);

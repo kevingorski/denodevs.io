@@ -74,7 +74,7 @@ export const renderWelcomeEmployerEmailMessage = (
   to: employer.email,
   subject: `${employer.name}, welcome to DenoDevs!`,
   html:
-    `Yo, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to log in</a>.`,
+    `Yo, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.`,
 });
 
 export const sendWelcomeEmployerEmailMessage = (
@@ -82,19 +82,19 @@ export const sendWelcomeEmployerEmailMessage = (
   token: string,
 ) => sendEmail(renderWelcomeEmployerEmailMessage(employer, token));
 
-export const renderEmployerLoginEmailMessage = (
+export const renderEmployerSignInEmailMessage = (
   employer: Employer,
   token: string,
 ): EmailMessage => ({
   to: employer.email,
-  subject: `DenoDevs login link`,
+  subject: `DenoDevs sign in link`,
   html:
-    `${employer.name}, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to log in</a>.`,
+    `${employer.name}, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.`,
 });
 
-export const sendEmployerLoginEmailMessage = (
+export const sendEmployerSignInEmailMessage = (
   employer: Employer,
   token: string,
-) => sendEmail(renderEmployerLoginEmailMessage(employer, token));
+) => sendEmail(renderEmployerSignInEmailMessage(employer, token));
 
 // TODO: set up email rendering admin page

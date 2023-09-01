@@ -3,7 +3,7 @@ import {
   getRedirectUrlCookie,
   redirect,
   REDIRECT_URL_COOKIE_NAME,
-  redirectToDevLogin,
+  redirectToDevSignIn,
   setRedirectUrlCookie,
 } from "./redirect.ts";
 import { assert, assertEquals } from "std/testing/asserts.ts";
@@ -29,9 +29,9 @@ Deno.test("[redirect] redirect()", () => {
   assertEquals(response.status, status);
 });
 
-Deno.test("[redirect] redirectToLogin()", () => {
+Deno.test("[redirect] redirectToDevSignIn()", () => {
   const from = "/hello-there";
-  const response = redirectToDevLogin(from);
+  const response = redirectToDevSignIn(from);
   const location = `/signin?from=${from}`;
   assert(!response.ok);
   assertEquals(response.body, null);

@@ -20,11 +20,11 @@ export function redirect(
   });
 }
 
-export function redirectToDevLogin(url: string) {
+export function redirectToDevSignIn(url: string) {
   return redirect(`/signin?from=${url}`);
 }
 
-export function redirectToEmployerLogin(url = "/employer") {
+export function redirectToEmployerSignIn(url = "/employer") {
   return redirect(`/employerSignIn?from=${url}`);
 }
 

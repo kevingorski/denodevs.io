@@ -58,8 +58,8 @@ enum TopLevelKeys {
   employers_created_count_by_day = "employers_created_count_by_day",
   github_profiles = "github_profiles",
   github_profiles_by_user = "github_profiles_by_user",
-  login_tokens = "login_tokens",
   sessions = "sessions",
+  sign_in_tokens = "sign_in_tokens",
   users = "users",
   users_by_email = "users_by_email",
   users_by_stripe_customer = "users_by_stripe_customer",
@@ -100,7 +100,7 @@ export function newEmployerProps(): Pick<
   };
 }
 
-export interface LoginToken {
+export interface SignInToken {
   entityId: string;
   entityType: TokenEntityType;
   generated: number;
@@ -108,7 +108,7 @@ export interface LoginToken {
 }
 
 // deno-lint-ignore no-empty-interface
-export interface Session extends LoginToken {}
+export interface Session extends SignInToken {}
 
 interface ExpringUUID {
   generated: number;
@@ -256,67 +256,67 @@ export async function deleteUserSession(sessionId: string) {
   await kv.delete([TopLevelKeys.sessions, TokenEntityType.user, sessionId]);
 }
 
-async function createLoginToken(
+async function createSignInToken(
   entity: Employer | User,
   entityType: TokenEntityType,
-): Promise<LoginToken> {
+): Promise<SignInToken> {
   const token = generateExpiringUUID();
-  const loginToken = {
+  const signInToken = {
     entityId: entity.id,
     entityType,
     ...token,
   };
-  const loginTokensKey = [
-    TopLevelKeys.login_tokens,
+  const signInTokensKey = [
+    TopLevelKeys.sign_in_tokens,
     token.uuid,
   ];
-  const res = await kv.set(loginTokensKey, loginToken);
+  const res = await kv.set(signInTokensKey, signInToken);
   if (!res.ok) {
-    throw new Error(`Failed to create login token: ${loginToken}`);
+    throw new Error(`Failed to create sign in token: ${signInToken}`);
   }
-  return loginToken;
+  return signInToken;
 }
 
-export function createEmployerLoginToken(
+export function createEmployerSignInToken(
   employer: Employer,
-): Promise<LoginToken> {
-  return createLoginToken(employer, TokenEntityType.employer);
+): Promise<SignInToken> {
+  return createSignInToken(employer, TokenEntityType.employer);
 }
 
-export function createUserLoginToken(
+export function createUserSignInToken(
   user: User,
-): Promise<LoginToken> {
-  return createLoginToken(user, TokenEntityType.user);
+): Promise<SignInToken> {
+  return createSignInToken(user, TokenEntityType.user);
 }
 
-async function getLoginToken(uuid: string) {
-  const loginTokensKey = [
-    TopLevelKeys.login_tokens,
+async function getSignInToken(uuid: string) {
+  const signInTokensKey = [
+    TopLevelKeys.sign_in_tokens,
     uuid,
   ];
-  return await getValue<LoginToken>(loginTokensKey, {
+  return await getValue<SignInToken>(signInTokensKey, {
     consistency: "eventual",
-  }) ?? await getValue<LoginToken>(loginTokensKey);
+  }) ?? await getValue<SignInToken>(signInTokensKey);
 }
 
-export async function getEmployerLoginToken(uuid: string) {
-  const loginToken = await getLoginToken(uuid);
-  if (loginToken && loginToken.entityType !== TokenEntityType.employer) {
+export async function getEmployerSignInToken(uuid: string) {
+  const signInToken = await getSignInToken(uuid);
+  if (signInToken && signInToken.entityType !== TokenEntityType.employer) {
     return null;
   }
-  return loginToken;
+  return signInToken;
 }
 
-export async function getUserLoginToken(uuid: string) {
-  const loginToken = await getLoginToken(uuid);
-  if (loginToken && loginToken.entityType !== TokenEntityType.user) {
+export async function getUserSignInToken(uuid: string) {
+  const signInToken = await getSignInToken(uuid);
+  if (signInToken && signInToken.entityType !== TokenEntityType.user) {
     return null;
   }
-  return loginToken;
+  return signInToken;
 }
 
-export async function deleteLoginToken(uuid: string) {
-  await kv.delete([TopLevelKeys.login_tokens, uuid]);
+export async function deleteSignInToken(uuid: string) {
+  await kv.delete([TopLevelKeys.sign_in_tokens, uuid]);
 }
 
 // User
@@ -356,11 +356,8 @@ export function newUserProps(): User {
  * import { createUser, newUser } from "@/utils/db.ts";
  *
  * const user = {
- *   email: "email",
- *   login: "login",
- *   avatarUrl: "https://example.com/avatar-url",
- *   sessionId: "sessionId",
  *   ...newUserProps(),
+ *   email: "email",
  * };
  * await createUser(user);
  * ```

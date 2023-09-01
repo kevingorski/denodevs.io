@@ -3,7 +3,7 @@ import { State } from "@/routes/_middleware.ts";
 import { redirect } from "@/utils/redirect.ts";
 import {
   createEmployer,
-  createEmployerLoginToken,
+  createEmployerSignInToken,
   newEmployerProps,
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
@@ -41,7 +41,7 @@ export const handler: Handlers<Props, State> = {
       return ctx.render({ ...ctx.state, existingEmail: email });
     }
 
-    const loginToken = await createEmployerLoginToken(employer);
+    const loginToken = await createEmployerSignInToken(employer);
 
     await sendWelcomeEmployerEmailMessage(employer, loginToken.uuid);
 

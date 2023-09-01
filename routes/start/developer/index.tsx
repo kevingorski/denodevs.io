@@ -1,6 +1,6 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
-import { createUser, createUserLoginToken, newUserProps } from "@/utils/db.ts";
+import { createUser, createUserSignInToken, newUserProps } from "@/utils/db.ts";
 import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
 import ContactSupportLink from "@/components/ContactSupportLink.tsx";
@@ -33,7 +33,7 @@ export const handler: Handlers<Props, State> = {
       return ctx.render({ ...ctx.state, existingEmail: email });
     }
 
-    const loginToken = await createUserLoginToken(user);
+    const loginToken = await createUserSignInToken(user);
     await sendWelcomeDevEmailMessage(user, loginToken.uuid);
 
     return redirect("/start/developer/thanks");
@@ -49,7 +49,7 @@ export default function DeveloperPage(props: PageProps<Props>) {
       </h1>
 
       <p>
-        To start creating your profile, first login with your GitHub account.
+        To start creating your profile, first sign in with your GitHub account.
         The details of your GitHub account will be used to create your profile,
         but you can edit it and connect other accounts to it afterward.
       </p>

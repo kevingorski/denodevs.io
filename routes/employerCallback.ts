@@ -4,12 +4,12 @@ import {
   deleteRedirectUrlCookie,
   getRedirectUrlCookie,
   redirect,
-  redirectToEmployerLogin,
+  redirectToEmployerSignIn,
 } from "@/utils/redirect.ts";
 import {
   createEmployerSession,
-  deleteLoginToken,
-  getEmployerLoginToken,
+  deleteSignInToken,
+  getEmployerSignInToken,
 } from "@/utils/db.ts";
 import { setCookie } from "https://deno.land/std@0.192.0/http/cookie.ts";
 import {
@@ -22,15 +22,15 @@ import {
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
   async GET(req) {
-    const loginResponse = redirectToEmployerLogin();
+    const loginResponse = redirectToEmployerSignIn();
     const requestUrl = new URL(req.url);
     const token = requestUrl.searchParams.get("token");
     if (!token) return loginResponse;
 
-    const loginToken = await getEmployerLoginToken(token);
+    const loginToken = await getEmployerSignInToken(token);
     if (!loginToken) return loginResponse;
 
-    await deleteLoginToken(token);
+    await deleteSignInToken(token);
 
     if ((loginToken.generated + LOGIN_TOKEN_LIFETIME_MS) < Date.now()) {
       // TODO: message for expired token

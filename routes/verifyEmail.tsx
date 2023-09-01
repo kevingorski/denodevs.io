@@ -1,9 +1,9 @@
 import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 import {
   createUserSession,
-  deleteLoginToken,
+  deleteSignInToken,
   getUser,
-  getUserLoginToken,
+  getUserSignInToken,
   updateUser,
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
@@ -22,14 +22,12 @@ export const handler: Handlers = {
     const token = requestUrl.searchParams.get("token");
     if (!token) return tokenIssueResponse;
 
-    const loginToken = await getUserLoginToken(token);
-    if (!loginToken) return tokenIssueResponse;
+    const signInToken = await getUserSignInToken(token);
+    if (!signInToken) return tokenIssueResponse;
 
-    // NB: not really a login token, expiration not so important
+    await deleteSignInToken(token);
 
-    await deleteLoginToken(token);
-
-    const user = await getUser(loginToken.entityId);
+    const user = await getUser(signInToken.entityId);
     if (!user) {
       return tokenIssueResponse;
     }
