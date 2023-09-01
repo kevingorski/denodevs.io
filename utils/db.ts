@@ -395,7 +395,9 @@ export async function createUser(user: User) {
     .sum(usersCreatedCountByDayKey, 1n)
     .commit();
 
-  if (!res.ok) throw new Error(`Failed to create user: ${user}`);
+  if (!res.ok) {
+    throw new Error(`Failed to create user with email: ${user.email}`);
+  }
 }
 
 export async function updateUser(user: User) {

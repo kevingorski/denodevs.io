@@ -1,11 +1,16 @@
-import type { Handlers } from "$fresh/server.ts";
-import { stripe } from "@/utils/payments.ts";
+import type { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { createUser, createUserLoginToken, newUserProps } from "@/utils/db.ts";
 import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
+import ContactSupportLink from "@/components/ContactSupportLink.tsx";
+import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
 
-export const handler: Handlers<State, State> = {
+interface Props extends State {
+  existingEmail?: string;
+}
+
+export const handler: Handlers<Props, State> = {
   GET(_, ctx) {
     return ctx.render(ctx.state);
   },
@@ -24,9 +29,8 @@ export const handler: Handlers<State, State> = {
 
     try {
       await createUser(user);
-    } catch (e) {
-      // TODO: handle duplicate email
-      return new Response(null, { status: 500 });
+    } catch (_error) {
+      return ctx.render({ ...ctx.state, existingEmail: email });
     }
 
     const loginToken = await createUserLoginToken(user);
@@ -36,7 +40,8 @@ export const handler: Handlers<State, State> = {
   },
 };
 
-export default function DeveloperPage() {
+export default function DeveloperPage(props: PageProps<Props>) {
+  const { existingEmail } = props.data;
   return (
     <main>
       <h1>
@@ -75,7 +80,16 @@ export default function DeveloperPage() {
         <button type="submit">Sign up</button>
       </form>
 
-      <div>TK: Remind me later</div>
+      {existingEmail && (
+        <div>
+          A developer account already exists for this email address, please{" "}
+          <a href="/signin">sign in</a> or{" "}
+          <ExistingEmailSupportLink
+            accountType="developer"
+            existingEmail={existingEmail}
+          />.
+        </div>
+      )}
 
       <h2>
         <a href="/">Home</a>
