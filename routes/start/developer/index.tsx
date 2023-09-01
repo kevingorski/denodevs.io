@@ -5,6 +5,7 @@ import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
 import ContactSupportLink from "@/components/ContactSupportLink.tsx";
 import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
+import { UserType } from "@/types/UserType.ts";
 
 interface Props extends State {
   existingEmail?: string;
@@ -85,7 +86,7 @@ export default function DeveloperPage(props: PageProps<Props>) {
           A developer account already exists for this email address, please{" "}
           <a href="/signin">sign in</a> or{" "}
           <ExistingEmailSupportLink
-            accountType="developer"
+            userType={UserType.Developer}
             existingEmail={existingEmail}
           />.
         </div>

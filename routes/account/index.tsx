@@ -12,6 +12,8 @@ import {
   GitHubProfile,
 } from "@/utils/db.ts";
 import { OAuthProvider } from "@/routes/account/connectOAuth.ts";
+import SignOutLink from "@/components/SignOutLink.tsx";
+import { UserType } from "@/types/UserType.ts";
 
 interface Props extends AccountState {
   gitHubProfile: GitHubProfile | null;
@@ -144,9 +146,7 @@ export default function AccountPage(props: PageProps<Props>) {
           text={user.bio || "N/A"}
         />
       </ul>
-      <a href="/signout">
-        Sign out
-      </a>
+      <SignOutLink userType={UserType.Developer} />
     </main>
   );
 }

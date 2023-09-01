@@ -1,5 +1,7 @@
 import { EmployerState } from "@/routes/employer/_middleware.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
+import SignOutLink from "@/components/SignOutLink.tsx";
+import { UserType } from "@/types/UserType.ts";
 
 export const handler: Handlers<EmployerState, EmployerState> = {
   GET(_, ctx) {
@@ -26,6 +28,8 @@ export default function EmployerHomePage(props: PageProps<EmployerState>) {
           email the me (founder of Deno Devs) directly here
         </a>.
       </p>
+
+      <SignOutLink userType={UserType.Employer} />
     </main>
   );
 }

@@ -8,6 +8,7 @@ import {
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
 import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
+import { UserType } from "@/types/UserType.ts";
 
 interface Props extends State {
   existingEmail?: string;
@@ -118,7 +119,7 @@ export default function EmployerSignUpPage(props: PageProps<Props>) {
           An employer account already exists for this email address, please{" "}
           <a href="/signin">sign in</a> or{" "}
           <ExistingEmailSupportLink
-            accountType="employer"
+            userType={UserType.Employer}
             existingEmail={existingEmail}
           />.
         </div>
