@@ -47,12 +47,12 @@ export const renderWelcomeDevEmailMessage = (
 <p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
 });
 
-export const sendWelcomeDevEmailMessage = (
+export const sendWelcomeDeveloperEmailMessage = (
   user: User,
   token: string,
 ) => sendEmail(renderWelcomeDevEmailMessage(user, token));
 
-export const renderDevEmailVerificationMessage = (
+export const renderDeveloperEmailVerificationMessage = (
   user: User,
   token: string,
 ): EmailMessage => ({
@@ -62,10 +62,25 @@ export const renderDevEmailVerificationMessage = (
     `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
 });
 
-export const sendDevEmailVerificationMessage = (
+export const sendDeveloperEmailVerificationMessage = (
   user: User,
   token: string,
-) => sendEmail(renderDevEmailVerificationMessage(user, token));
+) => sendEmail(renderDeveloperEmailVerificationMessage(user, token));
+
+export const renderDeveloperSignInEmailMessage = (
+  user: User,
+  token: string,
+): EmailMessage => ({
+  to: user.email,
+  subject: `DenoDevs sign in link`,
+  html:
+    `<a href="${SITE_BASE_URL}/verifyEmail?token=${token}">Click here to sign in</a>.`,
+});
+
+export const sendDeveloperSignInEmailMessage = (
+  user: User,
+  token: string,
+) => sendEmail(renderDeveloperSignInEmailMessage(user, token));
 
 export const renderWelcomeEmployerEmailMessage = (
   employer: Employer,

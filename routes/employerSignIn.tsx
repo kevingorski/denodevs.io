@@ -1,17 +1,22 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
-import { setRedirectUrlCookie } from "@/utils/redirect.ts";
+import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
 import { createEmployerSignInToken, getEmployerByEmail } from "@/utils/db.ts";
 import { sendEmployerSignInEmailMessage } from "@/utils/email.ts";
+import EmailSignInForm from "@/components/EmailSignInForm.tsx";
+import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
+import { UserType } from "@/types/UserType.ts";
 
 interface EmployerSignInPageData extends State {
   email?: string;
-  signInResult?: boolean;
+  hasSubmitted: boolean;
 }
 
 export const handler: Handlers<EmployerSignInPageData, State> = {
   GET(_, ctx) {
-    return ctx.render(ctx.state);
+    if (ctx.state.employerSessionId !== undefined) return redirect("/");
+
+    return ctx.render({ ...ctx.state, hasSubmitted: false });
   },
 
   async POST(req, ctx) {
@@ -36,7 +41,7 @@ export const handler: Handlers<EmployerSignInPageData, State> = {
     const response = await ctx.render({
       ...ctx.state,
       email,
-      signInResult,
+      hasSubmitted: true,
     });
     if (signInResult) {
       setRedirectUrlCookie(req, response);
@@ -45,62 +50,26 @@ export const handler: Handlers<EmployerSignInPageData, State> = {
   },
 };
 
-function SignInForm(props: { email: string }) {
-  return (
-    <form method="post">
-      <label>
-        Email:{" "}
-        <input
-          type="email"
-          name="email"
-          placeholder="Your email address"
-          maxLength={255}
-          value={props.email}
-          required
-        />
-      </label>
-      <button type="submit">Sign in</button>
-    </form>
-  );
-}
-
-function SuccessfulSignIn() {
-  return (
-    <p>
-      Check your email for the sign in link. This link will expire in 10
-      minutes.
-    </p>
-  );
-}
-
-function FailedSignIn(props: { email: string }) {
-  return (
-    <div>
-      <p>That didn't work. Please try again.</p>
-      <SignInForm email={props.email} />
-    </div>
-  );
-}
-
 export default function EmployerSignInPage(
   props: PageProps<EmployerSignInPageData>,
 ) {
-  const signInResult = props.data.signInResult;
+  const { email, hasSubmitted } = props.data;
   return (
     <main>
       <h1>
         Employer Sign In
       </h1>
 
-      {signInResult === true
-        ? <SuccessfulSignIn />
-        : signInResult === false
-        ? <FailedSignIn email={props.data.email || ""} />
-        : <SignInForm email={""} />}
+      <EmailSignInForm email={email || ""} hasSubmitted={hasSubmitted} />
 
-      <h2>
-        <a href="/">Home</a>
-      </h2>
+      <ul>
+        <li>
+          <SignInFormSupportLink email={email} userType={UserType.Employer} />
+        </li>
+        <li>
+          <a href="/signin">Developer Sign In</a>
+        </li>
+      </ul>
     </main>
   );
 }

@@ -2,7 +2,7 @@ export default function AuthenticationLinks(
   props: { employerSessionId?: string; sessionId?: string },
 ) {
   if (!props.employerSessionId && !props.sessionId) {
-    return <a href="/start">Sign in</a>;
+    return <a href="/signin">Sign in</a>;
   }
   return (
     <>

@@ -11,7 +11,7 @@ import {
   deleteSignInToken,
   getEmployerSignInToken,
 } from "@/utils/db.ts";
-import { setCookie } from "https://deno.land/std@0.192.0/http/cookie.ts";
+import { setCookie } from "std/http/cookie.ts";
 import {
   EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
   EMPLOYER_SESSION_COOKIE_NAME,

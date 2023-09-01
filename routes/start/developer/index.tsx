@@ -1,7 +1,7 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { createUser, createUserSignInToken, newUserProps } from "@/utils/db.ts";
-import { sendWelcomeDevEmailMessage } from "@/utils/email.ts";
+import { sendWelcomeDeveloperEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
 import ContactSupportLink from "@/components/ContactSupportLink.tsx";
 import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
@@ -35,7 +35,7 @@ export const handler: Handlers<Props, State> = {
     }
 
     const loginToken = await createUserSignInToken(user);
-    await sendWelcomeDevEmailMessage(user, loginToken.uuid);
+    await sendWelcomeDeveloperEmailMessage(user, loginToken.uuid);
 
     return redirect("/start/developer/thanks");
   },

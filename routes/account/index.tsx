@@ -11,9 +11,9 @@ import {
   getGitHubProfileByUser,
   GitHubProfile,
 } from "@/utils/db.ts";
-import { OAuthProvider } from "@/routes/account/connectOAuth.ts";
 import SignOutLink from "@/components/SignOutLink.tsx";
 import { UserType } from "@/types/UserType.ts";
+import { OAuthProvider } from "@/types/OAuthProvider.ts";
 
 interface Props extends AccountState {
   gitHubProfile: GitHubProfile | null;
@@ -86,7 +86,7 @@ export default function AccountPage(props: PageProps<Props>) {
   });
 
   const gitHubSignInUrl =
-    `/account/connectOAuth?provider=${OAuthProvider.GITHUB}&`;
+    `/account/connectOAuth?provider=${OAuthProvider.GITHUB}`;
 
   return (
     <main>

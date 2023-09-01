@@ -117,7 +117,7 @@ export default function EmployerSignUpPage(props: PageProps<Props>) {
       {existingEmail && (
         <div>
           An employer account already exists for this email address, please{" "}
-          <a href="/signin">sign in</a> or{" "}
+          <a href="/employerSignIn">sign in</a> or{" "}
           <ExistingEmailSupportLink
             userType={UserType.Employer}
             existingEmail={existingEmail}

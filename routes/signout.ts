@@ -5,7 +5,7 @@ import { deleteEmployerSession, deleteUserSession } from "@/utils/db.ts";
 import { signOut } from "kv_oauth";
 import { redirect } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_NAME } from "@/utils/constants.ts";
-import { deleteCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
+import { deleteCookie } from "std/http/cookie.ts";
 
 async function handleEmployerSignout(employerSessionId?: string) {
   const response = redirect("/");

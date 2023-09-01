@@ -1,9 +1,12 @@
+import { assertExists } from "std/testing/asserts.ts";
 import { DAY, HOUR, MINUTE } from "std/datetime/constants.ts";
 
 export const SITE_NAME = "Deno Devs";
 export const SITE_DESCRIPTION = "Deno developer reverse job board";
 export const REDIRECT_PATH_AFTER_LOGIN = "/";
-export const SITE_BASE_URL = Deno.env.get("SITE_BASE_URL");
+const siteBaseUrl = Deno.env.get("SITE_BASE_URL");
+assertExists(siteBaseUrl);
+export const SITE_BASE_URL = siteBaseUrl;
 export const USE_SECURE_COOKIES =
   Deno.env.get("USE_SECURE_COOKIES") !== "false";
 

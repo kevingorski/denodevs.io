@@ -11,7 +11,7 @@ import {
   ADMIN_SESSION_COOKIE_NAME,
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
-import { setCookie } from "https://deno.land/std@0.192.0/http/cookie.ts";
+import { setCookie } from "std/http/cookie.ts";
 
 export interface AdminState extends State {
   adminSessionId: string;

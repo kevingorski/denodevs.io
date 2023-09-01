@@ -5,7 +5,6 @@ import {
   assertEquals,
   assertFalse,
   assertInstanceOf,
-  assertStringIncludes,
 } from "std/testing/asserts.ts";
 
 const CONN_INFO: ServeHandlerInfo = {
@@ -41,21 +40,6 @@ Deno.test("[http]", async (test) => {
       "/signin?from=http://localhost/account",
     );
     assertEquals(response.status, 303);
-  });
-
-  await test.step("GET /signin", async () => {
-    const response = await handler(
-      new Request("http://localhost/signin"),
-      CONN_INFO,
-    );
-
-    assertFalse(response.ok);
-    assertFalse(response.body);
-    assertStringIncludes(
-      response.headers.get("location")!,
-      "https://github.com/login/oauth/authorize",
-    );
-    assertEquals(response.status, 302);
   });
 
   await test.step("GET /signout", async () => {
