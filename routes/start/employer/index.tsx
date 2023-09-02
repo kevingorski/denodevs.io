@@ -1,4 +1,4 @@
-import type { Handlers, PageProps } from "$fresh/server.ts";
+import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirect } from "@/utils/redirect.ts";
 import {
@@ -7,14 +7,8 @@ import {
   newEmployerProps,
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
-import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
-import { UserType } from "@/types/UserType.ts";
 
-interface Props extends State {
-  existingEmail?: string;
-}
-
-export const handler: Handlers<Props, State> = {
+export const handler: Handlers<State, State> = {
   GET(_, ctx) {
     return ctx.render(ctx.state);
   },
@@ -30,6 +24,7 @@ export const handler: Handlers<Props, State> = {
     }
 
     let employer;
+    const redirectToThanks = redirect("/start/employer/thanks");
 
     try {
       employer = await createEmployer({
@@ -39,19 +34,19 @@ export const handler: Handlers<Props, State> = {
         ...newEmployerProps(),
       });
     } catch (_error) {
-      return ctx.render({ ...ctx.state, existingEmail: email });
+      // Don't leak knowledge of existing email address
+      return redirectToThanks;
     }
 
     const loginToken = await createEmployerSignInToken(employer);
 
     await sendWelcomeEmployerEmailMessage(employer, loginToken.uuid);
 
-    return redirect("/start/employer/thanks");
+    return redirectToThanks;
   },
 };
 
-export default function EmployerSignUpPage(props: PageProps<Props>) {
-  const { existingEmail } = props.data;
+export default function EmployerSignUpPage() {
   return (
     <main>
       <h1>
@@ -113,17 +108,6 @@ export default function EmployerSignUpPage(props: PageProps<Props>) {
         </label>
         <button type="submit">Sign up</button>
       </form>
-
-      {existingEmail && (
-        <div>
-          An employer account already exists for this email address, please{" "}
-          <a href="/employerSignIn">sign in</a> or{" "}
-          <ExistingEmailSupportLink
-            userType={UserType.Employer}
-            existingEmail={existingEmail}
-          />.
-        </div>
-      )}
 
       <h2>
         <a href="/">Home</a>

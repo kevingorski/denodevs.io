@@ -1,5 +1,8 @@
-interface Props {
+export interface LinkProps {
   linkText?: string;
+}
+
+interface Props extends LinkProps {
   messageBody: string;
   messageSubject: string;
 }

@@ -1,5 +1,7 @@
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
+import { UserType } from "@/types/UserType.ts";
+import SignUpSupportLink from "@/components/SignUpSupportLink.tsx";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -19,9 +21,16 @@ export default function DeveloperThanksPage() {
         will let you get started.
       </p>
 
-      <h2>
-        <a href="/">Home</a>
-      </h2>
+      <ul>
+        <li>
+          <SignUpSupportLink
+            userType={UserType.Developer}
+          />
+        </li>
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
     </main>
   );
 }

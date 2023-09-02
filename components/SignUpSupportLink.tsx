@@ -5,24 +5,20 @@ import ContactSupportLink, {
 import { UserType } from "@/types/UserType.ts";
 
 interface Props extends LinkProps {
-  email?: string;
   userType: UserType;
 }
 
-export default function SignInFormSupportLink(
+export default function SignUpSupportLink(
   props: Props,
 ) {
   const userType = upperFirstCase(props.userType);
-  const messageSubject = `${userType} Sign In Support`;
-  const emailClause = props.email
-    ? ` with the email address "${props.email}"`
-    : "";
+  const messageSubject = `${userType} Sign Up Support`;
   const messageBody = `Hello, this is [Your Name Here].
-I'm trying to sign in with a ${userType} account on DenoDevs${emailClause}, but [What's Wrong Here].
+I was trying to sign up with a ${userType} account on DenoDevs, but [Issue Encountered Here].
 Please help!`;
   return (
     <ContactSupportLink
-      linkText={props.linkText || "📧 Sign In Help From Kevin"}
+      linkText={props.linkText}
       messageSubject={messageSubject}
       messageBody={messageBody}
     />

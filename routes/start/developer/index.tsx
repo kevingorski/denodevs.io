@@ -1,21 +1,14 @@
-import type { Handlers, PageProps } from "$fresh/server.ts";
+import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { createUser, createUserSignInToken, newUserProps } from "@/utils/db.ts";
 import { sendWelcomeDeveloperEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
-import ContactSupportLink from "@/components/ContactSupportLink.tsx";
-import ExistingEmailSupportLink from "@/components/ExistingEmailSupportLink.tsx";
-import { UserType } from "@/types/UserType.ts";
 
-interface Props extends State {
-  existingEmail?: string;
-}
-
-export const handler: Handlers<Props, State> = {
+export const handler: Handlers<State, State> = {
   GET(_, ctx) {
     return ctx.render(ctx.state);
   },
-  async POST(req, ctx) {
+  async POST(req, _ctx) {
     const form = await req.formData();
     const email = form.get("email")?.toString();
 
@@ -27,22 +20,23 @@ export const handler: Handlers<Props, State> = {
       ...newUserProps(),
       email,
     };
+    const redirectToThanks = redirect("/start/developer/thanks");
 
     try {
       await createUser(user);
     } catch (_error) {
-      return ctx.render({ ...ctx.state, existingEmail: email });
+      // Don't leak knowledge of existing email address
+      return redirectToThanks;
     }
 
     const loginToken = await createUserSignInToken(user);
     await sendWelcomeDeveloperEmailMessage(user, loginToken.uuid);
 
-    return redirect("/start/developer/thanks");
+    return redirectToThanks;
   },
 };
 
-export default function DeveloperPage(props: PageProps<Props>) {
-  const { existingEmail } = props.data;
+export default function DeveloperPage() {
   return (
     <main>
       <h1>
@@ -80,17 +74,6 @@ export default function DeveloperPage(props: PageProps<Props>) {
         </label>
         <button type="submit">Sign up</button>
       </form>
-
-      {existingEmail && (
-        <div>
-          A developer account already exists for this email address, please{" "}
-          <a href="/signin">sign in</a> or{" "}
-          <ExistingEmailSupportLink
-            userType={UserType.Developer}
-            existingEmail={existingEmail}
-          />.
-        </div>
-      )}
 
       <h2>
         <a href="/">Home</a>
