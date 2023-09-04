@@ -1,7 +1,7 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { State } from "./_middleware.ts";
 import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
-import { createUserSignInToken, getUserByEmail } from "@/utils/db.ts";
+import { createDeveloperSignInToken, getDeveloperByEmail } from "@/utils/db.ts";
 import { sendDeveloperSignInEmailMessage } from "@/utils/email.ts";
 import EmailSignInForm from "@/components/EmailSignInForm.tsx";
 import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
@@ -37,15 +37,15 @@ export const handler: Handlers<DeveloperSignInPageData, State> = {
     if (!email) {
       return new Response(null, { status: 400 });
     }
-    const user = await getUserByEmail(email);
+    const developer = await getDeveloperByEmail(email);
     let signInResult = false;
 
-    if (user) {
+    if (developer) {
       signInResult = true;
 
-      const loginToken = await createUserSignInToken(user);
+      const loginToken = await createDeveloperSignInToken(developer);
 
-      await sendDeveloperSignInEmailMessage(user, loginToken.uuid);
+      await sendDeveloperSignInEmailMessage(developer, loginToken.uuid);
     }
 
     const response = await ctx.render({

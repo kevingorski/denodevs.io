@@ -1,4 +1,4 @@
-import { Employer, User } from "@/utils/db.ts";
+import { Developer, Employer } from "@/utils/db.ts";
 import { SITE_BASE_URL } from "@/utils/constants.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
@@ -37,50 +37,50 @@ const sendEmail = (
 };
 
 export const renderWelcomeDevEmailMessage = (
-  user: User,
+  developer: Developer,
   token: string,
 ): EmailMessage => ({
-  to: user.email,
-  subject: `${user.name}, welcome to DenoDevs!`,
+  to: developer.email,
+  subject: `${developer.name}, welcome to DenoDevs!`,
   html: `<h1>Welcome to DenoDevs</h1>
 <p>Your account has been created...</p>
 <p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
 });
 
 export const sendWelcomeDeveloperEmailMessage = (
-  user: User,
+  developer: Developer,
   token: string,
-) => sendEmail(renderWelcomeDevEmailMessage(user, token));
+) => sendEmail(renderWelcomeDevEmailMessage(developer, token));
 
 export const renderDeveloperEmailVerificationMessage = (
-  user: User,
+  developer: Developer,
   token: string,
 ): EmailMessage => ({
-  to: user.email,
+  to: developer.email,
   subject: `Please verify your email`,
   html:
     `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
 });
 
 export const sendDeveloperEmailVerificationMessage = (
-  user: User,
+  developer: Developer,
   token: string,
-) => sendEmail(renderDeveloperEmailVerificationMessage(user, token));
+) => sendEmail(renderDeveloperEmailVerificationMessage(developer, token));
 
 export const renderDeveloperSignInEmailMessage = (
-  user: User,
+  developer: Developer,
   token: string,
 ): EmailMessage => ({
-  to: user.email,
+  to: developer.email,
   subject: `DenoDevs sign in link`,
   html:
     `<a href="${SITE_BASE_URL}/verifyEmail?token=${token}">Click here to sign in</a>.`,
 });
 
 export const sendDeveloperSignInEmailMessage = (
-  user: User,
+  developer: Developer,
   token: string,
-) => sendEmail(renderDeveloperSignInEmailMessage(user, token));
+) => sendEmail(renderDeveloperSignInEmailMessage(developer, token));
 
 export const renderWelcomeEmployerEmailMessage = (
   employer: Employer,

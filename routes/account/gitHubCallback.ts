@@ -2,7 +2,7 @@ import type { Handlers } from "$fresh/server.ts";
 import {
   createGitHubProfile,
   getGitHubProfile,
-  upgradeUserOAuthSession,
+  upgradeDeveloperOAuthSession,
 } from "@/utils/db.ts";
 import { AccountState } from "./_middleware.ts";
 import { handleCallback } from "kv_oauth";
@@ -12,7 +12,7 @@ import { getGitHubUser } from "@/utils/github.ts";
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, AccountState> = {
   async GET(req, ctx) {
-    const { user } = ctx.state;
+    const { developer } = ctx.state;
     const { response, accessToken, sessionId } = await handleCallback(
       req,
       gitHubOAuth2Client,
@@ -22,7 +22,7 @@ export const handler: Handlers<any, AccountState> = {
     const gitHubProfile = await getGitHubProfile(gitHubUser.id);
     if (!gitHubProfile) {
       await createGitHubProfile({
-        userId: user.id,
+        developerId: developer.id,
         gitHubId: gitHubUser.id,
         email: gitHubUser.email,
         login: gitHubUser.login,
@@ -34,7 +34,7 @@ export const handler: Handlers<any, AccountState> = {
         bio: gitHubUser.bio,
       });
     }
-    await upgradeUserOAuthSession(user.id, sessionId);
+    await upgradeDeveloperOAuthSession(developer.id, sessionId);
     return response;
   },
 };

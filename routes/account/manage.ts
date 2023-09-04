@@ -6,12 +6,14 @@ import { redirect } from "@/utils/redirect.ts";
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, AccountState> = {
   async GET(req, ctx) {
-    if (stripe === undefined || ctx.state.user.stripeCustomerId === undefined) {
+    if (
+      stripe === undefined || ctx.state.developer.stripeCustomerId === undefined
+    ) {
       return ctx.renderNotFound();
     }
 
     const { url } = await stripe.billingPortal.sessions.create({
-      customer: ctx.state.user.stripeCustomerId,
+      customer: ctx.state.developer.stripeCustomerId,
       return_url: new URL(req.url).origin + "/account",
     });
 

@@ -1,12 +1,12 @@
 import {
-  createUser,
-  getManyUsers,
-  getUser,
-  getUserByEmail,
-  getUserByStripeCustomer,
-  newUserProps,
-  updateUser,
-  type User,
+  createDeveloper,
+  type Developer,
+  getDeveloper,
+  getDeveloperByEmail,
+  getDeveloperByStripeCustomer,
+  getManyDevelopers,
+  newDeveloperProps,
+  updateDeveloper,
 } from "./db.ts";
 import {
   assertArrayIncludes,
@@ -14,9 +14,9 @@ import {
   assertRejects,
 } from "std/testing/asserts.ts";
 
-function genNewUser(): User {
+function genNewDeveloper(): Developer {
   return {
-    ...newUserProps(),
+    ...newDeveloperProps(),
     email: `${crypto.randomUUID()}@example.com`,
     stripeCustomerId: crypto.randomUUID(),
     name: null,
@@ -26,32 +26,38 @@ function genNewUser(): User {
   };
 }
 
-Deno.test("[db] user", async () => {
-  const user = genNewUser();
+Deno.test("[db] developer", async () => {
+  const developer = genNewDeveloper();
 
-  assertEquals(await getUser(user.id), null);
-  assertEquals(await getUserByEmail(user.email), null);
-  assertEquals(await getUserByStripeCustomer(user.stripeCustomerId!), null);
+  assertEquals(await getDeveloper(developer.id), null);
+  assertEquals(await getDeveloperByEmail(developer.email), null);
+  assertEquals(
+    await getDeveloperByStripeCustomer(developer.stripeCustomerId!),
+    null,
+  );
 
-  await createUser(user);
-  await assertRejects(async () => await createUser(user));
-  assertEquals(await getUser(user.id), user);
-  assertEquals(await getUserByEmail(user.email), user);
-  assertEquals(await getUserByStripeCustomer(user.stripeCustomerId!), user);
+  await createDeveloper(developer);
+  await assertRejects(async () => await createDeveloper(developer));
+  assertEquals(await getDeveloper(developer.id), developer);
+  assertEquals(await getDeveloperByEmail(developer.email), developer);
+  assertEquals(
+    await getDeveloperByStripeCustomer(developer.stripeCustomerId!),
+    developer,
+  );
 
-  const user1 = genNewUser();
-  await createUser(user1);
-  assertArrayIncludes(await getManyUsers([user.id, user1.id]), [
-    user,
-    user1,
+  const developer1 = genNewDeveloper();
+  await createDeveloper(developer1);
+  assertArrayIncludes(await getManyDevelopers([developer.id, developer1.id]), [
+    developer,
+    developer1,
   ]);
 
-  const newUser: User = { ...user };
-  await updateUser(newUser);
-  assertEquals(await getUser(newUser.id), newUser);
-  assertEquals(await getUserByEmail(newUser.email), newUser);
+  const newDeveloper: Developer = { ...developer };
+  await updateDeveloper(newDeveloper);
+  assertEquals(await getDeveloper(newDeveloper.id), newDeveloper);
+  assertEquals(await getDeveloperByEmail(newDeveloper.email), newDeveloper);
   assertEquals(
-    await getUserByStripeCustomer(newUser.stripeCustomerId!),
-    newUser,
+    await getDeveloperByStripeCustomer(newDeveloper.stripeCustomerId!),
+    newDeveloper,
   );
 });

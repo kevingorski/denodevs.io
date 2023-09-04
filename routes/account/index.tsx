@@ -8,7 +8,7 @@ import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 import { useCSP } from "$fresh/src/runtime/csp.ts";
 import {
   getGitHubProfile,
-  getGitHubProfileByUser,
+  getGitHubProfileByDeveloper,
   GitHubProfile,
 } from "@/utils/db.ts";
 import SignOutLink from "@/components/SignOutLink.tsx";
@@ -23,7 +23,9 @@ export const handler: Handlers<Props, AccountState> = {
   async GET(_request, ctx) {
     ctx.state.title = "Account";
 
-    const gitHubProfile = await getGitHubProfileByUser(ctx.state.user.id);
+    const gitHubProfile = await getGitHubProfileByDeveloper(
+      ctx.state.developer.id,
+    );
 
     return ctx.render({ ...ctx.state, gitHubProfile });
   },
@@ -60,8 +62,8 @@ function VerifyEmailPrompt(props: { email: string }) {
 }
 
 export default function AccountPage(props: PageProps<Props>) {
-  const { user, gitHubProfile } = props.data;
-  const action = user.isSubscribed ? "Manage" : "Upgrade";
+  const { developer, gitHubProfile } = props.data;
+  const action = developer.isSubscribed ? "Manage" : "Upgrade";
 
   // TODO: refactor this to something reusable when it drops
   // https://github.com/denoland/fresh/issues/1705
@@ -94,7 +96,9 @@ export default function AccountPage(props: PageProps<Props>) {
         <h1>Welcome to your DenoDevs profile!</h1>
         <p>Soon you'll be able to update all of this.</p>
       </aside>
-      {!user.emailConfirmed && <VerifyEmailPrompt email={user.email} />}
+      {!developer.emailConfirmed && (
+        <VerifyEmailPrompt email={developer.email} />
+      )}
       <div>
       </div>
 
@@ -114,11 +118,11 @@ export default function AccountPage(props: PageProps<Props>) {
       <ul>
         <Row
           title="Email"
-          text={user.email}
+          text={developer.email}
         />
         <Row
           title="Subscription"
-          text={user.isSubscribed ? "Premium 🦕" : "Free"}
+          text={developer.isSubscribed ? "Premium 🦕" : "Free"}
         >
           {stripe && (
             <a
@@ -131,19 +135,19 @@ export default function AccountPage(props: PageProps<Props>) {
         </Row>
         <Row
           title="Name"
-          text={user.name || "N/A"}
+          text={developer.name || "N/A"}
         />
         <Row
           title="Company"
-          text={user.company || "N/A"}
+          text={developer.company || "N/A"}
         />
         <Row
           title="Location"
-          text={user.location || "N/A"}
+          text={developer.location || "N/A"}
         />
         <Row
           title="Bio"
-          text={user.bio || "N/A"}
+          text={developer.bio || "N/A"}
         />
       </ul>
       <SignOutLink userType={UserType.Developer} />

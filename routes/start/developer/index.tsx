@@ -1,6 +1,10 @@
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
-import { createUser, createUserSignInToken, newUserProps } from "@/utils/db.ts";
+import {
+  createDeveloper,
+  createDeveloperSignInToken,
+  newDeveloperProps,
+} from "@/utils/db.ts";
 import { sendWelcomeDeveloperEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
 
@@ -16,21 +20,21 @@ export const handler: Handlers<State, State> = {
       return new Response(null, { status: 400 });
     }
 
-    const user = {
-      ...newUserProps(),
+    const developer = {
+      ...newDeveloperProps(),
       email,
     };
     const redirectToThanks = redirect("/start/developer/thanks");
 
     try {
-      await createUser(user);
+      await createDeveloper(developer);
     } catch (_error) {
       // Don't leak knowledge of existing email address
       return redirectToThanks;
     }
 
-    const loginToken = await createUserSignInToken(user);
-    await sendWelcomeDeveloperEmailMessage(user, loginToken.uuid);
+    const loginToken = await createDeveloperSignInToken(developer);
+    await sendWelcomeDeveloperEmailMessage(developer, loginToken.uuid);
 
     return redirectToThanks;
   },

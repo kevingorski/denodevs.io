@@ -18,7 +18,7 @@ export const handler: Handlers<null, AccountState> = {
 
     const { url } = await stripe.checkout.sessions.create({
       success_url: new URL(req.url).origin + "/account",
-      customer: ctx.state.user.stripeCustomerId,
+      customer: ctx.state.developer.stripeCustomerId,
       line_items: [
         {
           price: STRIPE_PREMIUM_PLAN_PRICE_ID,

@@ -52,33 +52,33 @@ export function formatDate(date: Date) {
 }
 
 enum TopLevelKeys {
+  developers = "developers",
+  developers_by_email = "developers_by_email",
+  developers_by_stripe_customer = "developers_by_stripe_customer",
+  developers_created_count = "developers_created_count",
+  developers_created_count_by_day = "developers_created_count_by_day",
   employers = "employers",
   employers_by_email = "employers_by_email",
   employers_created_count = "employers_created_count",
   employers_created_count_by_day = "employers_created_count_by_day",
   github_profiles = "github_profiles",
-  github_profiles_by_user = "github_profiles_by_user",
+  github_profiles_by_developer = "github_profiles_by_developer",
   sessions = "sessions",
   sign_in_tokens = "sign_in_tokens",
-  users = "users",
-  users_by_email = "users_by_email",
-  users_by_stripe_customer = "users_by_stripe_customer",
-  users_created_count = "users_created_count",
-  users_created_count_by_day = "users_created_count_by_day",
 }
 
 export type AllTimeMetric =
   | TopLevelKeys.employers_created_count
-  | TopLevelKeys.users_created_count;
+  | TopLevelKeys.developers_created_count;
 
 export type DailyMetric =
   | TopLevelKeys.employers_created_count_by_day
-  | TopLevelKeys.users_created_count_by_day;
+  | TopLevelKeys.developers_created_count_by_day;
 
 enum TokenEntityType {
   admin = "admin",
+  developer = "developer",
   employer = "employer",
-  user = "user",
 }
 
 // Employer
@@ -205,21 +205,21 @@ export async function createEmployerSession(employerId: string) {
   );
 }
 
-export async function createUserSession(userId: string) {
+export async function createDeveloperSession(developerId: string) {
   return await createSession(
-    TokenEntityType.user,
-    userId,
+    TokenEntityType.developer,
+    developerId,
     generateExpiringUUID(),
   );
 }
 
-export async function upgradeUserOAuthSession(
-  userId: string,
+export async function upgradeDeveloperOAuthSession(
+  developerId: string,
   sessionId: string,
 ) {
   return await createSession(
-    TokenEntityType.user,
-    userId,
+    TokenEntityType.developer,
+    developerId,
     { generated: Date.now(), uuid: sessionId },
   );
 }
@@ -240,8 +240,8 @@ export function getEmployerSession(sessionId: string) {
   return getSession(sessionId, TokenEntityType.employer);
 }
 
-export function getUserSession(sessionId: string) {
-  return getSession(sessionId, TokenEntityType.user);
+export function getDeveloperSession(sessionId: string) {
+  return getSession(sessionId, TokenEntityType.developer);
 }
 
 export async function deleteAdminSession(sessionId: string) {
@@ -252,12 +252,16 @@ export async function deleteEmployerSession(sessionId: string) {
   await kv.delete([TopLevelKeys.sessions, TokenEntityType.employer, sessionId]);
 }
 
-export async function deleteUserSession(sessionId: string) {
-  await kv.delete([TopLevelKeys.sessions, TokenEntityType.user, sessionId]);
+export async function deleteDeveloperSession(sessionId: string) {
+  await kv.delete([
+    TopLevelKeys.sessions,
+    TokenEntityType.developer,
+    sessionId,
+  ]);
 }
 
 async function createSignInToken(
-  entity: Employer | User,
+  entity: Employer | Developer,
   entityType: TokenEntityType,
 ): Promise<SignInToken> {
   const token = generateExpiringUUID();
@@ -283,10 +287,10 @@ export function createEmployerSignInToken(
   return createSignInToken(employer, TokenEntityType.employer);
 }
 
-export function createUserSignInToken(
-  user: User,
+export function createDeveloperSignInToken(
+  developer: Developer,
 ): Promise<SignInToken> {
-  return createSignInToken(user, TokenEntityType.user);
+  return createSignInToken(developer, TokenEntityType.developer);
 }
 
 async function getSignInToken(uuid: string) {
@@ -307,9 +311,9 @@ export async function getEmployerSignInToken(uuid: string) {
   return signInToken;
 }
 
-export async function getUserSignInToken(uuid: string) {
+export async function getDeveloperSignInToken(uuid: string) {
   const signInToken = await getSignInToken(uuid);
-  if (signInToken && signInToken.entityType !== TokenEntityType.user) {
+  if (signInToken && signInToken.entityType !== TokenEntityType.developer) {
     return null;
   }
   return signInToken;
@@ -319,15 +323,15 @@ export async function deleteSignInToken(uuid: string) {
   await kv.delete([TopLevelKeys.sign_in_tokens, uuid]);
 }
 
-// User
-interface UserRequiredFields {
+// Developer
+interface DeveloperRequiredFields {
   email: string;
   emailConfirmed: boolean;
   id: string;
   isSubscribed: boolean;
 }
 
-export interface User extends UserRequiredFields {
+export interface Developer extends DeveloperRequiredFields {
   bio: string | null;
   company: string | null;
   location: string | null;
@@ -335,7 +339,7 @@ export interface User extends UserRequiredFields {
   stripeCustomerId?: string;
 }
 
-export function newUserProps(): User {
+export function newDeveloperProps(): Developer {
   return {
     bio: null,
     company: null,
@@ -349,102 +353,110 @@ export function newUserProps(): User {
 }
 
 /**
- * Creates a new user in KV. Throws if the user already exists.
+ * Creates a new developer in KV. Throws if the developer already exists.
  *
  * @example
  * ```ts
- * import { createUser, newUser } from "@/utils/db.ts";
+ * import { createDeveloper, newDeveloperProps } from "@/utils/db.ts";
  *
- * const user = {
- *   ...newUserProps(),
+ * const developer = {
+ *   ...newDeveloperProps(),
  *   email: "email",
  * };
- * await createUser(user);
+ * await createDeveloper(developer);
  * ```
  */
-export async function createUser(user: User) {
-  const usersKey = [TopLevelKeys.users, user.id];
-  const usersByEmailKey = [TopLevelKeys.users_by_email, user.email];
-  const usersCreatedCountKey = [
-    TopLevelKeys.users_created_count,
+export async function createDeveloper(developer: Developer) {
+  const developersKey = [TopLevelKeys.developers, developer.id];
+  const developersByEmailKey = [
+    TopLevelKeys.developers_by_email,
+    developer.email,
   ];
-  const usersCreatedCountByDayKey = [
-    TopLevelKeys.users_created_count_by_day,
+  const developersCreatedCountKey = [
+    TopLevelKeys.developers_created_count,
+  ];
+  const developersCreatedCountByDayKey = [
+    TopLevelKeys.developers_created_count_by_day,
     formatDate(new Date()),
   ];
 
   const atomicOp = kv.atomic();
 
-  if (user.stripeCustomerId !== undefined) {
-    const usersByStripeCustomerKey = [
-      TopLevelKeys.users_by_stripe_customer,
-      user.stripeCustomerId,
+  if (developer.stripeCustomerId !== undefined) {
+    const developersByStripeCustomerKey = [
+      TopLevelKeys.developers_by_stripe_customer,
+      developer.stripeCustomerId,
     ];
     atomicOp
-      .check({ key: usersByStripeCustomerKey, versionstamp: null })
-      .set(usersByStripeCustomerKey, user);
+      .check({ key: developersByStripeCustomerKey, versionstamp: null })
+      .set(developersByStripeCustomerKey, developer);
   }
 
   const res = await atomicOp
-    .check({ key: usersKey, versionstamp: null })
-    .check({ key: usersByEmailKey, versionstamp: null })
-    .set(usersKey, user)
-    .set(usersByEmailKey, user)
-    .sum(usersCreatedCountKey, 1n)
-    .sum(usersCreatedCountByDayKey, 1n)
+    .check({ key: developersKey, versionstamp: null })
+    .check({ key: developersByEmailKey, versionstamp: null })
+    .set(developersKey, developer)
+    .set(developersByEmailKey, developer)
+    .sum(developersCreatedCountKey, 1n)
+    .sum(developersCreatedCountByDayKey, 1n)
     .commit();
 
   if (!res.ok) {
-    throw new Error(`Failed to create user with email: ${user.email}`);
+    throw new Error(
+      `Failed to create developer with email: ${developer.email}`,
+    );
   }
 }
 
-export async function updateUser(user: User) {
-  const usersKey = [TopLevelKeys.users, user.id];
-  const usersByEmailKey = [TopLevelKeys.users_by_email, user.email];
+export async function updateDeveloper(developer: Developer) {
+  const developersKey = [TopLevelKeys.developers, developer.id];
+  const developersByEmailKey = [
+    TopLevelKeys.developers_by_email,
+    developer.email,
+  ];
 
   const atomicOp = kv.atomic();
 
-  if (user.stripeCustomerId !== undefined) {
-    const usersByStripeCustomerKey = [
-      TopLevelKeys.users_by_stripe_customer,
-      user.stripeCustomerId,
+  if (developer.stripeCustomerId !== undefined) {
+    const developersByStripeCustomerKey = [
+      TopLevelKeys.developers_by_stripe_customer,
+      developer.stripeCustomerId,
     ];
     atomicOp
-      .set(usersByStripeCustomerKey, user);
+      .set(developersByStripeCustomerKey, developer);
   }
 
   const res = await atomicOp
-    .set(usersKey, user)
-    .set(usersByEmailKey, user)
+    .set(developersKey, developer)
+    .set(developersByEmailKey, developer)
     .commit();
 
-  if (!res.ok) throw new Error(`Failed to update user: ${user}`);
+  if (!res.ok) throw new Error(`Failed to update developer: ${developer}`);
 }
 
-export async function getUser(id: string) {
-  return await getValue<User>([TopLevelKeys.users, id]);
+export async function getDeveloper(id: string) {
+  return await getValue<Developer>([TopLevelKeys.developers, id]);
 }
 
-export async function getUserByEmail(email: string) {
-  return await getValue<User>([TopLevelKeys.users_by_email, email]);
+export async function getDeveloperByEmail(email: string) {
+  return await getValue<Developer>([TopLevelKeys.developers_by_email, email]);
 }
 
-export async function getUserByStripeCustomer(stripeCustomerId: string) {
-  return await getValue<User>([
-    TopLevelKeys.users_by_stripe_customer,
+export async function getDeveloperByStripeCustomer(stripeCustomerId: string) {
+  return await getValue<Developer>([
+    TopLevelKeys.developers_by_stripe_customer,
     stripeCustomerId,
   ]);
 }
 
-export async function getManyUsers(ids: string[]) {
-  const keys = ids.map((id) => [TopLevelKeys.users, id]);
-  const res = await getManyValues<User>(keys);
-  return res.filter(Boolean) as User[];
+export async function getManyDevelopers(ids: string[]) {
+  const keys = ids.map((id) => [TopLevelKeys.developers, id]);
+  const res = await getManyValues<Developer>(keys);
+  return res.filter(Boolean) as Developer[];
 }
 
 export interface GitHubProfile {
-  userId: string;
+  developerId: string;
   gitHubId: number;
   email: string | null;
   login: string;
@@ -458,15 +470,15 @@ export interface GitHubProfile {
 
 export async function createGitHubProfile(profile: GitHubProfile) {
   const gitHubProfileKey = [TopLevelKeys.github_profiles, profile.gitHubId];
-  const gitHubProfileByUserKey = [
-    TopLevelKeys.github_profiles_by_user,
-    profile.userId,
+  const gitHubProfileByDeveloperKey = [
+    TopLevelKeys.github_profiles_by_developer,
+    profile.developerId,
   ];
   const res = await kv.atomic()
     .check({ key: gitHubProfileKey, versionstamp: null })
-    .check({ key: gitHubProfileByUserKey, versionstamp: null })
+    .check({ key: gitHubProfileByDeveloperKey, versionstamp: null })
     .set(gitHubProfileKey, profile)
-    .set(gitHubProfileByUserKey, profile)
+    .set(gitHubProfileByDeveloperKey, profile)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to create GitHub profile: ${profile}`);
@@ -479,10 +491,10 @@ export async function getGitHubProfile(gitHubId: number) {
   ]);
 }
 
-export async function getGitHubProfileByUser(userId: string) {
+export async function getGitHubProfileByDeveloper(developerId: string) {
   return await getValue<GitHubProfile>([
-    TopLevelKeys.github_profiles_by_user,
-    userId,
+    TopLevelKeys.github_profiles_by_developer,
+    developerId,
   ]);
 }
 

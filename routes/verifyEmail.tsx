@@ -1,10 +1,10 @@
 import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 import {
-  createUserSession,
+  createDeveloperSession,
   deleteSignInToken,
-  getUser,
-  getUserSignInToken,
-  updateUser,
+  getDeveloper,
+  getDeveloperSignInToken,
+  updateDeveloper,
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
 import {
@@ -22,21 +22,21 @@ export const handler: Handlers = {
     const token = requestUrl.searchParams.get("token");
     if (!token) return tokenIssueResponse;
 
-    const signInToken = await getUserSignInToken(token);
+    const signInToken = await getDeveloperSignInToken(token);
     if (!signInToken) return tokenIssueResponse;
 
     await deleteSignInToken(token);
 
-    const user = await getUser(signInToken.entityId);
-    if (!user) {
+    const developer = await getDeveloper(signInToken.entityId);
+    if (!developer) {
       return tokenIssueResponse;
     }
-    if (!user.emailConfirmed) {
-      user.emailConfirmed = true;
-      await updateUser(user);
+    if (!developer.emailConfirmed) {
+      developer.emailConfirmed = true;
+      await updateDeveloper(developer);
     }
 
-    const session = await createUserSession(user.id);
+    const session = await createDeveloperSession(developer.id);
 
     ctx.state.sessionId = session.uuid;
 
