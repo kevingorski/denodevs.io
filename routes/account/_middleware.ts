@@ -8,10 +8,18 @@ import {
 } from "@/utils/db.ts";
 import { redirectToDevSignIn } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
+import { deleteCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
+import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
 
 export interface AccountState extends State {
   sessionId: string;
   developer: Developer;
+}
+
+async function deleteSessionAndCookie(sessionId: string, response: Response) {
+  await deleteDeveloperSession(sessionId);
+  deleteCookie(response.headers, SITE_COOKIE_NAME);
+  return response;
 }
 
 export async function handler(
@@ -23,21 +31,25 @@ export async function handler(
   if (!sessionId) return redirectResponse;
 
   const session = await getDeveloperSession(sessionId);
-  if (!session) return redirectResponse;
+  if (!session) {
+    deleteCookie(redirectResponse.headers, SITE_COOKIE_NAME);
+    return redirectResponse;
+  }
 
   // TODO: Separate value or generic name?
   if (
     session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
   ) {
-    await deleteDeveloperSession(sessionId);
     // TODO: message for expired session
-    return redirectResponse;
+    return await deleteSessionAndCookie(sessionId, redirectResponse);
   }
 
   const developer = await getDeveloper(session.entityId);
 
   // TODO: message for developer not found?
-  if (!developer) return redirectResponse;
+  if (!developer) {
+    return await deleteSessionAndCookie(sessionId, redirectResponse);
+  }
 
   ctx.state.developer = developer;
   return await ctx.next();
