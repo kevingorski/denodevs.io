@@ -81,6 +81,9 @@ export default function AboutPage() {
         <li>
           <a href="https://deno.com/deploy">Deno Deploy</a>
         </li>
+        <li>
+          <a href="https://deno.com/kv">Deno KV</a>
+        </li>
       </ol>
     </main>
   );
