@@ -9,5 +9,8 @@ pre-commit:
       run: deno lint
     deno_check:
       run: deno check main.ts
+
+pre-push:
+  commands:
     deno_test:
-      run: deno task test
+          run: deno task test
