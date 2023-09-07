@@ -83,7 +83,6 @@ export const sendDeveloperEmailVerificationMessage = (
 
 // Developer Sign In
 
-// TODO: Separate verify email from magic link sign in
 export const renderDeveloperSignInEmailMessage = (
   developer: Developer,
   token: string,
@@ -91,7 +90,7 @@ export const renderDeveloperSignInEmailMessage = (
   to: developer.email,
   subject: `DenoDevs sign in link`,
   html:
-    `<a href="${SITE_BASE_URL}/verifyEmail?token=${token}">Click here to sign in</a>.`,
+    `<a href="${SITE_BASE_URL}/developerMagicLink?token=${token}">Click here to sign in</a>.`,
 });
 
 export const sendDeveloperSignInEmailMessage = (
