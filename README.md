@@ -234,8 +234,8 @@ which offers more flexibility. For instance, with the GitHub Action, you could:
 
 To come...
 
-Before submitting, run the following to check the formatting, linting, licenses,
-and types and run tests in one hit:
+Before submitting, run the following to check the formatting, linting, and types
+and run tests in one hit:
 
 ```
 deno task ok
