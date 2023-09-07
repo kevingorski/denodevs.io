@@ -7,6 +7,7 @@ import {
 } from "@/utils/db.ts";
 import { sendWelcomeDeveloperEmailMessage } from "@/utils/email.ts";
 import { redirect } from "@/utils/redirect.ts";
+import { addDeveloperEmailToResponse } from "@/utils/signInHelp.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -35,6 +36,12 @@ export const handler: Handlers<State, State> = {
 
     const loginToken = await createDeveloperSignInToken(developer);
     await sendWelcomeDeveloperEmailMessage(developer, loginToken.uuid);
+
+    addDeveloperEmailToResponse(
+      req,
+      redirectToThanks,
+      email,
+    );
 
     return redirectToThanks;
   },

@@ -1,3 +1,6 @@
+import { UserType } from "@/types/UserType.ts";
+import SignInHelp from "@/types/SignInHelp.ts";
+
 function SubmittedMessage() {
   return (
     <p>
@@ -8,25 +11,43 @@ function SubmittedMessage() {
 }
 
 export default function SignInForm(
-  props: { email: string; hasSubmitted: boolean },
+  props: {
+    email: string;
+    hasSubmitted: boolean;
+    signInHelp: SignInHelp | null;
+    userType: UserType;
+  },
 ) {
+  const { email, hasSubmitted, signInHelp, userType } = props;
+  let previousEmail = null;
+  switch (userType) {
+    case UserType.Developer:
+      previousEmail = signInHelp?.developerMaskedEmail;
+      break;
+    case UserType.Employer:
+      previousEmail = signInHelp?.employerMaskedEmail;
+      break;
+  }
+  const placeholder = !previousEmail
+    ? "Your email address"
+    : `Hint: ${previousEmail}`;
   return (
     <>
-      {props.hasSubmitted ? <SubmittedMessage /> : null}
+      {hasSubmitted ? <SubmittedMessage /> : null}
       <form method="post">
         <label>
           Email:{" "}
           <input
-            disabled={props.hasSubmitted}
+            disabled={hasSubmitted}
             maxLength={255}
             name="email"
-            placeholder="Your email address"
+            placeholder={placeholder}
             required
             type="email"
-            value={props.email}
+            value={email}
           />
         </label>
-        <button disabled={props.hasSubmitted} type="submit">Sign in</button>
+        <button disabled={hasSubmitted} type="submit">Sign in</button>
       </form>
     </>
   );

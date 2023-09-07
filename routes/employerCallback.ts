@@ -9,6 +9,7 @@ import {
 import {
   createEmployerSession,
   deleteSignInToken,
+  getEmployer,
   getEmployerSignInToken,
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
@@ -18,6 +19,7 @@ import {
   LOGIN_TOKEN_LIFETIME_MS,
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
+import { addEmployerEmailToResponse } from "@/utils/signInHelp.ts";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, State> = {
@@ -42,7 +44,14 @@ export const handler: Handlers<any, State> = {
 
     deleteRedirectUrlCookie(response.headers);
 
-    const session = await createEmployerSession(loginToken.entityId);
+    const [employer, session] = await Promise.all([
+      getEmployer(loginToken.entityId),
+      createEmployerSession(loginToken.entityId),
+    ]);
+
+    if (!employer) {
+      return loginResponse;
+    }
 
     setCookie(
       response.headers,
@@ -56,6 +65,8 @@ export const handler: Handlers<any, State> = {
         value: session.uuid,
       },
     );
+
+    addEmployerEmailToResponse(req, response, employer.email);
 
     return response;
   },

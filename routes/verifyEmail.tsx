@@ -12,6 +12,7 @@ import {
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
+import { addDeveloperEmailToResponse } from "@/utils/signInHelp.ts";
 
 export const handler: Handlers = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -41,6 +42,7 @@ export const handler: Handlers = {
     ctx.state.sessionId = session.uuid;
 
     const response = await ctx.render();
+    addDeveloperEmailToResponse(req, response, developer.email);
 
     setCookie(
       response.headers,

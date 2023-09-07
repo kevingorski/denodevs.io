@@ -8,6 +8,8 @@ import { AccountState } from "./_middleware.ts";
 import { handleCallback } from "kv_oauth";
 import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
 import { getGitHubUser } from "@/utils/github.ts";
+import { OAuthProvider } from "@/types/OAuthProvider.ts";
+import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, AccountState> = {
@@ -35,6 +37,11 @@ export const handler: Handlers<any, AccountState> = {
       });
     }
     await upgradeDeveloperOAuthSession(developer.id, sessionId);
+    addOAuthProviderToResponse(
+      req,
+      response,
+      OAuthProvider.GITHUB,
+    );
     return response;
   },
 };

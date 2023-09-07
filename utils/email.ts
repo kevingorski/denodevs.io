@@ -67,6 +67,7 @@ export const sendDeveloperEmailVerificationMessage = (
   token: string,
 ) => sendEmail(renderDeveloperEmailVerificationMessage(developer, token));
 
+// TODO: Separate verify email from magic link sign in
 export const renderDeveloperSignInEmailMessage = (
   developer: Developer,
   token: string,
