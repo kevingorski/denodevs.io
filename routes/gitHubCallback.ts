@@ -6,10 +6,10 @@ import { State } from "@/routes/_middleware.ts";
 import { getGitHubUser } from "@/utils/github.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";
+import { redirectToDeveloperSignUp } from "@/utils/redirect.ts";
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, State> = {
-  async GET(req, ctx) {
+export const handler: Handlers<State, State> = {
+  async GET(req, _ctx) {
     const { response, accessToken, sessionId } = await handleCallback(
       req,
       gitHubOAuth2Client,
@@ -18,8 +18,7 @@ export const handler: Handlers<any, State> = {
     const gitHubUser = await getGitHubUser(accessToken);
     const gitHubProfile = await getGitHubProfile(gitHubUser.id);
     if (!gitHubProfile) {
-      // TODO: show a message about signing up
-      return ctx.renderNotFound();
+      return redirectToDeveloperSignUp();
     }
     await upgradeDeveloperOAuthSession(gitHubProfile.developerId, sessionId);
 

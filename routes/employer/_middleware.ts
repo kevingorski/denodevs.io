@@ -41,13 +41,11 @@ export async function handler(
       } < ${Date.now()})`,
     );
     await deleteEmployerSession(employerSessionId);
-    // TODO: message for expired session
     return redirectResponse;
   }
 
   const employer = await getEmployer(session.entityId);
 
-  // TODO: message for employer not found
   if (!employer) {
     console.error(`employer ${session.entityId} not found`);
     return redirectResponse;

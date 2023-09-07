@@ -6,7 +6,7 @@ import {
   getDeveloper,
   getDeveloperSession,
 } from "@/utils/db.ts";
-import { redirectToDevSignIn } from "@/utils/redirect.ts";
+import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
 import { SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 import { deleteCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
@@ -26,7 +26,7 @@ export async function handler(
   req: Request,
   ctx: MiddlewareHandlerContext<AccountState>,
 ) {
-  const redirectResponse = redirectToDevSignIn(req.url);
+  const redirectResponse = redirectToDeveloperSignIn(req.url);
   const { sessionId } = ctx.state;
   if (!sessionId) return redirectResponse;
 
@@ -39,13 +39,11 @@ export async function handler(
   if (
     session.generated + SESSION_COOKIE_LIFETIME_MS < Date.now()
   ) {
-    // TODO: message for expired session
     return await deleteSessionAndCookie(sessionId, redirectResponse);
   }
 
   const developer = await getDeveloper(session.entityId);
 
-  // TODO: message for developer not found?
   if (!developer) {
     return await deleteSessionAndCookie(sessionId, redirectResponse);
   }

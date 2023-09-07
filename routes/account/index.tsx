@@ -83,7 +83,6 @@ export default function AccountPage(props: PageProps<Props>) {
       <div>
       </div>
 
-      {/* TODO: show GH already connected */}
       {!gitHubProfile && (
         <div>
           <a class="button" href={gitHubSignInUrl}>

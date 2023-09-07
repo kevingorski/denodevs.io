@@ -20,8 +20,12 @@ export function redirect(
   });
 }
 
-export function redirectToDevSignIn(url: string) {
+export function redirectToDeveloperSignIn(url: string) {
   return redirect(`/signin?from=${url}`);
+}
+
+export function redirectToDeveloperSignUp() {
+  return redirect("/start/developer");
 }
 
 export function redirectToEmployerSignIn(url = "/employer") {

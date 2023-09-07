@@ -21,8 +21,7 @@ import {
 } from "@/utils/constants.ts";
 import { addEmployerEmailToResponse } from "@/utils/signInHelp.ts";
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, State> = {
+export const handler: Handlers<State, State> = {
   async GET(req) {
     const loginResponse = redirectToEmployerSignIn();
     const requestUrl = new URL(req.url);
@@ -35,7 +34,6 @@ export const handler: Handlers<any, State> = {
     await deleteSignInToken(token);
 
     if ((loginToken.generated + LOGIN_TOKEN_LIFETIME_MS) < Date.now()) {
-      // TODO: message for expired token
       return loginResponse;
     }
 
