@@ -172,6 +172,18 @@ export async function getEmployerByEmail(email: string) {
   return await getValue<Employer>([TopLevelKeys.employers_by_email, email]);
 }
 
+export async function deleteEmployer(employer: Employer) {
+  const employersKey = [TopLevelKeys.employers, employer.id];
+  const employersByEmailKey = [TopLevelKeys.employers_by_email, employer.email];
+
+  const res = await kv.atomic()
+    .delete(employersKey)
+    .delete(employersByEmailKey)
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to delete employer: ${employer}`);
+}
+
 async function createSession(
   entityType: TokenEntityType,
   entityId: string,

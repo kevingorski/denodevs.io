@@ -30,6 +30,10 @@ export default function EmployerHomePage(props: PageProps<EmployerState>) {
       </p>
 
       <SignOutLink userType={UserType.Employer} />
+      <h2>Danger Zone</h2>
+      <a class="button button--danger" href="/employer/delete">
+        Delete My Account
+      </a>
     </main>
   );
 }
