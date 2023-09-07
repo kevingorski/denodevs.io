@@ -15,24 +15,25 @@ import * as $9 from "./routes/account/manage.ts";
 import * as $10 from "./routes/account/sendVerificationEmail.ts";
 import * as $11 from "./routes/account/upgrade.ts";
 import * as $12 from "./routes/admin/_middleware.ts";
-import * as $13 from "./routes/admin/index.tsx";
-import * as $14 from "./routes/api/stripe-webhooks.ts";
-import * as $15 from "./routes/employer/_middleware.ts";
-import * as $16 from "./routes/employer/index.tsx";
-import * as $17 from "./routes/employerCallback.ts";
-import * as $18 from "./routes/employerSignIn.tsx";
-import * as $19 from "./routes/gitHubCallback.ts";
-import * as $20 from "./routes/index.tsx";
-import * as $21 from "./routes/kv-insights/_middleware.ts";
-import * as $22 from "./routes/signInOAuth.ts";
-import * as $23 from "./routes/signin.tsx";
-import * as $24 from "./routes/signout.ts";
-import * as $25 from "./routes/start/developer/index.tsx";
-import * as $26 from "./routes/start/developer/thanks.tsx";
-import * as $27 from "./routes/start/employer/index.tsx";
-import * as $28 from "./routes/start/employer/thanks.tsx";
-import * as $29 from "./routes/start/index.tsx";
-import * as $30 from "./routes/verifyEmail.tsx";
+import * as $13 from "./routes/admin/emailTemplates.tsx";
+import * as $14 from "./routes/admin/index.tsx";
+import * as $15 from "./routes/api/stripe-webhooks.ts";
+import * as $16 from "./routes/employer/_middleware.ts";
+import * as $17 from "./routes/employer/index.tsx";
+import * as $18 from "./routes/employerCallback.ts";
+import * as $19 from "./routes/employerSignIn.tsx";
+import * as $20 from "./routes/gitHubCallback.ts";
+import * as $21 from "./routes/index.tsx";
+import * as $22 from "./routes/kv-insights/_middleware.ts";
+import * as $23 from "./routes/signInOAuth.ts";
+import * as $24 from "./routes/signin.tsx";
+import * as $25 from "./routes/signout.ts";
+import * as $26 from "./routes/start/developer/index.tsx";
+import * as $27 from "./routes/start/developer/thanks.tsx";
+import * as $28 from "./routes/start/employer/index.tsx";
+import * as $29 from "./routes/start/employer/thanks.tsx";
+import * as $30 from "./routes/start/index.tsx";
+import * as $31 from "./routes/verifyEmail.tsx";
 import * as $$0 from "./islands/Chart.tsx";
 import * as $$1 from "./islands/EntriesManagement.tsx";
 import * as $$2 from "./islands/VerifyEmailButton.tsx";
@@ -52,24 +53,25 @@ const manifest = {
     "./routes/account/sendVerificationEmail.ts": $10,
     "./routes/account/upgrade.ts": $11,
     "./routes/admin/_middleware.ts": $12,
-    "./routes/admin/index.tsx": $13,
-    "./routes/api/stripe-webhooks.ts": $14,
-    "./routes/employer/_middleware.ts": $15,
-    "./routes/employer/index.tsx": $16,
-    "./routes/employerCallback.ts": $17,
-    "./routes/employerSignIn.tsx": $18,
-    "./routes/gitHubCallback.ts": $19,
-    "./routes/index.tsx": $20,
-    "./routes/kv-insights/_middleware.ts": $21,
-    "./routes/signInOAuth.ts": $22,
-    "./routes/signin.tsx": $23,
-    "./routes/signout.ts": $24,
-    "./routes/start/developer/index.tsx": $25,
-    "./routes/start/developer/thanks.tsx": $26,
-    "./routes/start/employer/index.tsx": $27,
-    "./routes/start/employer/thanks.tsx": $28,
-    "./routes/start/index.tsx": $29,
-    "./routes/verifyEmail.tsx": $30,
+    "./routes/admin/emailTemplates.tsx": $13,
+    "./routes/admin/index.tsx": $14,
+    "./routes/api/stripe-webhooks.ts": $15,
+    "./routes/employer/_middleware.ts": $16,
+    "./routes/employer/index.tsx": $17,
+    "./routes/employerCallback.ts": $18,
+    "./routes/employerSignIn.tsx": $19,
+    "./routes/gitHubCallback.ts": $20,
+    "./routes/index.tsx": $21,
+    "./routes/kv-insights/_middleware.ts": $22,
+    "./routes/signInOAuth.ts": $23,
+    "./routes/signin.tsx": $24,
+    "./routes/signout.ts": $25,
+    "./routes/start/developer/index.tsx": $26,
+    "./routes/start/developer/thanks.tsx": $27,
+    "./routes/start/employer/index.tsx": $28,
+    "./routes/start/employer/thanks.tsx": $29,
+    "./routes/start/index.tsx": $30,
+    "./routes/verifyEmail.tsx": $31,
   },
   islands: {
     "./islands/Chart.tsx": $$0,
