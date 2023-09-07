@@ -2,8 +2,7 @@ import type { Handlers, PageProps, RouteConfig } from "$fresh/server.ts";
 import { AccountState } from "@/routes/account/_middleware.ts";
 import ContactSupportLink from "@/components/ContactSupportLink.tsx";
 import { SIGN_IN_HELP_COOKIE_NAME, SITE_NAME } from "@/utils/constants.ts";
-import { deleteDeveloper, deleteDeveloperSession } from "@/utils/db.ts";
-import { redirect } from "@/utils/redirect.ts";
+import { deleteDeveloper } from "@/utils/db.ts";
 import { signOut } from "kv_oauth";
 import { deleteCookie } from "std/http/cookie.ts";
 import DeleteAccountButton from "@/islands/DeleteAccountButton.tsx";
@@ -24,7 +23,7 @@ export const handler: Handlers<AccountState, AccountState> = {
   },
 };
 
-export default function AccountPage(props: PageProps<AccountState>) {
+export default function DeleteAccountPage(props: PageProps<AccountState>) {
   const messageBody =
     `Hello Kevin, I'm considering deleting my ${SITE_NAME} account because [Your Reason Here]...`;
   const messageSubject = `Deleting ${SITE_NAME} account`;
