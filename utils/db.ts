@@ -499,6 +499,46 @@ export async function getGitHubProfileByDeveloper(developerId: string) {
   ]);
 }
 
+export async function deleteDeveloper(developer: Developer) {
+  const developersKey = [TopLevelKeys.developers, developer.id];
+  const developersByEmailKey = [
+    TopLevelKeys.developers_by_email,
+    developer.email,
+  ];
+
+  const atomicOp = kv.atomic();
+
+  if (developer.stripeCustomerId !== undefined) {
+    const developersByStripeCustomerKey = [
+      TopLevelKeys.developers_by_stripe_customer,
+      developer.stripeCustomerId,
+    ];
+    atomicOp.delete(developersByStripeCustomerKey);
+  }
+
+  const gitHubProfile = await getGitHubProfileByDeveloper(developer.id);
+
+  if (gitHubProfile) {
+    const gitHubProfileKey = [
+      TopLevelKeys.github_profiles,
+      gitHubProfile.gitHubId,
+    ];
+    const gitHubProfileByDeveloperKey = [
+      TopLevelKeys.github_profiles_by_developer,
+      developer.id,
+    ];
+    atomicOp.delete(gitHubProfileKey);
+    atomicOp.delete(gitHubProfileByDeveloperKey);
+  }
+
+  const res = await atomicOp
+    .delete(developersKey)
+    .delete(developersByEmailKey)
+    .commit();
+
+  if (!res.ok) throw new Error(`Failed to delete developer: ${developer}`);
+}
+
 export async function getManyMetricsForAllTime(
   metrics: AllTimeMetric[],
 ) {
