@@ -244,3 +244,18 @@ deno task ok
 ## Goals and Philosophy
 
 To come...
+
+# Dependencies
+
+For use as
+[tea developer environment setup](https://docs.tea.xyz/features/developer-environments),
+if desired. The local dependencies can be installed with:
+
+```bash
+tea -SE && cd .
+```
+
+| Project                          | Version |
+| -------------------------------- | ------- |
+| deno.land                        | ^1.36.3 |
+| github.com/evilmartians/lefthook | ^1.4.10 |
