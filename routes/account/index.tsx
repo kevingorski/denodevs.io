@@ -14,6 +14,7 @@ import {
 import SignOutLink from "@/components/SignOutLink.tsx";
 import { UserType } from "@/types/UserType.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
+import denoDevsCsp from "@/utils/csp.ts";
 
 interface Props extends AccountState {
   gitHubProfile: GitHubProfile | null;
@@ -65,27 +66,7 @@ export default function AccountPage(props: PageProps<Props>) {
   const { developer, gitHubProfile } = props.data;
   const action = developer.isSubscribed ? "Manage" : "Upgrade";
 
-  // TODO: refactor this to something reusable when it drops
-  // https://github.com/denoland/fresh/issues/1705
-  useCSP((csp) => {
-    csp.directives.baseUri = ["'none'"];
-    if (!csp.directives.scriptSrc) {
-      csp.directives.scriptSrc = [];
-    }
-    csp.directives.scriptSrc.push("'strict-dynamic'");
-    csp.directives.scriptSrc.push("'unsafe-inline'");
-    csp.directives.scriptSrc.push("http:");
-    csp.directives.scriptSrc.push("https:");
-    if (!csp.directives.styleSrc) {
-      csp.directives.styleSrc = [];
-    }
-    csp.directives.styleSrc.push("'self'");
-    if (!csp.directives.imgSrc) {
-      csp.directives.imgSrc = [];
-    }
-    csp.directives.imgSrc.push("'self'");
-    csp.directives.imgSrc.push("avatars.githubusercontent.com");
-  });
+  useCSP(denoDevsCsp);
 
   const gitHubSignInUrl =
     `/account/connectOAuth?provider=${OAuthProvider.GITHUB}`;
@@ -151,6 +132,10 @@ export default function AccountPage(props: PageProps<Props>) {
         />
       </ul>
       <SignOutLink userType={UserType.Developer} />
+      <h2>Danger Zone</h2>
+      <a class="button button--danger" href="/account/delete">
+        Delete My Account
+      </a>
     </main>
   );
 }
