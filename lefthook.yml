@@ -1,0 +1,13 @@
+assert_lefthook_installed: true
+
+pre-commit:
+  parallel: true
+  commands:
+    deno_fmt:
+      run: deno fmt --check
+    deno_lint:
+      run: deno lint
+    deno_check:
+      run: deno check main.ts
+    deno_test:
+      run: deno task test
