@@ -55,6 +55,10 @@ export default function DeveloperPage() {
       </h1>
 
       <p>
+        Already got an account? <a href="/signin">Sign in here</a>.
+      </p>
+
+      <p>
         To start creating your profile, first sign in with your GitHub account.
         The details of your GitHub account will be used to create your profile,
         but you can edit it and connect other accounts to it afterward.
