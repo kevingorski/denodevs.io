@@ -67,9 +67,10 @@ enum TopLevelKeys {
   sign_in_tokens = "sign_in_tokens",
 }
 
-export type AllTimeMetric =
-  | TopLevelKeys.employers_created_count
-  | TopLevelKeys.developers_created_count;
+export enum AllTimeMetric {
+  DevelopersCreatedCount = TopLevelKeys.developers_created_count,
+  EmployersCreatedCount = TopLevelKeys.employers_created_count,
+}
 
 export type DailyMetric =
   | TopLevelKeys.employers_created_count_by_day
@@ -496,6 +497,14 @@ export async function getGitHubProfileByDeveloper(developerId: string) {
     TopLevelKeys.github_profiles_by_developer,
     developerId,
   ]);
+}
+
+export async function getManyMetricsForAllTime(
+  metrics: AllTimeMetric[],
+) {
+  const keys = metrics.map((metric) => [metric]);
+  const res = await getManyValues<bigint>(keys);
+  return res.map((value) => value?.valueOf() ?? 0n);
 }
 
 export async function getManyMetricsByDay(
