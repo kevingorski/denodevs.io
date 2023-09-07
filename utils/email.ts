@@ -1,4 +1,9 @@
-import { Developer, Employer } from "@/utils/db.ts";
+import {
+  Developer,
+  Employer,
+  newDeveloperProps,
+  newEmployerProps,
+} from "@/utils/db.ts";
 import { SITE_BASE_URL } from "@/utils/constants.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
@@ -10,6 +15,11 @@ export interface EmailMessage {
   to: string;
   subject: string;
   html: string;
+}
+
+export interface TemplateSample {
+  name: string;
+  message: EmailMessage;
 }
 
 const sendEmail = (
@@ -36,12 +46,14 @@ const sendEmail = (
   });
 };
 
-export const renderWelcomeDevEmailMessage = (
+// Welcome Developer
+
+export const renderWelcomeDeveloperEmailMessage = (
   developer: Developer,
   token: string,
 ): EmailMessage => ({
   to: developer.email,
-  subject: `${developer.name}, welcome to DenoDevs!`,
+  subject: "Welcome to DenoDevs!",
   html: `<h1>Welcome to DenoDevs</h1>
 <p>Your account has been created...</p>
 <p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
@@ -50,7 +62,9 @@ export const renderWelcomeDevEmailMessage = (
 export const sendWelcomeDeveloperEmailMessage = (
   developer: Developer,
   token: string,
-) => sendEmail(renderWelcomeDevEmailMessage(developer, token));
+) => sendEmail(renderWelcomeDeveloperEmailMessage(developer, token));
+
+// Developer Email Verification
 
 export const renderDeveloperEmailVerificationMessage = (
   developer: Developer,
@@ -66,6 +80,8 @@ export const sendDeveloperEmailVerificationMessage = (
   developer: Developer,
   token: string,
 ) => sendEmail(renderDeveloperEmailVerificationMessage(developer, token));
+
+// Developer Sign In
 
 // TODO: Separate verify email from magic link sign in
 export const renderDeveloperSignInEmailMessage = (
@@ -83,6 +99,8 @@ export const sendDeveloperSignInEmailMessage = (
   token: string,
 ) => sendEmail(renderDeveloperSignInEmailMessage(developer, token));
 
+// Welcome Employer
+
 export const renderWelcomeEmployerEmailMessage = (
   employer: Employer,
   token: string,
@@ -97,6 +115,8 @@ export const sendWelcomeEmployerEmailMessage = (
   employer: Employer,
   token: string,
 ) => sendEmail(renderWelcomeEmployerEmailMessage(employer, token));
+
+// Employer Sign In
 
 export const renderEmployerSignInEmailMessage = (
   employer: Employer,
@@ -113,4 +133,34 @@ export const sendEmployerSignInEmailMessage = (
   token: string,
 ) => sendEmail(renderEmployerSignInEmailMessage(employer, token));
 
-// TODO: set up email rendering admin page
+export function renderTemplateSamples(): TemplateSample[] {
+  const developer = {
+    ...newDeveloperProps(),
+    email: "dev.email@example.com",
+  };
+  const employer = {
+    ...newEmployerProps(),
+    company: "Example Co.",
+    email: "employer.email@example.com",
+    name: "Your New Employer",
+  };
+  const token = "example-token";
+  return [
+    {
+      name: "Welcome Developer",
+      message: renderWelcomeDeveloperEmailMessage(developer, token),
+    },
+    {
+      name: "Developer Email Verification",
+      message: renderDeveloperEmailVerificationMessage(developer, token),
+    },
+    {
+      name: "Developer Sign In",
+      message: renderDeveloperSignInEmailMessage(developer, token),
+    },
+    {
+      name: "Welcome Employer",
+      message: renderWelcomeEmployerEmailMessage(employer, token),
+    },
+  ];
+}
