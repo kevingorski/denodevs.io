@@ -1,5 +1,6 @@
 export interface LinkProps {
   linkText?: string;
+  titleText?: string;
 }
 
 interface Props extends LinkProps {
@@ -16,7 +17,7 @@ export default function ContactSupportLink(
   const href =
     `mailto:kevin@denodevs.io?subject=${messageSubject}&body=${messageBody}`;
   return (
-    <a href={href} target="_blank">
+    <a href={href} target="_blank" title={props.titleText}>
       {linkText}
     </a>
   );
