@@ -10,7 +10,7 @@ interface Props extends LinkProps {
 export default function ContactSupportLink(
   props: Props,
 ) {
-  const linkText = props.linkText ?? "contact Kevin";
+  const linkText = props.linkText ?? "Contact Kevin";
   const messageBody = encodeURIComponent(props.messageBody);
   const messageSubject = encodeURIComponent(props.messageSubject);
   const href =
