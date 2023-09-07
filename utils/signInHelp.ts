@@ -13,7 +13,6 @@ export function setSignInHelpCookie(
 ) {
   const json = JSON.stringify(signInHelp);
   const encodedJson = encodeURIComponent(json);
-  console.log(json, encodedJson);
   setCookie(
     response.headers,
     {
