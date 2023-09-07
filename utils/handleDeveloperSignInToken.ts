@@ -8,7 +8,7 @@ import {
 import { addDeveloperEmailToResponse } from "@/utils/signInHelp.ts";
 import { setCookie } from "std/http/cookie.ts";
 import {
-  EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
+  SESSION_COOKIE_LIFETIME_MS,
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
@@ -49,8 +49,7 @@ export default async function handleDeveloperSignInToken(
       path: "/",
       httpOnly: true,
       secure: USE_SECURE_COOKIES,
-      // TODO: Separate value or generic name?
-      maxAge: EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
+      maxAge: SESSION_COOKIE_LIFETIME_MS,
       sameSite: "Strict",
       name: SITE_COOKIE_NAME,
       value: session.uuid,

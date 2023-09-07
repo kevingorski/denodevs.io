@@ -14,9 +14,9 @@ import {
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
 import {
-  EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
   EMPLOYER_SESSION_COOKIE_NAME,
   LOGIN_TOKEN_LIFETIME_MS,
+  SESSION_COOKIE_LIFETIME_MS,
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { addEmployerEmailToResponse } from "@/utils/signInHelp.ts";
@@ -59,7 +59,7 @@ export const handler: Handlers<any, State> = {
         path: "/",
         httpOnly: true,
         secure: USE_SECURE_COOKIES,
-        maxAge: EMPLOYER_SESSION_COOKIE_LIFETIME_MS,
+        maxAge: SESSION_COOKIE_LIFETIME_MS,
         sameSite: "Strict",
         name: EMPLOYER_SESSION_COOKIE_NAME,
         value: session.uuid,

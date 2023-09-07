@@ -8,7 +8,7 @@ import {
   updateEmployer,
 } from "@/utils/db.ts";
 import { redirectToEmployerSignIn } from "@/utils/redirect.ts";
-import { EMPLOYER_SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
+import { SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 
 export interface EmployerState extends State {
   employerSessionId: string;
@@ -33,11 +33,11 @@ export async function handler(
   }
 
   if (
-    session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS < Date.now()
+    session.generated + SESSION_COOKIE_LIFETIME_MS < Date.now()
   ) {
     console.error(
       `employerSessionId ${employerSessionId} too old (${
-        session.generated + EMPLOYER_SESSION_COOKIE_LIFETIME_MS
+        session.generated + SESSION_COOKIE_LIFETIME_MS
       } < ${Date.now()})`,
     );
     await deleteEmployerSession(employerSessionId);
