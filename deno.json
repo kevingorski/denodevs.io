@@ -5,7 +5,7 @@
     "db:dump": "deno run --allow-read --allow-env --unstable tools/dump_kv.ts",
     "db:seed": "deno run --allow-read --allow-env --allow-net --unstable tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env --unstable tools/reset_kv.ts",
-    "start": "deno run --unstable -A --watch=static/,routes/ dev.ts",
+    "start": "deno run --unstable -A --watch=styles/,routes/,utils/ dev.ts",
     "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 deno test -A --unstable --coverage=./cov",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",

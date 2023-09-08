@@ -20,7 +20,7 @@ export default function App(props: AppProps) {
           href={props.url.href}
         />
         <meta name="viewport" content="width=device-width" />
-        <link href="/styles.css" rel="stylesheet" />
+        <link href="/styles.gen.css" rel="stylesheet" />
       </head>
       <body>
         <Header
