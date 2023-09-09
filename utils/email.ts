@@ -4,11 +4,11 @@ import {
   newDeveloperProps,
   newEmployerProps,
 } from "@/utils/db.ts";
-import { SITE_BASE_URL } from "@/utils/constants.ts";
+import { SITE_BASE_URL, SITE_NAME } from "@/utils/constants.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const shouldSendToConsole = Deno.env.get("SEND_EMAIL_TO_CONSOLE") === "true";
-const defaultFromAddress = "DenoDevs <notifications@denodevs.io>";
+const defaultFromAddress = `${SITE_NAME} <notifications@denodevs.io>`;
 
 export interface EmailMessage {
   from?: string;
@@ -53,10 +53,11 @@ export const renderWelcomeDeveloperEmailMessage = (
   token: string,
 ): EmailMessage => ({
   to: developer.email,
-  subject: "Welcome to DenoDevs!",
-  html: `<h1>Welcome to DenoDevs</h1>
-<p>Your account has been created...</p>
-<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
+  subject: `Welcome to ${SITE_NAME}!`,
+  html: `<h1>Welcome to ${SITE_NAME}</h1>
+<p>Your account has been created – please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a> and get started.</p>
+<p>Thanks,</p>
+<p>${SITE_NAME}</p>`,
 });
 
 export const sendWelcomeDeveloperEmailMessage = (
@@ -71,9 +72,11 @@ export const renderDeveloperEmailVerificationMessage = (
   token: string,
 ): EmailMessage => ({
   to: developer.email,
-  subject: `Please verify your email`,
+  subject: `Please verify your email for ${SITE_NAME}`,
   html:
-    `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>`,
+    `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>
+<p>Thanks,</p>
+<p>${SITE_NAME}</p>`,
 });
 
 export const sendDeveloperEmailVerificationMessage = (
@@ -88,9 +91,11 @@ export const renderDeveloperSignInEmailMessage = (
   token: string,
 ): EmailMessage => ({
   to: developer.email,
-  subject: `DenoDevs sign in link`,
+  subject: `${SITE_NAME} magic link`,
   html:
-    `<a href="${SITE_BASE_URL}/developerMagicLink?token=${token}">Click here to sign in</a>.`,
+    `<a href="${SITE_BASE_URL}/developerMagicLink?token=${token}">Click here to sign in</a>.
+<p>Thanks,</p>
+<p>${SITE_NAME}</p>`,
 });
 
 export const sendDeveloperSignInEmailMessage = (
@@ -105,9 +110,11 @@ export const renderWelcomeEmployerEmailMessage = (
   token: string,
 ): EmailMessage => ({
   to: employer.email,
-  subject: `${employer.name}, welcome to DenoDevs!`,
-  html:
-    `Yo, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.`,
+  subject: `${employer.name}, welcome to ${SITE_NAME}!`,
+  html: `<h1>Welcome to ${SITE_NAME}</h1>
+<p>Your employer account has been created – please <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.
+<p>Thanks,</p>
+<p>${SITE_NAME}</p>`,
 });
 
 export const sendWelcomeEmployerEmailMessage = (
@@ -122,9 +129,11 @@ export const renderEmployerSignInEmailMessage = (
   token: string,
 ): EmailMessage => ({
   to: employer.email,
-  subject: `DenoDevs sign in link`,
+  subject: `${SITE_NAME} magic link`,
   html:
-    `${employer.name}, <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.`,
+    `<a href="${SITE_BASE_URL}/employerCallback?token=${token}">Click here to sign in</a>.
+<p>Thanks,</p>
+<p>${SITE_NAME}</p>`,
 });
 
 export const sendEmployerSignInEmailMessage = (
