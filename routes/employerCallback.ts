@@ -16,26 +16,26 @@ import {
 import { setCookie } from "std/http/cookie.ts";
 import {
   EMPLOYER_SESSION_COOKIE_NAME,
-  LOGIN_TOKEN_LIFETIME_MS,
   SESSION_COOKIE_LIFETIME_MS,
+  SIGN_IN_TOKEN_LIFETIME_MS,
   USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { addEmployerEmailToResponse } from "@/utils/signInHelp.ts";
 
 export const handler: Handlers<State, State> = {
   async GET(req) {
-    const loginResponse = redirectToEmployerSignIn();
+    const signInResponse = redirectToEmployerSignIn();
     const requestUrl = new URL(req.url);
     const token = requestUrl.searchParams.get("token");
-    if (!token) return loginResponse;
+    if (!token) return signInResponse;
 
-    const loginToken = await getEmployerSignInToken(token);
-    if (!loginToken) return loginResponse;
+    const signInToken = await getEmployerSignInToken(token);
+    if (!signInToken) return signInResponse;
 
     await deleteSignInToken(token);
 
-    if ((loginToken.generated + LOGIN_TOKEN_LIFETIME_MS) < Date.now()) {
-      return loginResponse;
+    if ((signInToken.generated + SIGN_IN_TOKEN_LIFETIME_MS) < Date.now()) {
+      return signInResponse;
     }
 
     const redirectUrl = getRedirectUrlCookie(req.headers) || "/employer";
@@ -44,12 +44,12 @@ export const handler: Handlers<State, State> = {
     deleteRedirectUrlCookie(response.headers);
 
     const [employer, session] = await Promise.all([
-      getEmployer(loginToken.entityId),
-      createEmployerSession(loginToken.entityId),
+      getEmployer(signInToken.entityId),
+      createEmployerSession(signInToken.entityId),
     ]);
 
     if (!employer) {
-      return loginResponse;
+      return signInResponse;
     }
     if (!employer.emailConfirmed) {
       employer.emailConfirmed = true;
