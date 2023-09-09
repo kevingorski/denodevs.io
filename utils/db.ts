@@ -20,6 +20,14 @@ async function getValue<T>(
   return res.value;
 }
 
+async function getGetValue<T>(
+  key: Deno.KvKey,
+) {
+  const res = await kv.get<T>(key, { consistency: "eventual" }) ??
+    kv.get<T>(key);
+  return res.value;
+}
+
 // deno-lint-ignore no-unused-vars
 async function getValues<T>(
   selector: Deno.KvListSelector,
@@ -52,6 +60,7 @@ export function formatDate(date: Date) {
 }
 
 enum TopLevelKeys {
+  csrf_tokens = "csrf_tokens",
   developers = "developers",
   developers_by_email = "developers_by_email",
   developers_by_stripe_customer = "developers_by_stripe_customer",
@@ -111,7 +120,7 @@ export interface SignInToken {
 // deno-lint-ignore no-empty-interface
 export interface Session extends SignInToken {}
 
-interface ExpringUUID {
+export interface ExpringUUID {
   generated: number;
   uuid: string;
 }
@@ -240,9 +249,7 @@ export async function upgradeDeveloperOAuthSession(
 async function getSession(sessionId: string, tokenEntityType: TokenEntityType) {
   const sessionsKey = [TopLevelKeys.sessions, tokenEntityType, sessionId];
 
-  return await getValue<Session>(sessionsKey, {
-    consistency: "eventual",
-  });
+  return await getGetValue<Session>(sessionsKey);
 }
 
 export function getAdminSession(sessionId: string) {
@@ -271,6 +278,26 @@ export async function deleteDeveloperSession(sessionId: string) {
     TokenEntityType.developer,
     sessionId,
   ]);
+}
+
+export async function createCsrfToken() {
+  const token = generateExpiringUUID();
+  const csrfTokenKey = [TopLevelKeys.csrf_tokens, token.uuid];
+  const res = await kv.set(csrfTokenKey, token);
+  if (!res.ok) {
+    throw new Error(`Failed to create CSRF token: ${token}`);
+  }
+  return token;
+}
+
+export async function getCsrfToken(uuid: string) {
+  const csrfTokenKey = [TopLevelKeys.csrf_tokens, uuid];
+  return await getGetValue<ExpringUUID>(csrfTokenKey);
+}
+
+export async function deleteCsrfToken(uuid: string) {
+  const csrfTokenKey = [TopLevelKeys.csrf_tokens, uuid];
+  await kv.delete(csrfTokenKey);
 }
 
 async function createSignInToken(
@@ -311,9 +338,7 @@ async function getSignInToken(uuid: string) {
     TopLevelKeys.sign_in_tokens,
     uuid,
   ];
-  return await getValue<SignInToken>(signInTokensKey, {
-    consistency: "eventual",
-  }) ?? await getValue<SignInToken>(signInTokensKey);
+  return await getGetValue<SignInToken>(signInTokensKey);
 }
 
 export async function getEmployerSignInToken(uuid: string) {

@@ -1,20 +1,29 @@
-import type { Handlers } from "$fresh/server.ts";
+import type { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirect } from "@/utils/redirect.ts";
 import {
+  createCsrfToken,
   createEmployer,
   createEmployerSignInToken,
   newEmployerProps,
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
+import {
+  ProtectedForm,
+  readPostDataAndValidateCsrfToken,
+} from "@/utils/csrf.ts";
+import { CSRFInput } from "@/components/CRSFInput.tsx";
 
-export const handler: Handlers<State, State> = {
-  GET(_, ctx) {
-    return ctx.render(ctx.state);
+interface Props extends State, ProtectedForm {}
+
+export const handler: Handlers<Props, State> = {
+  async GET(_, ctx) {
+    const csrfToken = await createCsrfToken();
+    return ctx.render({ ...ctx.state, csrfToken });
   },
 
   async POST(req, ctx) {
-    const form = await req.formData();
+    const form = await readPostDataAndValidateCsrfToken(req);
     const email = form.get("email")?.toString();
     const name = form.get("name")?.toString();
     const company = form.get("company")?.toString();
@@ -46,7 +55,7 @@ export const handler: Handlers<State, State> = {
   },
 };
 
-export default function EmployerSignUpPage() {
+export default function EmployerSignUpPage(props: PageProps<Props>) {
   return (
     <main>
       <h1>
@@ -78,6 +87,7 @@ export default function EmployerSignUpPage() {
       </ul>
 
       <form method="post">
+        <CSRFInput csrfToken={props.data.csrfToken} />
         <label>
           Email:{" "}
           <input

@@ -9,7 +9,9 @@ assertExists(siteBaseUrl);
 export const SITE_BASE_URL = siteBaseUrl;
 export const USE_SECURE_COOKIES =
   Deno.env.get("USE_SECURE_COOKIES") !== "false";
+export const CSRF_TOKEN_INPUT_NAME = "csrfToken";
 
+export const CSRF_TOKEN_LIFETIME_MS = 20 * MINUTE;
 export const SIGN_IN_TOKEN_LIFETIME_MS = 10 * MINUTE;
 export const SESSION_COOKIE_LIFETIME_MS = 7 * DAY;
 
