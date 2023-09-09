@@ -20,7 +20,7 @@ export function redirect(
   });
 }
 
-export function redirectToDeveloperSignIn(url: string) {
+export function redirectToDeveloperSignIn(url = "/account") {
   return redirect(`/signin?from=${url}`);
 }
 

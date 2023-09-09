@@ -56,6 +56,8 @@ export const renderWelcomeDeveloperEmailMessage = (
   subject: `Welcome to ${SITE_NAME}!`,
   html: `<h1>Welcome to ${SITE_NAME}</h1>
 <p>Your account has been created – please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a> and get started.</p>
+<p>If you are redirected to the sign in page, your verification link has expired and you'll need to sign in with your email to get a new one.
+<p>You can always respond to this email if you have any questions.</p>
 <p>Thanks,</p>
 <p>${SITE_NAME}</p>`,
 });
@@ -75,6 +77,8 @@ export const renderDeveloperEmailVerificationMessage = (
   subject: `Please verify your email for ${SITE_NAME}`,
   html:
     `<p>Please <a href="${SITE_BASE_URL}/verifyEmail?token=${token}">click here to confirm your email</a>.</p>
+<p>If you are redirected to the sign in page, your verification link has expired and you'll need to sign in with your email to get a new one.
+<p>You can always respond to this email if you have any questions.</p>
 <p>Thanks,</p>
 <p>${SITE_NAME}</p>`,
 });
@@ -94,6 +98,8 @@ export const renderDeveloperSignInEmailMessage = (
   subject: `${SITE_NAME} magic link`,
   html:
     `<a href="${SITE_BASE_URL}/developerMagicLink?token=${token}">Click here to sign in</a>.
+<p>If you are redirected to the sign in page, your verification link has expired and you'll need to sign in with your email to get a new one.
+<p>You can always respond to this email if you have any questions.</p>
 <p>Thanks,</p>
 <p>${SITE_NAME}</p>`,
 });
@@ -113,6 +119,8 @@ export const renderWelcomeEmployerEmailMessage = (
   subject: `${employer.name}, welcome to ${SITE_NAME}!`,
   html: `<h1>Welcome to ${SITE_NAME}</h1>
 <p>Your employer account has been created – please <a href="${SITE_BASE_URL}/employerCallback?token=${token}">click here to sign in</a>.
+<p>If you are redirected to the sign in page, your verification link has expired and you'll need to sign in with your email to get a new one.
+<p>You can always respond to this email if you have any questions.</p>
 <p>Thanks,</p>
 <p>${SITE_NAME}</p>`,
 });
@@ -132,6 +140,8 @@ export const renderEmployerSignInEmailMessage = (
   subject: `${SITE_NAME} magic link`,
   html:
     `<a href="${SITE_BASE_URL}/employerCallback?token=${token}">Click here to sign in</a>.
+<p>If you are redirected to the sign in page, your verification link has expired and you'll need to sign in with your email to get a new one.
+<p>You can always respond to this email if you have any questions.</p>
 <p>Thanks,</p>
 <p>${SITE_NAME}</p>`,
 });
