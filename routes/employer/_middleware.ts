@@ -5,7 +5,6 @@ import {
   Employer,
   getEmployer,
   getEmployerSession,
-  updateEmployer,
 } from "@/utils/db.ts";
 import { redirectToEmployerSignIn } from "@/utils/redirect.ts";
 import { SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
@@ -49,11 +48,6 @@ export async function handler(
   if (!employer) {
     console.error(`employer ${session.entityId} not found`);
     return redirectResponse;
-  }
-
-  if (!employer.emailConfirmed) {
-    employer.emailConfirmed = true;
-    await updateEmployer(employer);
   }
 
   ctx.state.employer = employer;

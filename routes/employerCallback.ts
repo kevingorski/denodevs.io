@@ -11,6 +11,7 @@ import {
   deleteSignInToken,
   getEmployer,
   getEmployerSignInToken,
+  updateEmployer,
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
 import {
@@ -49,6 +50,10 @@ export const handler: Handlers<State, State> = {
 
     if (!employer) {
       return loginResponse;
+    }
+    if (!employer.emailConfirmed) {
+      employer.emailConfirmed = true;
+      await updateEmployer(employer);
     }
 
     setCookie(
