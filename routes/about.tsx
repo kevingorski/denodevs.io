@@ -1,5 +1,6 @@
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
+import { CLICKY_SITE_ID } from "@/utils/constants.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -85,6 +86,16 @@ export default function AboutPage() {
           <a href="https://deno.com/kv">Deno KV</a>
         </li>
       </ol>
+
+      <a
+        title="Privacy-friendly Web Analytics"
+        href={`https://clicky.com/${CLICKY_SITE_ID}`}
+      >
+        <img
+          alt="Clicky"
+          src="//static.getclicky.com/media/links/badge.gif"
+        />
+      </a>
     </main>
   );
 }

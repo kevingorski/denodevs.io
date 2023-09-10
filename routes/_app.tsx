@@ -2,7 +2,11 @@ import { AppProps } from "$fresh/server.ts";
 import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
 import Meta from "@/components/Meta.tsx";
-import { SITE_DESCRIPTION, SITE_NAME } from "../utils/constants.ts";
+import {
+  CLICKY_SITE_ID,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} from "../utils/constants.ts";
 
 export default function App(props: AppProps) {
   if (props.url.pathname === "/kv-insights") {
@@ -32,6 +36,8 @@ export default function App(props: AppProps) {
           employerSessionId={props.data?.employerSessionId}
           sessionId={props.data?.sessionId}
         />
+        <script async data-id={CLICKY_SITE_ID} src="//static.getclicky.com/js">
+        </script>
       </body>
     </html>
   );
