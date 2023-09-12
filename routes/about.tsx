@@ -1,6 +1,12 @@
 import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
-import { CLICKY_SITE_ID } from "@/utils/constants.ts";
+import { CLICKY_SITE_ID, KEVINS_EMAIL_ADDRESS } from "@/utils/constants.ts";
+import gravatar from "npm:gravatar";
+
+const profileImageUrl = gravatar.url(KEVINS_EMAIL_ADDRESS, { s: "128" });
+const profileHighResolutionImageUrl = gravatar.url(KEVINS_EMAIL_ADDRESS, {
+  s: "256",
+});
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -51,20 +57,6 @@ export default function AboutPage() {
 
       <h2>Made with Deno goodness</h2>
 
-      <p>
-        <a href="https://github.com/kevingorski/denodevs.io" target="_blank">
-          DenoDevs is open source!
-        </a>
-        <iframe
-          src="https://github.com/sponsors/kevingorski/button"
-          title="Sponsor kevingorski"
-          height="32"
-          width="114"
-          style="border: 0; border-radius: 6px;"
-        >
-        </iframe>
-      </p>
-
       <ol>
         <li>
           <a href="https://fresh.deno.dev">
@@ -86,6 +78,19 @@ export default function AboutPage() {
           <a href="https://deno.com/kv">Deno KV</a>
         </li>
       </ol>
+      <p>
+        <a href="https://github.com/kevingorski/denodevs.io" target="_blank">
+          DenoDevs is open source!
+        </a>
+        <iframe
+          src="https://github.com/sponsors/kevingorski/button"
+          title="Sponsor kevingorski"
+          height="32"
+          width="114"
+          style="border: 0; border-radius: 6px;"
+        >
+        </iframe>
+      </p>
 
       <a
         title="Privacy-friendly Web Analytics"
@@ -96,6 +101,15 @@ export default function AboutPage() {
           src="//static.getclicky.com/media/links/badge.gif"
         />
       </a>
+
+      <h2>Made by a real person</h2>
+      <img
+        alt="Photo of Kevin Gorski"
+        width="128"
+        height="128"
+        srcset={`${profileImageUrl}, ${profileHighResolutionImageUrl} 2x`}
+        src={profileImageUrl}
+      />
     </main>
   );
 }

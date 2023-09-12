@@ -26,4 +26,5 @@ export default function denoDevsCsp(csp: ContentSecurityPolicy) {
   directives.imgSrc.push("'self'");
   directives.imgSrc.push("avatars.githubusercontent.com");
   directives.imgSrc.push("static.getclicky.com");
+  directives.imgSrc.push("www.gravatar.com");
 }
