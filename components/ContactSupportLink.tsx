@@ -1,3 +1,5 @@
+import { SUPPORT_EMAIL_ADDRESS } from "@/utils/constants.ts";
+
 export interface LinkProps {
   linkText?: string;
   titleText?: string;
@@ -15,7 +17,7 @@ export default function ContactSupportLink(
   const messageBody = encodeURIComponent(props.messageBody);
   const messageSubject = encodeURIComponent(props.messageSubject);
   const href =
-    `mailto:kevin@denodevs.io?subject=${messageSubject}&body=${messageBody}`;
+    `mailto:${SUPPORT_EMAIL_ADDRESS}?subject=${messageSubject}&body=${messageBody}`;
   return (
     <a href={href} target="_blank" title={props.titleText}>
       {linkText}

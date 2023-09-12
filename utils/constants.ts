@@ -24,3 +24,6 @@ export const SIGN_IN_HELP_COOKIE_LIFETIME_MS = 60 * DAY;
 export const SIGN_IN_HELP_COOKIE_NAME = "sign-in-help";
 
 export const CLICKY_SITE_ID = Deno.env.get("CLICKY_SITE_ID");
+
+export const KEVINS_EMAIL_ADDRESS = "kevin@denodevs.io";
+export const SUPPORT_EMAIL_ADDRESS = KEVINS_EMAIL_ADDRESS;
