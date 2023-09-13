@@ -5,7 +5,18 @@ to work with Deno.
 
 ## Getting Started Locally
 
-### Prerequisites
+### Dependencies
+
+You may install these manually or with
+[tea developer environment setup](https://docs.tea.xyz/using-dev/dev) (not yet
+working) if desired.
+
+| Project                          | Version |
+| -------------------------------- | ------- |
+| deno.land                        | ^1.36.3 |
+| github.com/evilmartians/lefthook | ^1.4.10 |
+
+For manual setup:
 
 - [Deno](https://deno.com/manual/getting_started/installation)
 - [Git](https://github.com/git-guides/install-git)
@@ -17,7 +28,7 @@ to work with Deno.
 1. Clone the repo:
 
    ```bash
-   git clone https://github.com/kevingorski/denodevs.git
+   git clone https://github.com/kevingorski/denodevs.io.git
    cd denodevs
    ```
 
@@ -40,6 +51,40 @@ to work with Deno.
    in your `.env` file.
 3. Click `Generate a new client secret` and copy the resulting client secret to
    the `GITHUB_CLIENT_SECRET` environment variable in your `.env` file.
+
+### Email
+
+By default emails will be sent to the console rather than sent via
+[Resend](https://resend.com/). If you have a Resend API key, that can be set at
+`RESEND_API_KEY`, but you'll still need to turn off `SEND_EMAIL_TO_CONSOLE`
+(`=false`).
+
+You can also test changes to emails via the Admin area (explained in the next
+section).
+
+### Admin Access
+
+In order to access the Admin area, you'll need to either use the default
+passwords or update them.
+
+**Caution**: By default local development traffic is not secured and these
+values are sent via basic auth, so do not use anything you wouldn't want public
+(because it essentially is).
+
+```env
+ADMIN_PASSWORD=xxx
+ADMIN_USERNAME=xxx
+```
+
+### Securing Local Traffic (optional)
+
+If you do set up a local SSL certficate, the following environment values will
+need to be updated:
+
+```env
+SITE_BASE_URL=https://localhost:8000
+USE_SECURE_COOKIES=true
+```
 
 ### Payments and Subscriptions using Stripe (optional)
 
@@ -76,15 +121,11 @@ new SaaS app.
 
 ### Bootstrapping your local Database (Optional)
 
-If the home page is feeling a little empty, run
+TODO: This currently doesn't work
 
 ```
 deno task db:seed
 ```
-
-On execution, this script will fetch 20 (customizable) of the top HN posts using
-the [HackerNews API](https://github.com/HackerNews/API) to populate your home
-page.
 
 To see all the values in your local Deno KV database, run
 
@@ -103,133 +144,6 @@ deno task db:reset
 Since this operation is not recoverable, you will be prompted to confirm
 deletion before proceeding.
 
-## Deploying to Production
-
-This section assumes that a
-[local development environment](#getting-started-locally) has been set up.
-
-### Authentication (OAuth)
-
-1. [Change your OAuth app settings](https://github.com/settings/developers) to
-   the following:
-
-- `Homepage URL` = `https://{{ YOUR DOMAIN }}`
-- `Authorization callback URL` = `http://{{ YOUR DOMAIN }}/callback`
-
-### Payments (Stripe)
-
-In order to use Stripe in production, you'll have to
-[activate your Stripe account](https://stripe.com/docs/account/activate).
-
-Once your Stripe account is activated, simply grab the production version of the
-Stripe Secret Key. That will be the value of `STRIPE_SECRET_KEY` in prod.
-
-### Automate Stripe Subscription Updates via Webhooks
-
-Keep your user's customer information up-to-date with billing changes by
-[registering a webhook endpoint in Stripe](https://stripe.com/docs/development/dashboard/register-webhook).
-
-- Endpoint URL: `https://{{ YOUR DOMAIN }}/api/stripe-webhooks`
-- Listen to `Events on your account`
-- Select `customer.subscription.created` and `customer.subscription.deleted`
-
-### Stripe Production Environmental Variables
-
-- `STRIPE_SECRET_KEY`: Dashboard Home (Right Side of Page) -> Secret Key (only
-  revealed once)
-- `STRIPE_WEBHOOK_SECRET`: Dashboard Home -> Developers (right side of page) ->
-  Create webhook -> Click Add Endpoint
-  - After Creation, redirected to new webhook page -> Signing Secret -> Reveal
-- `STRIPE_PREMIUM_PLAN_PRICE_ID`: Dashboard -> Products -> Premium Tier ->
-  Pricing/API ID
-
-### Stripe Customer Portal Branding
-
-[Set up your branding on Stripe](https://dashboard.stripe.com/settings/branding),
-as the user will be taken to Stripe's checkout page when they upgrade to a
-subscription.
-
-### Automatic Deployment with Deno Deploy
-
-These steps show you how to deploy your SaaS app close to your users at the edge
-with [Deno Deploy](https://deno.com/deploy).
-
-1. Clone this repository for your SaaSKit project.
-
-2. Sign into [Deno Deploy](https://dash.deno.com) with your GitHub account.
-
-3. Select your GitHub organization or user, repository, and branch
-
-4. Select "Automatic" deployment mode and `main.ts` as the entry point
-
-5. Click "Link", which will start the deployment.
-
-6. Once the deployment is complete, click on "Settings" and add the production
-   environmental variables, then hit "Save"
-
-You should be able to visit your newly deployed SaaS.
-
-### Deno Deploy via GitHub Action
-
-You can also choose to deploy to
-[Deno Deploy via a GitHub Action](https://github.com/denoland/deployctl/blob/main/action/README.md),
-which offers more flexibility. For instance, with the GitHub Action, you could:
-
-- Add a build step
-- Run `deno lint` to lint your code
-- Run `deno test` to run automated unit tests
-
-1. Create
-   [a new, empty project from the Deno Deploy dashboard](https://dash.deno.com/new).
-   Set a name for your project.
-
-2. Add the GitHub Action.
-
-   [GitHub Actions](https://docs.github.com/en/actions) are configured using a
-   `.yml` file placed in the `.github/workflows` folder of your repo. Here's an
-   example `.yml` file to deploy to Deno Deploy. Be sure to update the
-   `YOUR_DENO_DEPLOY_PROJECT_NAME` with one that you've set in Deno Deploy.
-
-   ```yml
-   # Github action to deploy this project to Deno Deploy
-   name: Deploy
-   on: [push]
-
-   jobs:
-     deploy:
-       name: Deploy
-       runs-on: ubuntu-latest
-       permissions:
-         id-token: write  # Needed for auth with Deno Deploy
-         contents: read  # Needed to clone the repository
-
-       steps:
-         - name: Clone repository
-           uses: actions/checkout@v3
-
-         - name: Install Deno
-           uses: denoland/setup-deno@main
-           # If you need to install a specific Deno version
-           # with:
-           #   deno-version: 1.32.4
-
-   ## You would put your building, linting, testing and other CI/CD steps here
-
-   ## Finally, deploy
-         - name: Upload to Deno Deploy
-           uses: denoland/deployctl@v1
-           with:
-             project: YOUR_DENO_DEPLOY_PROJECT_NAME
-             entrypoint: main.ts
-             # root: dist
-             import-map: import_map.json
-             exclude: .git/** .gitignore .vscode/** .github/** README.md .env .example.env
-   ```
-
-3. Commit and push your code to GitHub. This should trigger the GitHub Action.
-   When the action successfully completes, your app should be available on Deno
-   Deploy.
-
 ## Contributing
 
 To come...
@@ -244,18 +158,3 @@ deno task ok
 ## Goals and Philosophy
 
 To come...
-
-# Dependencies
-
-For use as
-[tea developer environment setup](https://docs.tea.xyz/features/developer-environments),
-if desired. The local dependencies can be installed with:
-
-```bash
-tea -SE && cd .
-```
-
-| Project                          | Version |
-| -------------------------------- | ------- |
-| deno.land                        | ^1.36.3 |
-| github.com/evilmartians/lefthook | ^1.4.10 |
