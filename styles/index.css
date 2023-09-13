@@ -33,7 +33,8 @@ body {
 
 main {
   flex-grow: 1;
-  margin: var(--block-spacing);
+  margin: 1rem auto;
+  width: max(20rem, min(40rem, 50vw));
 }
 
 h1 {
