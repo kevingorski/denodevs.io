@@ -36,7 +36,7 @@ export default function App(props: AppProps) {
           employerSessionId={props.data?.employerSessionId}
           sessionId={props.data?.sessionId}
         />
-        <script async data-id={CLICKY_SITE_ID} src="//static.getclicky.com/js">
+        <script async data-id={CLICKY_SITE_ID} src="/56ac6c4e308a9.js">
         </script>
       </body>
     </html>

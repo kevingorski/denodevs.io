@@ -38,7 +38,8 @@
     "ulid": "https://deno.land/x/ulid@v0.2.2/mod.ts"
   },
   "exclude": [
-    "cov/"
+    "cov/",
+    "static/56ac6c4e308a9.js"
   ],
   "lint": {
     "rules": {
