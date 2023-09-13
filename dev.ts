@@ -5,6 +5,9 @@ import "std/dotenv/load.ts";
 import { bundle } from "npm:lightningcss";
 
 const { code, map } = bundle({
+  drafts: {
+    nesting: true,
+  },
   filename: "./styles/index.css",
   minify: true,
   sourceMap: true,
