@@ -8,18 +8,14 @@ to work with Deno.
 ### Dependencies
 
 You may install these manually or with
-[tea developer environment setup](https://docs.tea.xyz/using-dev/dev) (not yet
-working) if desired.
-
-| Project                          | Version |
-| -------------------------------- | ------- |
-| deno.land                        | ^1.36.3 |
-| github.com/evilmartians/lefthook | ^1.4.10 |
-
-For manual setup:
+[tea developer environment setup](https://docs.tea.xyz/using-dev/dev) if
+desired.
 
 - [Deno](https://deno.com/manual/getting_started/installation)
 - [Git](https://github.com/git-guides/install-git)
+
+These require manual setup (but are optional):
+
 - [A free Stripe account](https://stripe.com)
 - [Stripe CLI](https://stripe.com/docs/stripe-cli#install)
 

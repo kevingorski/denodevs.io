@@ -56,5 +56,6 @@
     "exclude": [
       "_fresh"
     ]
-  }
+  },
+  "tea": "deno.land^1.36.3 github.com/evilmartians/lefthook^1.4.10"
 }
