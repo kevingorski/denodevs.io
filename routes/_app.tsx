@@ -6,6 +6,7 @@ import {
   CLICKY_SITE_ID,
   SITE_DESCRIPTION,
   SITE_NAME,
+  SITE_VERSION,
 } from "../utils/constants.ts";
 
 export default function App(props: AppProps) {
@@ -13,13 +14,16 @@ export default function App(props: AppProps) {
     return <props.Component />;
   }
 
+  const siteName = `${SITE_NAME} ${SITE_VERSION}`;
+  const title = props.data?.title
+    ? `${props.data.title} 🦕💼 ${siteName}`
+    : siteName;
+
   return (
     <html lang="en">
       <head>
         <Meta
-          title={props.data?.title
-            ? `${props.data.title} 🦕💼 ${SITE_NAME}`
-            : SITE_NAME}
+          title={title}
           description={props.data?.description ?? SITE_DESCRIPTION}
           href={props.url.href}
         />

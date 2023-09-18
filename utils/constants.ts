@@ -4,6 +4,8 @@ import { DAY, HOUR, MINUTE } from "std/datetime/constants.ts";
 export const SITE_NAME = "Deno Devs";
 export const SITE_DESCRIPTION =
   `${SITE_NAME} is where employers apply to Deno developers`;
+export const SITE_VERSION = "Alpha";
+
 export const REDIRECT_PATH_AFTER_LOGIN = "/";
 const siteBaseUrl = Deno.env.get("SITE_BASE_URL");
 assertExists(siteBaseUrl);

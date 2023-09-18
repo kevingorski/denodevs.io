@@ -1,5 +1,6 @@
 import type { Handlers } from "$fresh/server.ts";
 import type { State } from "@/routes/_middleware.ts";
+import { SITE_VERSION } from "@/utils/constants.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -22,6 +23,7 @@ export default function HomePage() {
         Fill out your profile and what you're looking for and interested
         companies and projects will reach out to you.
       </p>
+      <p>Currently in {SITE_VERSION}.</p>
 
       <div>
         <a href="/start">Get started</a>
