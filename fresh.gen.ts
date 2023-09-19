@@ -38,10 +38,11 @@ import * as $32 from "./routes/start/employer/index.tsx";
 import * as $33 from "./routes/start/employer/thanks.tsx";
 import * as $34 from "./routes/start/index.tsx";
 import * as $35 from "./routes/verifyEmail.ts";
-import * as $$0 from "./islands/Chart.tsx";
-import * as $$1 from "./islands/DeleteAccountButton.tsx";
-import * as $$2 from "./islands/EntriesManagement.tsx";
-import * as $$3 from "./islands/VerifyEmailButton.tsx";
+import * as $$0 from "./islands/BlurHashedImage.tsx";
+import * as $$1 from "./islands/Chart.tsx";
+import * as $$2 from "./islands/DeleteAccountButton.tsx";
+import * as $$3 from "./islands/EntriesManagement.tsx";
+import * as $$4 from "./islands/VerifyEmailButton.tsx";
 
 const manifest = {
   routes: {
@@ -83,10 +84,11 @@ const manifest = {
     "./routes/verifyEmail.ts": $35,
   },
   islands: {
-    "./islands/Chart.tsx": $$0,
-    "./islands/DeleteAccountButton.tsx": $$1,
-    "./islands/EntriesManagement.tsx": $$2,
-    "./islands/VerifyEmailButton.tsx": $$3,
+    "./islands/BlurHashedImage.tsx": $$0,
+    "./islands/Chart.tsx": $$1,
+    "./islands/DeleteAccountButton.tsx": $$2,
+    "./islands/EntriesManagement.tsx": $$3,
+    "./islands/VerifyEmailButton.tsx": $$4,
   },
   baseUrl: import.meta.url,
 };

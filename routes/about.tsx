@@ -6,11 +6,14 @@ import {
   SITE_NAME,
 } from "@/utils/constants.ts";
 import gravatar from "npm:gravatar";
+import BlurHashedImage from "@/islands/BlurHashedImage.tsx";
 
 const profileImageUrl = gravatar.url(KEVINS_EMAIL_ADDRESS, { s: "128" });
 const profileHighResolutionImageUrl = gravatar.url(KEVINS_EMAIL_ADDRESS, {
   s: "256",
 });
+const profileImageBlurHash =
+  "oQJQ.jX-L1r@=|s;~nIo%LRjWBoL55RP#mW=S2bbtRt7b0t7agt6ozRjxFWoI:xat6f6RQj?WVWX";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -106,10 +109,11 @@ export default function AboutPage() {
         <h2>
           <a id="MadeByKevin">Made By Kevin</a>
         </h2>
-        <img
+        <BlurHashedImage
           alt="Photo of Kevin Gorski"
-          width="128"
-          height="128"
+          blurhash={profileImageBlurHash}
+          width={128}
+          height={128}
           srcset={`${profileImageUrl}, ${profileHighResolutionImageUrl} 2x`}
           src={profileImageUrl}
           style="float:right; margin: 0 0 1em 1em;"
