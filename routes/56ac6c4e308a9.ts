@@ -2,9 +2,10 @@
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 
 async function proxyClickyRequest(req: Request, ctx: HandlerContext) {
-  const { host, protocol, search } = new URL(req.url);
-  const proxiedUrl = new URL("https://in.getclicky.com/in.php");
-  proxiedUrl.search = search;
+  const { host, protocol } = new URL(req.url);
+  const proxiedUrl = new URL(
+    "https://static.getclicky.com/js?in=%2F335afc1fe2e63",
+  );
 
   const headers = new Headers();
   headers.set("host", proxiedUrl.hostname);

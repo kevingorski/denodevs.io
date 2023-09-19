@@ -18,6 +18,9 @@ export default function App(props: AppProps) {
   const title = props.data?.title
     ? `${props.data.title} 🦕💼 ${siteName}`
     : siteName;
+  const clickyUrl = props.url.searchParams.has("proxy")
+    ? "/56ac6c4e308a9"
+    : "//static.getclicky.com/js";
 
   return (
     <html lang="en">
@@ -40,12 +43,7 @@ export default function App(props: AppProps) {
           employerSessionId={props.data?.employerSessionId}
           sessionId={props.data?.sessionId}
         />
-        {
-          /* TODO: Re-enable after fixing reverse proxy
-        <script async data-id={CLICKY_SITE_ID} src="/56ac6c4e308a9.js">
-        </script> */
-        }
-        <script async data-id={CLICKY_SITE_ID} src="//static.getclicky.com/js">
+        <script async data-id={CLICKY_SITE_ID} src={clickyUrl}>
         </script>
       </body>
     </html>
