@@ -1,5 +1,5 @@
 import { chunk } from "std/collections/chunk.ts";
-import { ulid } from "ulid";
+import { ulid } from "std/ulid/mod.ts";
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
