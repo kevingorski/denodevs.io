@@ -11,13 +11,31 @@ if (
 }
 export const kv = await Deno.openKv(path);
 
+interface KvGetOptions {
+  consistency?: Deno.KvConsistencyLevel;
+}
+
 // Helpers
 async function getValue<T>(
   key: Deno.KvKey,
-  options?: { consistency?: Deno.KvConsistencyLevel },
+  options?: KvGetOptions,
 ) {
   const res = await kv.get<T>(key, options);
   return res.value;
+}
+
+async function getSecondaryIndexValue<TPrimaryKey, TPrimaryValue>(
+  secondaryKey: Deno.KvKey,
+  getByPrimaryKey: (
+    primaryKey: TPrimaryKey,
+    options?: KvGetOptions,
+  ) => Promise<TPrimaryValue | null>,
+  options?: KvGetOptions,
+) {
+  const primaryKey = await getValue<TPrimaryKey>(secondaryKey, options);
+  return primaryKey === null
+    ? null
+    : await getByPrimaryKey(primaryKey, options);
 }
 
 async function getGetValue<T>(
@@ -150,7 +168,7 @@ export async function createEmployer(
     .check({ key: employersKey, versionstamp: null })
     .check({ key: employersByEmailKey, versionstamp: null })
     .set(employersKey, employer)
-    .set(employersByEmailKey, employer)
+    .set(employersByEmailKey, employer.id)
     .sum(employersCreatedCountKey, 1n)
     .sum(employersCreatedCountByDayKey, 1n)
     .commit();
@@ -163,13 +181,7 @@ export async function createEmployer(
 
 export async function updateEmployer(employer: Employer) {
   const employersKey = [TopLevelKeys.employers, employer.id];
-  const employersByEmailKey = [TopLevelKeys.employers_by_email, employer.email];
-
-  const res = await kv.atomic()
-    .set(employersKey, employer)
-    .set(employersByEmailKey, employer)
-    .commit();
-
+  const res = await kv.set(employersKey, employer);
   if (!res.ok) throw new Error(`Failed to update employer: ${employer}`);
 }
 
@@ -178,7 +190,10 @@ export async function getEmployer(id: string) {
 }
 
 export async function getEmployerByEmail(email: string) {
-  return await getValue<Employer>([TopLevelKeys.employers_by_email, email]);
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.employers_by_email, email],
+    getEmployer,
+  );
 }
 
 export async function deleteEmployer(employer: Employer) {
@@ -427,14 +442,14 @@ export async function createDeveloper(developer: Developer) {
     ];
     atomicOp
       .check({ key: developersByStripeCustomerKey, versionstamp: null })
-      .set(developersByStripeCustomerKey, developer);
+      .set(developersByStripeCustomerKey, developer.id);
   }
 
   const res = await atomicOp
     .check({ key: developersKey, versionstamp: null })
     .check({ key: developersByEmailKey, versionstamp: null })
     .set(developersKey, developer)
-    .set(developersByEmailKey, developer)
+    .set(developersByEmailKey, developer.id)
     .sum(developersCreatedCountKey, 1n)
     .sum(developersCreatedCountByDayKey, 1n)
     .commit();
@@ -448,27 +463,7 @@ export async function createDeveloper(developer: Developer) {
 
 export async function updateDeveloper(developer: Developer) {
   const developersKey = [TopLevelKeys.developers, developer.id];
-  const developersByEmailKey = [
-    TopLevelKeys.developers_by_email,
-    developer.email,
-  ];
-
-  const atomicOp = kv.atomic();
-
-  if (developer.stripeCustomerId !== undefined) {
-    const developersByStripeCustomerKey = [
-      TopLevelKeys.developers_by_stripe_customer,
-      developer.stripeCustomerId,
-    ];
-    atomicOp
-      .set(developersByStripeCustomerKey, developer);
-  }
-
-  const res = await atomicOp
-    .set(developersKey, developer)
-    .set(developersByEmailKey, developer)
-    .commit();
-
+  const res = await kv.set(developersKey, developer);
   if (!res.ok) throw new Error(`Failed to update developer: ${developer}`);
 }
 
@@ -477,14 +472,17 @@ export async function getDeveloper(id: string) {
 }
 
 export async function getDeveloperByEmail(email: string) {
-  return await getValue<Developer>([TopLevelKeys.developers_by_email, email]);
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.developers_by_email, email],
+    getDeveloper,
+  );
 }
 
 export async function getDeveloperByStripeCustomer(stripeCustomerId: string) {
-  return await getValue<Developer>([
-    TopLevelKeys.developers_by_stripe_customer,
-    stripeCustomerId,
-  ]);
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.developers_by_stripe_customer, stripeCustomerId],
+    getDeveloper,
+  );
 }
 
 export async function getManyDevelopers(ids: string[]) {
@@ -516,7 +514,7 @@ export async function createGitHubProfile(profile: GitHubProfile) {
     .check({ key: gitHubProfileKey, versionstamp: null })
     .check({ key: gitHubProfileByDeveloperKey, versionstamp: null })
     .set(gitHubProfileKey, profile)
-    .set(gitHubProfileByDeveloperKey, profile)
+    .set(gitHubProfileByDeveloperKey, profile.gitHubId)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to create GitHub profile: ${profile}`);
@@ -530,10 +528,10 @@ export async function getGitHubProfile(gitHubId: number) {
 }
 
 export async function getGitHubProfileByDeveloper(developerId: string) {
-  return await getValue<GitHubProfile>([
-    TopLevelKeys.github_profiles_by_developer,
-    developerId,
-  ]);
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.github_profiles_by_developer, developerId],
+    getGitHubProfile,
+  );
 }
 
 export async function deleteDeveloper(developer: Developer) {
