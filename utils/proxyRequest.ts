@@ -12,8 +12,11 @@ export default async function proxyRequest(
   req: Request,
   ctx: HandlerContext,
 ) {
-  const { headers: originalHeaders, method: originalMethod } = req;
-  req.formData;
+  const { headers: originalHeaders, method: originalMethod, url: originalUrl } =
+    req;
+  const { host: originalHost, protocol: originalProtocol } = new URL(
+    originalUrl,
+  );
 
   // Maintain existing XFF if any, add remote IP
   const originalForwardedFor = originalHeaders.get("x-forwarded-for");
@@ -21,13 +24,16 @@ export default async function proxyRequest(
     originalForwardedFor !== null ? originalForwardedFor + "," : ""
   }${ctx.remoteAddr.hostname}`;
 
+  console.dir(ctx.remoteAddr);
+
   const headers = new Headers();
+  headers.set("host", proxiedUrl.hostname);
   headers.set(
     "x-forwarded-for",
     newForwardedFor,
   );
-  // headers.set("x-forwarded-host", host);
-  // headers.set("x-forwarded-proto", protocol);
+  headers.set("x-forwarded-host", originalHost);
+  headers.set("x-forwarded-proto", originalProtocol);
 
   for (const [key, value] of originalHeaders.entries()) {
     if (
