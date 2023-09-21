@@ -56,5 +56,5 @@
       "_fresh"
     ]
   },
-  "tea": "deno.land^1.37.0 github.com/evilmartians/lefthook^1.4.10"
+  "tea": "deno.land^1.37.0 github.com/evilmartians/lefthook^1.5.0"
 }
