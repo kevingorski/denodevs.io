@@ -1,21 +1,14 @@
-/* Reverse proxy for Clicky Beacon to enable analytics */
+/* Reverse proxy for Clicky beacon to enable analytics */
 import { HandlerContext, Handlers } from "$fresh/server.ts";
+import proxyRequest from "@/utils/proxyRequest.ts";
 
-async function proxyClickyRequest(req: Request, ctx: HandlerContext) {
-  const { host, protocol, search } = new URL(req.url);
-  const proxiedUrl = new URL("https://in.getclicky.com/in.php");
-  proxiedUrl.search = search;
+const proxiedUrl = "https://in.getclicky.com/in.php";
 
-  const headers = new Headers();
-  headers.set("host", proxiedUrl.hostname);
-  headers.set("x-forwarded-for", ctx.remoteAddr.hostname);
-  headers.set("x-forwarded-host", host);
-  headers.set("x-forwarded-proto", protocol);
-  const response = await fetch(proxiedUrl, {
-    headers,
-    method: req.method,
-  });
-  return response;
+function proxyClickyRequest(req: Request, ctx: HandlerContext) {
+  const requestedUrl = new URL(req.url);
+  const withQueryString = new URL(proxiedUrl);
+  withQueryString.search = requestedUrl.search;
+  return proxyRequest(withQueryString, req, ctx);
 }
 
 export const handler: Handlers = {
