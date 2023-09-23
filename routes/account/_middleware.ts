@@ -1,15 +1,12 @@
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import {
-  deleteDeveloperSession,
-  Developer,
-  getDeveloper,
-  getDeveloperSession,
-} from "@/utils/db.ts";
+import { deleteDeveloperSession, Developer } from "@/utils/db.ts";
 import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
-import { SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
 import { deleteCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
+import getDeveloperFromSessionId, {
+  DeveloperSessionResult,
+} from "@/utils/getDeveloperFromSessionId.ts";
 
 export interface AccountState extends State {
   sessionId: string;
@@ -28,26 +25,22 @@ export async function handler(
 ) {
   const redirectResponse = redirectToDeveloperSignIn(req.url);
   const { sessionId } = ctx.state;
-  if (!sessionId) return redirectResponse;
+  const maybeDeveloper = await getDeveloperFromSessionId(sessionId);
 
-  const session = await getDeveloperSession(sessionId);
-  if (!session) {
-    deleteCookie(redirectResponse.headers, SITE_COOKIE_NAME);
-    return redirectResponse;
+  switch (maybeDeveloper) {
+    case DeveloperSessionResult.NO_SESSION_ID:
+      return redirectResponse;
+    case DeveloperSessionResult.NO_SESSION:
+      deleteCookie(redirectResponse.headers, SITE_COOKIE_NAME);
+      return redirectResponse;
+    case DeveloperSessionResult.EXPIRED_SESSION:
+      return await deleteSessionAndCookie(sessionId, redirectResponse);
+    case DeveloperSessionResult.NO_DEVELOPER:
+      return await deleteSessionAndCookie(sessionId, redirectResponse);
+    default:
+      ctx.state.developer = maybeDeveloper;
+      break;
   }
 
-  if (
-    session.generated + SESSION_COOKIE_LIFETIME_MS < Date.now()
-  ) {
-    return await deleteSessionAndCookie(sessionId, redirectResponse);
-  }
-
-  const developer = await getDeveloper(session.entityId);
-
-  if (!developer) {
-    return await deleteSessionAndCookie(sessionId, redirectResponse);
-  }
-
-  ctx.state.developer = developer;
   return await ctx.next();
 }

@@ -11,7 +11,10 @@ import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { SITE_BASE_URL } from "@/utils/constants.ts";
 import SignInHelp from "@/types/SignInHelp.ts";
 import { getSignInHelpFromCookie } from "@/utils/signInHelp.ts";
-import { GitHubOAuthSignInButton } from "@/components/OAuthSignInButton.tsx";
+import {
+  GitHubOAuthSignInButton,
+  GoogleOAuthSignInButton,
+} from "@/components/OAuthSignInButton.tsx";
 
 interface DeveloperSignInPageData extends State {
   from: string | null;
@@ -85,6 +88,11 @@ export default function DeveloperSignInPage(
       <h2>Sign in with your GitHub account</h2>
 
       <GitHubOAuthSignInButton
+        signInHelp={signInHelp}
+        successUrl={successUrl}
+      />
+
+      <GoogleOAuthSignInButton
         signInHelp={signInHelp}
         successUrl={successUrl}
       />

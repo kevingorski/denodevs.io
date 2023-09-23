@@ -1,7 +1,7 @@
 import type { Handlers } from "$fresh/server.ts";
 import { getGitHubProfile, upgradeDeveloperOAuthSession } from "@/utils/db.ts";
 import { handleCallback } from "kv_oauth";
-import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
+import { gitHubOAuth2Client } from "@/utils/oauth2_clients.ts";
 import { State } from "@/routes/_middleware.ts";
 import { getGitHubUser } from "@/utils/github.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";

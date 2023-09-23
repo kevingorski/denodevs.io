@@ -28,17 +28,18 @@ import * as $22 from "./routes/employer/index.tsx";
 import * as $23 from "./routes/employerCallback.ts";
 import * as $24 from "./routes/employerSignIn.tsx";
 import * as $25 from "./routes/gitHubCallback.ts";
-import * as $26 from "./routes/index.tsx";
-import * as $27 from "./routes/kv-insights/_middleware.ts";
-import * as $28 from "./routes/signInOAuth.ts";
-import * as $29 from "./routes/signin.tsx";
-import * as $30 from "./routes/signout.ts";
-import * as $31 from "./routes/start/developer/index.tsx";
-import * as $32 from "./routes/start/developer/thanks.tsx";
-import * as $33 from "./routes/start/employer/index.tsx";
-import * as $34 from "./routes/start/employer/thanks.tsx";
-import * as $35 from "./routes/start/index.tsx";
-import * as $36 from "./routes/verifyEmail.ts";
+import * as $26 from "./routes/googleCallback.ts";
+import * as $27 from "./routes/index.tsx";
+import * as $28 from "./routes/kv-insights/_middleware.ts";
+import * as $29 from "./routes/signInOAuth.ts";
+import * as $30 from "./routes/signin.tsx";
+import * as $31 from "./routes/signout.ts";
+import * as $32 from "./routes/start/developer/index.tsx";
+import * as $33 from "./routes/start/developer/thanks.tsx";
+import * as $34 from "./routes/start/employer/index.tsx";
+import * as $35 from "./routes/start/employer/thanks.tsx";
+import * as $36 from "./routes/start/index.tsx";
+import * as $37 from "./routes/verifyEmail.ts";
 import * as $$0 from "./islands/BlurHashedImage.tsx";
 import * as $$1 from "./islands/Chart.tsx";
 import * as $$2 from "./islands/DeleteAccountButton.tsx";
@@ -73,17 +74,18 @@ const manifest = {
     "./routes/employerCallback.ts": $23,
     "./routes/employerSignIn.tsx": $24,
     "./routes/gitHubCallback.ts": $25,
-    "./routes/index.tsx": $26,
-    "./routes/kv-insights/_middleware.ts": $27,
-    "./routes/signInOAuth.ts": $28,
-    "./routes/signin.tsx": $29,
-    "./routes/signout.ts": $30,
-    "./routes/start/developer/index.tsx": $31,
-    "./routes/start/developer/thanks.tsx": $32,
-    "./routes/start/employer/index.tsx": $33,
-    "./routes/start/employer/thanks.tsx": $34,
-    "./routes/start/index.tsx": $35,
-    "./routes/verifyEmail.ts": $36,
+    "./routes/googleCallback.ts": $26,
+    "./routes/index.tsx": $27,
+    "./routes/kv-insights/_middleware.ts": $28,
+    "./routes/signInOAuth.ts": $29,
+    "./routes/signin.tsx": $30,
+    "./routes/signout.ts": $31,
+    "./routes/start/developer/index.tsx": $32,
+    "./routes/start/developer/thanks.tsx": $33,
+    "./routes/start/employer/index.tsx": $34,
+    "./routes/start/employer/thanks.tsx": $35,
+    "./routes/start/index.tsx": $36,
+    "./routes/verifyEmail.ts": $37,
   },
   islands: {
     "./islands/BlurHashedImage.tsx": $$0,

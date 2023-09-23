@@ -6,7 +6,7 @@ import {
 } from "@/utils/db.ts";
 import { AccountState } from "./_middleware.ts";
 import { handleCallback } from "kv_oauth";
-import { gitHubOAuth2Client } from "@/utils/oauth2_client.ts";
+import { gitHubOAuth2Client } from "@/utils/oauth2_clients.ts";
 import { getGitHubUser } from "@/utils/github.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";

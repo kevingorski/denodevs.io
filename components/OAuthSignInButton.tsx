@@ -36,3 +36,13 @@ export function GitHubOAuthSignInButton(
     </OAuthSignInButton>
   );
 }
+
+export function GoogleOAuthSignInButton(
+  props: Omit<Props, "children" | "oAuthProvider">,
+) {
+  return (
+    <OAuthSignInButton {...props} oAuthProvider={OAuthProvider.GOOGLE}>
+      G Sign in with Google
+    </OAuthSignInButton>
+  );
+}

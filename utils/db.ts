@@ -90,6 +90,8 @@ enum TopLevelKeys {
   employers_created_count_by_day = "employers_created_count_by_day",
   github_profiles = "github_profiles",
   github_profiles_by_developer = "github_profiles_by_developer",
+  google_profiles = "google_profiles",
+  google_profiles_by_developer = "google_profiles_by_developer",
   sessions = "sessions",
   sign_in_tokens = "sign_in_tokens",
 }
@@ -534,6 +536,45 @@ export async function getGitHubProfileByDeveloper(developerId: string) {
   );
 }
 
+export interface GoogleProfile {
+  developerId: string;
+  googleId: string;
+}
+
+export async function createGoogleProfile(
+  profile: GoogleProfile,
+) {
+  const googleProfileKey = [TopLevelKeys.google_profiles, profile.googleId];
+  const googleProfilesByDeveloperKey = [
+    TopLevelKeys.google_profiles_by_developer,
+    profile.developerId,
+  ];
+  const res = await kv.atomic()
+    .check({ key: googleProfileKey, versionstamp: null })
+    .check({ key: googleProfilesByDeveloperKey, versionstamp: null })
+    .set(googleProfileKey, profile)
+    .set(googleProfilesByDeveloperKey, profile.googleId)
+    .commit();
+
+  if (!res.ok) {
+    throw new Error(`Failed to create Google profile: ${profile}`);
+  }
+}
+
+export async function getGoogleProfile(googleId: string) {
+  return await getValue<GoogleProfile>([
+    TopLevelKeys.google_profiles,
+    googleId,
+  ]);
+}
+
+export async function getGoogleProfileByDeveloper(developerId: string) {
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.google_profiles_by_developer, developerId],
+    getGoogleProfile,
+  );
+}
+
 export async function deleteDeveloper(developer: Developer) {
   const developersKey = [TopLevelKeys.developers, developer.id];
   const developersByEmailKey = [
@@ -564,6 +605,21 @@ export async function deleteDeveloper(developer: Developer) {
     ];
     atomicOp.delete(gitHubProfileKey);
     atomicOp.delete(gitHubProfileByDeveloperKey);
+  }
+
+  const googleProfile = await getGoogleProfileByDeveloper(developer.id);
+
+  if (googleProfile) {
+    const googleProfileKey = [
+      TopLevelKeys.google_profiles,
+      googleProfile.googleId,
+    ];
+    const googleProfilesByDeveloperKey = [
+      TopLevelKeys.google_profiles_by_developer,
+      developer.id,
+    ];
+    atomicOp.delete(googleProfileKey);
+    atomicOp.delete(googleProfilesByDeveloperKey);
   }
 
   const res = await atomicOp

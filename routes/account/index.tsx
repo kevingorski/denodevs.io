@@ -7,9 +7,10 @@ import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 import { useCSP } from "$fresh/src/runtime/csp.ts";
 import {
-  getGitHubProfile,
   getGitHubProfileByDeveloper,
+  getGoogleProfileByDeveloper,
   GitHubProfile,
+  GoogleProfile,
 } from "@/utils/db.ts";
 import SignOutLink from "@/components/SignOutLink.tsx";
 import { UserType } from "@/types/UserType.ts";
@@ -18,17 +19,22 @@ import denoDevsCsp from "@/utils/csp.ts";
 
 interface Props extends AccountState {
   gitHubProfile: GitHubProfile | null;
+  googleProfile: GoogleProfile | null;
 }
 
 export const handler: Handlers<Props, AccountState> = {
   async GET(_request, ctx) {
     ctx.state.title = "Account";
 
+    const developerId = ctx.state.developer.id;
     const gitHubProfile = await getGitHubProfileByDeveloper(
-      ctx.state.developer.id,
+      developerId,
+    );
+    const googleProfile = await getGoogleProfileByDeveloper(
+      developerId,
     );
 
-    return ctx.render({ ...ctx.state, gitHubProfile });
+    return ctx.render({ ...ctx.state, gitHubProfile, googleProfile });
   },
 };
 
@@ -63,13 +69,15 @@ function VerifyEmailPrompt(props: { email: string }) {
 }
 
 export default function AccountPage(props: PageProps<Props>) {
-  const { developer, gitHubProfile } = props.data;
+  const { developer, gitHubProfile, googleProfile } = props.data;
   const action = developer.isSubscribed ? "Manage" : "Upgrade";
 
   useCSP(denoDevsCsp);
 
   const gitHubSignInUrl =
     `/account/connectOAuth?provider=${OAuthProvider.GITHUB}`;
+  const googleSignInUrl =
+    `/account/connectOAuth?provider=${OAuthProvider.GOOGLE}`;
 
   return (
     <main>
@@ -87,6 +95,13 @@ export default function AccountPage(props: PageProps<Props>) {
         <div>
           <a class="button" href={gitHubSignInUrl}>
             <GitHub /> Connect with GitHub
+          </a>
+        </div>
+      )}
+      {!googleProfile && (
+        <div>
+          <a class="button" href={googleSignInUrl}>
+            G Connect with Google
           </a>
         </div>
       )}
