@@ -2,7 +2,6 @@ export interface GitHubUser {
   id: number;
   login: string;
   avatar_url: string;
-  html_url: string;
   gravatar_id: string | null;
   name: string | null;
   company: string | null;
@@ -11,7 +10,7 @@ export interface GitHubUser {
   email: string | null;
 }
 
-export async function getGitHubUser(accessToken: string): Promise<GitHubUser> {
+export async function getGitHubUser(accessToken: string) {
   const response = await fetch("https://api.github.com/user", {
     headers: { authorization: `Bearer ${accessToken}` },
   });
@@ -19,5 +18,17 @@ export async function getGitHubUser(accessToken: string): Promise<GitHubUser> {
     await response.body?.cancel();
     throw new Error();
   }
-  return await response.json() as GitHubUser;
+  const {
+    avatar_url,
+    gravatar_id,
+    id,
+    ...rest
+  } = await response.json() as GitHubUser;
+
+  return {
+    avatarUrl: avatar_url,
+    gitHubId: id,
+    gravatarId: gravatar_id,
+    ...rest,
+  };
 }

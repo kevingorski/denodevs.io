@@ -39,7 +39,11 @@ async function getGoogleProfile(url: URL, accessToken: string) {
   return await apiResponse.json() as GoogleProfile;
 }
 
-export async function getGoogleUserId(accessToken: string) {
+export async function getGoogleUser(accessToken: string) {
   const response = await getGoogleProfile(validatePersonUrl, accessToken);
-  return response.resourceName.split("/").pop();
+  const googleId = response.resourceName.split("/").pop();
+  if (!googleId) {
+    throw new Error();
+  }
+  return { googleId };
 }

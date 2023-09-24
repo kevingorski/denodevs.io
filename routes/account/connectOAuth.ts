@@ -15,18 +15,11 @@ export const handler: Handlers<any, AccountState> = {
    */
   async GET(req, ctx) {
     const requestUrl = new URL(req.url);
-    const requestOrigin = requestUrl.origin;
     const provider = requestUrl.searchParams.get("provider");
     let client;
-    let options = {};
     switch (provider) {
       case OAuthProvider.GITHUB:
         client = gitHubOAuth2Client;
-        options = {
-          urlParams: {
-            redirect_uri: `${requestOrigin}/account/gitHubCallback`,
-          },
-        };
         break;
       case OAuthProvider.GOOGLE:
         client = googleOAuth2Client;
@@ -34,6 +27,6 @@ export const handler: Handlers<any, AccountState> = {
       default:
         return ctx.renderNotFound();
     }
-    return await signIn(req, client, options);
+    return await signIn(req, client);
   },
 };
