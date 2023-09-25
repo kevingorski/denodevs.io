@@ -1,7 +1,7 @@
 import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import type { JSX } from "preact";
-import { decodeBlurHash } from "npm:fast-blurhash";
+import { decodeBlurHash } from "fast-blurhash";
 
 type Props =
   & JSX.HTMLAttributes<HTMLImageElement>

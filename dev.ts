@@ -2,7 +2,7 @@
 
 import dev from "$fresh/dev.ts";
 import "std/dotenv/load.ts";
-import { bundle } from "npm:lightningcss";
+import { bundle } from "lightningcss";
 
 const { code, map } = bundle({
   drafts: {

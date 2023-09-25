@@ -5,7 +5,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
 } from "@/utils/constants.ts";
-import gravatar from "npm:gravatar";
+import gravatar from "gravatar";
 import BlurHashedImage from "@/islands/BlurHashedImage.tsx";
 
 const profileImageUrl = gravatar.url(KEVINS_EMAIL_ADDRESS, { s: "128" });
