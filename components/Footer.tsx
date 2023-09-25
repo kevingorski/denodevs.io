@@ -15,6 +15,7 @@ export default function Footer(
       <nav class="SiteNav">
         <AuthenticationLinks {...props} />
         <a href="/about">About</a>
+        <a href="/privacyPolicy">Privacy</a>
         <ContactSupportLink
           linkText="📧"
           messageBody="Hello there, I have feedback about Deno Devs: [Your Feedback Here]"
