@@ -36,6 +36,8 @@ These require manual setup (but are optional):
 
 ### Auth (OAuth)
 
+#### GitHub
+
 1. [Register a new GitHub OAuth application](https://github.com/settings/applications/new)
    with the following values:
 
@@ -47,6 +49,43 @@ These require manual setup (but are optional):
    in your `.env` file.
 3. Click `Generate a new client secret` and copy the resulting client secret to
    the `GITHUB_CLIENT_SECRET` environment variable in your `.env` file.
+
+#### Google
+
+1. [Create a Google account](https://accounts.google.com) if you don't already
+   have one.
+2. Accept the T&C for your account on
+   [Google Cloud Console](https://console.cloud.google.com/).
+3. Go to "APIs & Services"
+4. Create a project for Deno Devs development
+5. With that project selected, create an OAuth consent screen with the following
+   settings:
+   1. `External` (not `Internal`)
+   2. App name `Deno Devs`
+   3. User support email: select any email associated with your account
+   4. Authorized domains: `localhost` by default for dev
+   5. Developer contact information: any email address you'd like
+   6. OAuth scopes:
+      1. `openid`
+      2. `./auth/userinfo.email`
+      3. `./auth/userinfo.profile`
+   7. Test users
+      1. Add any email addresses you'd like to use for testing (up to 100)
+6. Under "Credentials," "+ Create Credentials," "OAuth Cliend ID"
+   1. Application type `Web application`
+   2. Name `Deno Devs`
+   3. Authorized JavaScript origins `http://localhost` (or however you're
+      hostiing dev)
+   4. Authorized redirect URIs
+      1. `http://localhost/googleCallback`
+      2. `https://developers.google.com/oauthplayground` if you'd like to use
+         the
+         [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/)
+         to test that everything is working (optional)
+   5. Set the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in your `.env` file
+7. Go to "Enabled APIs & Services," click "+ Enable Apis and Services"
+   1. Search for "people" to find the "Google People API", click on it
+   2. Click "Enable"
 
 ### Email
 
