@@ -1,11 +1,10 @@
-import type { Handlers } from "$fresh/server.ts";
+import { defineRoute, RouteContext } from "$fresh/server.ts";
 import { stripe } from "@/utils/payments.ts";
 import type { AccountState } from "./_middleware.ts";
 import { redirect } from "@/utils/redirect.ts";
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, AccountState> = {
-  async GET(req, ctx) {
+export default defineRoute(
+  async (req, ctx: RouteContext<void, AccountState>) => {
     if (
       stripe === undefined || ctx.state.developer.stripeCustomerId === undefined
     ) {
@@ -19,4 +18,4 @@ export const handler: Handlers<any, AccountState> = {
 
     return redirect(url);
   },
-};
+);

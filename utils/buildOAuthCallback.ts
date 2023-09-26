@@ -22,7 +22,7 @@ interface OAuth2ProviderOptions<TUserData> {
   provider: OAuthProvider;
 }
 
-export default function buildOAuthCallback<
+export default function defineOAuthCallbackRoute<
   TUserData,
 >(
   options: OAuth2ProviderOptions<TUserData>,

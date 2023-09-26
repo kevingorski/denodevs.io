@@ -2,9 +2,9 @@ import { createGoogleProfile, getGoogleProfile } from "@/utils/db.ts";
 import { googleOAuth2Client } from "../utils/oauth2_clients.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { getGoogleUser } from "@/utils/google.ts";
-import buildOAuthCallback from "@/utils/buildOAuthCallback.ts";
+import defineOAuthCallbackRoute from "@/utils/buildOAuthCallback.ts";
 
-export default buildOAuthCallback({
+export default defineOAuthCallbackRoute({
   client: googleOAuth2Client,
   createProviderProfile: createGoogleProfile,
   getProviderProfile: (userData) => getGoogleProfile(userData.googleId),

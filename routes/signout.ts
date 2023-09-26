@@ -1,4 +1,4 @@
-import type { Handlers } from "$fresh/server.ts";
+import { defineRoute, RouteContext } from "$fresh/server.ts";
 import { UserType } from "@/types/UserType.ts";
 import type { State } from "./_middleware.ts";
 import { deleteDeveloperSession, deleteEmployerSession } from "@/utils/db.ts";
@@ -19,9 +19,8 @@ async function handleEmployerSignout(employerSessionId?: string) {
   return response;
 }
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, State> = {
-  async GET(req, ctx) {
+export default defineRoute(
+  async (req, ctx: RouteContext<void, State>) => {
     const requestUrl = new URL(req.url);
     const userType = requestUrl.searchParams.get("type");
 
@@ -40,4 +39,4 @@ export const handler: Handlers<any, State> = {
         return await signOut(req);
     }
   },
-};
+);

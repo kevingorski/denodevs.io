@@ -1,15 +1,13 @@
-import type { Handlers } from "$fresh/server.ts";
+import { defineRoute } from "$fresh/server.ts";
 import { signIn } from "kv_oauth";
 import {
   gitHubOAuth2Client,
   googleOAuth2Client,
 } from "../utils/oauth2_clients.ts";
-import { AccountState } from "@/routes/account/_middleware.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 
-// deno-lint-ignore no-explicit-any
-export const handler: Handlers<any, AccountState> = {
-  async GET(req, ctx) {
+export default defineRoute(
+  async (req, ctx) => {
     const requestUrl = new URL(req.url);
     const provider = requestUrl.searchParams.get("provider");
     let client;
@@ -27,4 +25,4 @@ export const handler: Handlers<any, AccountState> = {
 
     return await signIn(req, client);
   },
-};
+);
