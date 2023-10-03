@@ -81,7 +81,6 @@ enum TopLevelKeys {
   csrf_tokens = "csrf_tokens",
   developers = "developers",
   developers_by_email = "developers_by_email",
-  developers_by_stripe_customer = "developers_by_stripe_customer",
   developers_created_count = "developers_created_count",
   developers_created_count_by_day = "developers_created_count_by_day",
   employers = "employers",
@@ -383,27 +382,38 @@ interface DeveloperRequiredFields {
   email: string;
   emailConfirmed: boolean;
   id: string;
-  isSubscribed: boolean;
+}
+
+export enum DeveloperStatus {
+  ActivelyLooking = 1,
+  OpenToOpportunities,
+  DoNotDisturb,
 }
 
 export interface Developer extends DeveloperRequiredFields {
+  availableToWorkStartDate: Date | null;
   bio: string | null;
-  company: string | null;
   location: string | null;
   name: string | null;
-  stripeCustomerId?: string;
+  openToContract: boolean;
+  openToFullTime: boolean;
+  openToPartTime: boolean;
+  status: DeveloperStatus | null;
 }
 
 export function newDeveloperProps(): Developer {
   return {
+    availableToWorkStartDate: null,
     bio: null,
-    company: null,
     email: "",
     emailConfirmed: false,
     id: ulid(),
-    isSubscribed: false,
     location: null,
     name: null,
+    openToContract: false,
+    openToFullTime: false,
+    openToPartTime: false,
+    status: null,
   };
 }
 
@@ -435,19 +445,7 @@ export async function createDeveloper(developer: Developer) {
     formatDate(new Date()),
   ];
 
-  const atomicOp = kv.atomic();
-
-  if (developer.stripeCustomerId !== undefined) {
-    const developersByStripeCustomerKey = [
-      TopLevelKeys.developers_by_stripe_customer,
-      developer.stripeCustomerId,
-    ];
-    atomicOp
-      .check({ key: developersByStripeCustomerKey, versionstamp: null })
-      .set(developersByStripeCustomerKey, developer.id);
-  }
-
-  const res = await atomicOp
+  const res = await kv.atomic()
     .check({ key: developersKey, versionstamp: null })
     .check({ key: developersByEmailKey, versionstamp: null })
     .set(developersKey, developer)
@@ -476,13 +474,6 @@ export async function getDeveloper(id: string) {
 export async function getDeveloperByEmail(email: string) {
   return await getSecondaryIndexValue(
     [TopLevelKeys.developers_by_email, email],
-    getDeveloper,
-  );
-}
-
-export async function getDeveloperByStripeCustomer(stripeCustomerId: string) {
-  return await getSecondaryIndexValue(
-    [TopLevelKeys.developers_by_stripe_customer, stripeCustomerId],
     getDeveloper,
   );
 }
@@ -583,15 +574,6 @@ export async function deleteDeveloper(developer: Developer) {
   ];
 
   const atomicOp = kv.atomic();
-
-  if (developer.stripeCustomerId !== undefined) {
-    const developersByStripeCustomerKey = [
-      TopLevelKeys.developers_by_stripe_customer,
-      developer.stripeCustomerId,
-    ];
-    atomicOp.delete(developersByStripeCustomerKey);
-  }
-
   const gitHubProfile = await getGitHubProfileByDeveloper(developer.id);
 
   if (gitHubProfile) {

@@ -1,7 +1,6 @@
 import type { Handlers, PageProps, RouteConfig } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
 import { ComponentChild } from "preact";
-import { stripe } from "@/utils/payments.ts";
 import { GitHub } from "@/components/Icons.tsx";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
@@ -70,7 +69,14 @@ function VerifyEmailPrompt(props: { email: string }) {
 
 export default function AccountPage(props: PageProps<Props>) {
   const { developer, gitHubProfile, googleProfile } = props.data;
-  const action = developer.isSubscribed ? "Manage" : "Upgrade";
+
+  const workTypes: string[] = [];
+
+  if (developer.openToFullTime) workTypes.push("Full-time");
+  if (developer.openToPartTime) workTypes.push("Part-time");
+  if (developer.openToContract) workTypes.push("Contract");
+
+  const openTo = workTypes.length ? workTypes.join() : "N/A";
 
   useCSP(denoDevsCsp);
 
@@ -116,25 +122,8 @@ export default function AccountPage(props: PageProps<Props>) {
           text={developer.email}
         />
         <Row
-          title="Subscription"
-          text={developer.isSubscribed ? "Premium 🦕" : "Free"}
-        >
-          {stripe && (
-            <a
-              class="underline"
-              href={`/account/${action.toLowerCase()}`}
-            >
-              {action}
-            </a>
-          )}
-        </Row>
-        <Row
           title="Name"
           text={developer.name || "N/A"}
-        />
-        <Row
-          title="Company"
-          text={developer.company || "N/A"}
         />
         <Row
           title="Location"
@@ -143,6 +132,18 @@ export default function AccountPage(props: PageProps<Props>) {
         <Row
           title="Bio"
           text={developer.bio || "N/A"}
+        />
+        <Row
+          title="Available starting"
+          text={developer.availableToWorkStartDate?.toISOString() || "N/A"}
+        />
+        <Row
+          title="Status"
+          text={developer.status?.toString() || "N/A"}
+        />
+        <Row
+          title="Open to"
+          text={openTo}
         />
       </ul>
       <SignOutLink userType={UserType.Developer} />
