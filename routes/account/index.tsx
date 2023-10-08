@@ -45,17 +45,12 @@ interface RowProps {
 
 function Row(props: RowProps) {
   return (
-    <li>
-      <div>
-        <span>
-          <strong>{props.title}</strong>
-        </span>
-        {props.children && <span>{props.children}</span>}
+    <div>
+      <div style="display:inline-block; margin-right:1em;">
+        <strong>{props.title}</strong>
       </div>
-      <p>
-        {props.text}
-      </p>
-    </li>
+      {props.text}
+    </div>
   );
 }
 
@@ -87,40 +82,64 @@ export default function AccountPage(props: PageProps<Props>) {
 
   return (
     <main>
-      <aside>
-        <h1>Welcome to your DenoDevs profile!</h1>
-        <p>Soon you'll be able to update all of this.</p>
-      </aside>
-      {!developer.emailConfirmed && (
-        <VerifyEmailPrompt email={developer.email} />
-      )}
-      <div>
-      </div>
+      <h1>Welcome to your DenoDevs profile!</h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="#ConnectedAccounts">Connected Accounts</a>
+          </li>
+          <li>
+            <a href="#Email">Email</a>
+          </li>
+          <li>
+            <a href="#ProfileDetails">Profile Details</a>
+          </li>
+          <li>
+            <a href="#JobPreferences">Job Preferences</a>
+          </li>
+          <li>
+            <SignOutLink userType={UserType.Developer} />
+          </li>
+        </ul>
+      </nav>
 
-      {!gitHubProfile && (
-        <div>
-          <a class="button" href={gitHubSignInUrl}>
-            <GitHub /> Connect with GitHub
-          </a>
-        </div>
-      )}
-      {!googleProfile && (
-        <div>
-          <a class="button" href={googleSignInUrl}>
-            G Connect with Google
-          </a>
-        </div>
-      )}
+      <section>
+        <h2>
+          <a name="ConnectedAccounts">Connected Accounts</a>
+        </h2>
+        {gitHubProfile
+          ? <GitHubAvatarImg login={gitHubProfile.login} size={24} />
+          : (
+            <div>
+              <a class="button" href={gitHubSignInUrl}>
+                <GitHub /> Connect with GitHub
+              </a>
+            </div>
+          )}
+        {!googleProfile && (
+          <div>
+            <a class="button" href={googleSignInUrl}>
+              G Connect with Google
+            </a>
+          </div>
+        )}
+        <p>More authentication options coming soon.</p>
+      </section>
 
-      <p>More authentication options coming soon.</p>
-      {gitHubProfile && (
-        <GitHubAvatarImg login={gitHubProfile.login} size={24} />
-      )}
-      <ul>
-        <Row
-          title="Email"
-          text={developer.email}
-        />
+      <section>
+        <h2>
+          <a name="Email">Email</a>
+        </h2>
+        <div>{developer.email}</div>
+        {!developer.emailConfirmed && (
+          <VerifyEmailPrompt email={developer.email} />
+        )}
+      </section>
+
+      <section>
+        <h2>
+          <a name="ProfileDetails">Profile Details</a>
+        </h2>
         <Row
           title="Name"
           text={developer.name || "N/A"}
@@ -133,6 +152,12 @@ export default function AccountPage(props: PageProps<Props>) {
           title="Bio"
           text={developer.bio || "N/A"}
         />
+      </section>
+
+      <section>
+        <h2>
+          <a name="JobPreferences">Job Preferences</a>
+        </h2>
         <Row
           title="Available starting"
           text={developer.availableToWorkStartDate?.toISOString() || "N/A"}
@@ -145,12 +170,14 @@ export default function AccountPage(props: PageProps<Props>) {
           title="Open to"
           text={openTo}
         />
-      </ul>
-      <SignOutLink userType={UserType.Developer} />
-      <h2>Danger Zone</h2>
-      <a class="button button--danger" href="/account/delete">
-        Delete My Account
-      </a>
+      </section>
+
+      <section>
+        <h2>Danger Zone</h2>
+        <a class="button button--danger" href="/account/delete">
+          Delete My Account
+        </a>
+      </section>
     </main>
   );
 }
