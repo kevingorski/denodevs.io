@@ -13,7 +13,6 @@ export default function denoDevsCsp(csp: ContentSecurityPolicy) {
   directives.scriptSrc.push("'unsafe-inline'");
   directives.scriptSrc.push("http:");
   directives.scriptSrc.push("https:");
-  directives.scriptSrc.push("static.getclicky.com");
 
   if (!directives.styleSrc) {
     directives.styleSrc = [];

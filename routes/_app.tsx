@@ -18,9 +18,6 @@ export default function App(props: AppProps) {
   const title = props.data?.title
     ? `${props.data.title} 🦕💼 ${siteName}`
     : siteName;
-  const clickyUrl = props.url.searchParams.has("proxy")
-    ? "/56ac6c4e308a9"
-    : "//static.getclicky.com/js";
 
   return (
     <html lang="en">
@@ -43,8 +40,7 @@ export default function App(props: AppProps) {
           employerSessionId={props.data?.employerSessionId}
           sessionId={props.data?.sessionId}
         />
-        <script async data-id={CLICKY_SITE_ID} src={clickyUrl}>
-        </script>
+        <script async data-id={CLICKY_SITE_ID} src="/56ac6c4e308a9" />
       </body>
     </html>
   );
