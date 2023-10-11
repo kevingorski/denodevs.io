@@ -1,5 +1,5 @@
 import { createGitHubOAuth2Client, createGoogleOAuth2Client } from "kv_oauth";
-import { SITE_BASE_URL } from "@/utils/constants.ts";
+import { SITE_BASE_URL } from "@/utils/config.ts";
 
 export const gitHubOAuth2Client = createGitHubOAuth2Client();
 

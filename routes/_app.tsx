@@ -3,11 +3,11 @@ import Header from "@/components/Header.tsx";
 import Footer from "@/components/Footer.tsx";
 import Meta from "@/components/Meta.tsx";
 import {
-  CLICKY_SITE_ID,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_VERSION,
 } from "../utils/constants.ts";
+import { CLICKY_SITE_ID } from "@/utils/config.ts";
 
 export default function App(props: AppProps) {
   if (props.url.pathname === "/kv-insights") {

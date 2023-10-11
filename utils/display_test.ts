@@ -1,6 +1,6 @@
 import { pluralize, timeAgo } from "./display.ts";
 import { DAY, HOUR, MINUTE, SECOND } from "std/datetime/constants.ts";
-import { assertEquals } from "std/testing/asserts.ts";
+import { assertEquals } from "std/assert/mod.ts";
 
 Deno.test("[display] pluralize()", () => {
   assertEquals(pluralize(0, "item"), "0 items");

@@ -1,5 +1,7 @@
 import { chunk } from "std/collections/chunk.ts";
 import { ulid } from "std/ulid/mod.ts";
+import { Developer } from "@/types/Developer.ts";
+import { ExpiringUUID } from "@/types/ExpiringUUID.ts";
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
@@ -139,12 +141,7 @@ export interface SignInToken {
 // deno-lint-ignore no-empty-interface
 export interface Session extends SignInToken {}
 
-export interface ExpringUUID {
-  generated: number;
-  uuid: string;
-}
-
-function generateExpiringUUID(): ExpringUUID {
+function generateExpiringUUID(): ExpiringUUID {
   return {
     uuid: crypto.randomUUID(),
     generated: Date.now(),
@@ -212,7 +209,7 @@ export async function deleteEmployer(employer: Employer) {
 async function createSession(
   entityType: TokenEntityType,
   entityId: string,
-  token: ExpringUUID,
+  token: ExpiringUUID,
 ) {
   const session = {
     entityId,
@@ -308,7 +305,7 @@ export async function createCsrfToken() {
 
 export async function getCsrfToken(uuid: string) {
   const csrfTokenKey = [TopLevelKeys.csrf_tokens, uuid];
-  return await getGetValue<ExpringUUID>(csrfTokenKey);
+  return await getGetValue<ExpiringUUID>(csrfTokenKey);
 }
 
 export async function deleteCsrfToken(uuid: string) {
@@ -375,30 +372,6 @@ export async function getDeveloperSignInToken(uuid: string) {
 
 export async function deleteSignInToken(uuid: string) {
   await kv.delete([TopLevelKeys.sign_in_tokens, uuid]);
-}
-
-// Developer
-interface DeveloperRequiredFields {
-  email: string;
-  emailConfirmed: boolean;
-  id: string;
-}
-
-export enum DeveloperStatus {
-  ActivelyLooking = 1,
-  OpenToOpportunities,
-  DoNotDisturb,
-}
-
-export interface Developer extends DeveloperRequiredFields {
-  availableToWorkStartDate: Date | null;
-  bio: string | null;
-  location: string | null;
-  name: string | null;
-  openToContract: boolean;
-  openToFullTime: boolean;
-  openToPartTime: boolean;
-  status: DeveloperStatus | null;
 }
 
 export function newDeveloperProps(): Developer {

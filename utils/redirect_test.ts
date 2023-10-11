@@ -6,7 +6,7 @@ import {
   redirectToDeveloperSignIn,
   setRedirectUrlCookie,
 } from "./redirect.ts";
-import { assert, assertEquals } from "std/testing/asserts.ts";
+import { assert, assertEquals } from "std/assert/mod.ts";
 
 Deno.test("[redirect] redirect() defaults", () => {
   const location = "/hello-there";

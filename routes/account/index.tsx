@@ -1,28 +1,34 @@
 import type { Handlers, PageProps, RouteConfig } from "$fresh/server.ts";
 import type { AccountState } from "./_middleware.ts";
-import { ComponentChild } from "preact";
-import { GitHub } from "@/components/Icons.tsx";
-import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
-import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 import { useCSP } from "$fresh/src/runtime/csp.ts";
 import {
+  createCsrfToken,
   getGitHubProfileByDeveloper,
   getGoogleProfileByDeveloper,
   GitHubProfile,
   GoogleProfile,
+  updateDeveloper,
 } from "@/utils/db.ts";
+import { DeveloperStatus } from "@/types/DeveloperStatus.ts";
 import SignOutLink from "@/components/SignOutLink.tsx";
 import { UserType } from "@/types/UserType.ts";
-import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import denoDevsCsp from "@/utils/csp.ts";
+import { SITE_NAME } from "@/utils/constants.ts";
+import DeveloperAccountTabs from "@/islands/DeveloperAccountTabs.tsx";
+import {
+  ProtectedForm,
+  readPostDataAndValidateCsrfToken,
+} from "@/utils/csrf.ts";
+import { redirect } from "@/utils/redirect.ts";
 
-interface Props extends AccountState {
+interface Props extends AccountState, ProtectedForm {
   gitHubProfile: GitHubProfile | null;
   googleProfile: GoogleProfile | null;
 }
 
 export const handler: Handlers<Props, AccountState> = {
-  async GET(_request, ctx) {
+  async GET(req, ctx) {
+    const csrfToken = await createCsrfToken();
     ctx.state.title = "Account";
 
     const developerId = ctx.state.developer.id;
@@ -33,151 +39,70 @@ export const handler: Handlers<Props, AccountState> = {
       developerId,
     );
 
-    return ctx.render({ ...ctx.state, gitHubProfile, googleProfile });
+    return ctx.render({
+      ...ctx.state,
+      csrfToken,
+      gitHubProfile,
+      googleProfile,
+    });
+  },
+
+  async POST(req, ctx) {
+    const form = await readPostDataAndValidateCsrfToken(req);
+    const developer = ctx.state.developer;
+    const fullNameEntryValue = form.get("fullName");
+    const locationEntryValue = form.get("location");
+    const bioEntryValue = form.get("bio");
+    const availableToWorkStartDateEntryValue = form.get(
+      "availableToWorkStartDate",
+    );
+    const openToFullTimeEntryValue = form.get("openToFullTime");
+    const openToPartTimeEntryValue = form.get("openToPartTime");
+    const openToContractEntryValue = form.get("openToContract");
+    const statusEntryValue = form.get("status");
+
+    if (fullNameEntryValue) {
+      developer.name = fullNameEntryValue.valueOf().toString();
+    }
+
+    if (locationEntryValue) {
+      developer.location = locationEntryValue.valueOf().toString();
+    }
+
+    if (bioEntryValue) {
+      developer.bio = bioEntryValue.valueOf().toString();
+    }
+
+    if (availableToWorkStartDateEntryValue) {
+      developer.availableToWorkStartDate = availableToWorkStartDateEntryValue
+        .valueOf().toString();
+    }
+
+    developer.openToFullTime = openToFullTimeEntryValue !== null;
+    developer.openToPartTime = openToPartTimeEntryValue !== null;
+    developer.openToContract = openToContractEntryValue !== null;
+
+    if (statusEntryValue) {
+      developer.status = Number(
+        statusEntryValue.valueOf().toString(),
+      ) as DeveloperStatus;
+    }
+
+    await updateDeveloper(developer);
+
+    // Prevent refresh POSTs, possible side effects of not re-loading Developer
+    return redirect("/account");
   },
 };
 
-interface RowProps {
-  title: string;
-  children?: ComponentChild;
-  text: string;
-}
-
-function Row(props: RowProps) {
-  return (
-    <div>
-      <div style="display:inline-block; margin-right:1em;">
-        <strong>{props.title}</strong>
-      </div>
-      {props.text}
-    </div>
-  );
-}
-
-function VerifyEmailPrompt(props: { email: string }) {
-  return (
-    <div>
-      <VerifyEmailButton email={props.email} />
-    </div>
-  );
-}
-
 export default function AccountPage(props: PageProps<Props>) {
-  const { developer, gitHubProfile, googleProfile } = props.data;
-
-  const workTypes: string[] = [];
-
-  if (developer.openToFullTime) workTypes.push("Full-time");
-  if (developer.openToPartTime) workTypes.push("Part-time");
-  if (developer.openToContract) workTypes.push("Contract");
-
-  const openTo = workTypes.length ? workTypes.join() : "N/A";
-
   useCSP(denoDevsCsp);
-
-  const gitHubSignInUrl =
-    `/account/connectOAuth?provider=${OAuthProvider.GITHUB}`;
-  const googleSignInUrl =
-    `/account/connectOAuth?provider=${OAuthProvider.GOOGLE}`;
 
   return (
     <main>
-      <h1>Welcome to your DenoDevs profile!</h1>
-      <nav>
-        <ul>
-          <li>
-            <a href="#ConnectedAccounts">Connected Accounts</a>
-          </li>
-          <li>
-            <a href="#Email">Email</a>
-          </li>
-          <li>
-            <a href="#ProfileDetails">Profile Details</a>
-          </li>
-          <li>
-            <a href="#JobPreferences">Job Preferences</a>
-          </li>
-          <li>
-            <SignOutLink userType={UserType.Developer} />
-          </li>
-        </ul>
-      </nav>
-
-      <section>
-        <h2>
-          <a name="ConnectedAccounts">Connected Accounts</a>
-        </h2>
-        {gitHubProfile
-          ? <GitHubAvatarImg login={gitHubProfile.login} size={24} />
-          : (
-            <div>
-              <a class="button" href={gitHubSignInUrl}>
-                <GitHub /> Connect with GitHub
-              </a>
-            </div>
-          )}
-        {!googleProfile && (
-          <div>
-            <a class="button" href={googleSignInUrl}>
-              G Connect with Google
-            </a>
-          </div>
-        )}
-        <p>More authentication options coming soon.</p>
-      </section>
-
-      <section>
-        <h2>
-          <a name="Email">Email</a>
-        </h2>
-        <div>{developer.email}</div>
-        {!developer.emailConfirmed && (
-          <VerifyEmailPrompt email={developer.email} />
-        )}
-      </section>
-
-      <section>
-        <h2>
-          <a name="ProfileDetails">Profile Details</a>
-        </h2>
-        <Row
-          title="Name"
-          text={developer.name || "N/A"}
-        />
-        <Row
-          title="Location"
-          text={developer.location || "N/A"}
-        />
-        <Row
-          title="Bio"
-          text={developer.bio || "N/A"}
-        />
-      </section>
-
-      <section>
-        <h2>
-          <a name="JobPreferences">Job Preferences</a>
-        </h2>
-        <Row
-          title="Available starting"
-          text={developer.availableToWorkStartDate?.toISOString() || "N/A"}
-        />
-        <Row
-          title="Status"
-          text={developer.status?.toString() || "N/A"}
-        />
-        <Row
-          title="Open to"
-          text={openTo}
-        />
-      </section>
-
-      <section>
-        <h2>Danger Zone</h2>
-        <a class="button button--danger" href="/account/delete">
-          Delete My Account
-        </a>
-      </section>
+      <h1>Welcome to your {SITE_NAME} profile!</h1>
+      <DeveloperAccountTabs {...props.data} />
+      <SignOutLink userType={UserType.Developer} />
     </main>
   );
 }

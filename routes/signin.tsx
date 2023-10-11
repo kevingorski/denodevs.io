@@ -6,15 +6,13 @@ import { sendDeveloperSignInEmailMessage } from "@/utils/email.ts";
 import EmailSignInForm from "@/components/EmailSignInForm.tsx";
 import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
 import { UserType } from "@/types/UserType.ts";
-import { GitHub } from "@/components/Icons.tsx";
-import { OAuthProvider } from "@/types/OAuthProvider.ts";
-import { SITE_BASE_URL } from "@/utils/constants.ts";
 import SignInHelp from "@/types/SignInHelp.ts";
 import { getSignInHelpFromCookie } from "@/utils/signInHelp.ts";
 import {
   GitHubOAuthSignInButton,
   GoogleOAuthSignInButton,
 } from "@/components/OAuthSignInButton.tsx";
+import { SITE_BASE_URL } from "@/utils/config.ts";
 
 interface DeveloperSignInPageData extends State {
   from: string | null;

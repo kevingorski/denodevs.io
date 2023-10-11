@@ -1,10 +1,7 @@
-import {
-  Developer,
-  Employer,
-  newDeveloperProps,
-  newEmployerProps,
-} from "@/utils/db.ts";
-import { SITE_BASE_URL, SITE_NAME } from "@/utils/constants.ts";
+import { Employer, newDeveloperProps, newEmployerProps } from "@/utils/db.ts";
+import { Developer } from "@/types/Developer.ts";
+import { SITE_NAME } from "@/utils/constants.ts";
+import { SITE_BASE_URL } from "@/utils/config.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const shouldSendToConsole = Deno.env.get("SEND_EMAIL_TO_CONSOLE") === "true";

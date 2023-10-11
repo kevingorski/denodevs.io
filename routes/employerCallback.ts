@@ -18,9 +18,9 @@ import {
   EMPLOYER_SESSION_COOKIE_NAME,
   SESSION_COOKIE_LIFETIME_MS,
   SIGN_IN_TOKEN_LIFETIME_MS,
-  USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { addEmployerEmailToResponse } from "@/utils/signInHelp.ts";
+import { USE_SECURE_COOKIES } from "@/utils/config.ts";
 
 export const handler: Handlers<State, State> = {
   async GET(req) {

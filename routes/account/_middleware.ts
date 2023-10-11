@@ -1,6 +1,7 @@
 import { State } from "@/routes/_middleware.ts";
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { deleteDeveloperSession, Developer } from "@/utils/db.ts";
+import { deleteDeveloperSession } from "@/utils/db.ts";
+import { Developer } from "@/types/Developer.ts";
 import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
 import { deleteCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";

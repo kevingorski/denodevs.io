@@ -9,9 +9,9 @@ import {
 import {
   ADMIN_SESSION_COOKIE_LIFETIME_MS,
   ADMIN_SESSION_COOKIE_NAME,
-  USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { setCookie } from "std/http/cookie.ts";
+import { USE_SECURE_COOKIES } from "@/utils/config.ts";
 
 export interface AdminState extends State {
   adminSessionId: string;

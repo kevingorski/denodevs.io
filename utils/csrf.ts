@@ -1,11 +1,12 @@
-import { ExpringUUID, getCsrfToken } from "@/utils/db.ts";
+import { getCsrfToken } from "@/utils/db.ts";
+import { ExpiringUUID } from "@/types/ExpiringUUID.ts";
 import {
   CSRF_TOKEN_INPUT_NAME,
   CSRF_TOKEN_LIFETIME_MS,
 } from "@/utils/constants.ts";
 
 export interface ProtectedForm {
-  csrfToken: ExpringUUID;
+  csrfToken: ExpiringUUID;
 }
 
 export async function isCsrfTokenValid(uuid: string) {

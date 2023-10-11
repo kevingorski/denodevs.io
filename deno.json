@@ -6,20 +6,17 @@
     "db:seed": "deno run --allow-read --allow-env --allow-net --unstable tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env --unstable tools/reset_kv.ts",
     "start": "deno run --unstable -A --watch=styles/,routes/,utils/ dev.ts",
-    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 deno test -A --unstable --coverage=./cov",
+    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id deno test -A --unstable",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",
     "build": "deno run --unstable -A dev.ts build",
     "preview": "deno run --unstable -A main.ts",
     "update:fresh": "deno run -A -r https://fresh.deno.dev/update ."
   },
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact"
-  },
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "imports": {
     "@/": "./",
-    "$fresh/": "https://deno.land/x/fresh@1.4.3/",
+    "$fresh/": "https://deno.land/x/fresh@1.5.0/",
     "$gfm": "https://deno.land/x/gfm@0.2.4/mod.ts",
     "basic_auth": "https://deno.land/x/basic_auth@v1.1.1/mod.ts",
     "case": "https://deno.land/x/case@2.1.1/mod.ts",
@@ -34,31 +31,17 @@
     "marked": "npm:marked@^9.0.3",
     "preact": "https://esm.sh/preact@10.15.1",
     "preact/": "https://esm.sh/preact@10.15.1/",
-    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.1",
-    "@preact/signals": "https://esm.sh/*@preact/signals@1.1.3",
-    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.2.3",
+    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.2",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
+    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
+    "react": "https://esm.sh/preact@10.15.1/compat",
+    "react-dom": "https://esm.sh/preact@10.15.1/compat",
+    "react/jsx-runtime": "https://esm.sh/preact@10.15.1/compat",
     "std/": "https://deno.land/std@0.202.0/",
-    "stripe": "./stripe.ts"
+    "stripe": "./stripe.ts",
+    "@radix-ui/react-tabs": "https://esm.sh/@radix-ui/react-tabs@1.0.4?alias=@types/react:preact/compat&external=react,react-dom&target=es2022"
   },
-  "exclude": [
-    "cov/",
-    "static/56ac6c4e308a9.js"
-  ],
-  "lint": {
-    "rules": {
-      "tags": [
-        "fresh",
-        "recommended"
-      ]
-    },
-    "exclude": [
-      "_fresh"
-    ]
-  },
-  "fmt": {
-    "exclude": [
-      "_fresh"
-    ]
-  },
+  "exclude": ["cov/", "**/_fresh/*"],
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
   "tea": "deno.land^1.37.0 github.com/evilmartians/lefthook^1.5.0"
 }

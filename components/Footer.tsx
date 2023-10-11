@@ -18,14 +18,14 @@ export default function Footer(
         <a href="/privacyPolicy">Privacy</a>
         <ContactSupportLink
           linkText="📧"
-          messageBody="Hello there, I have feedback about Deno Devs: [Your Feedback Here]"
-          messageSubject="Send DenoDevs Feedback"
-          titleText="Send DenoDevs Feedback"
+          messageBody={`Hello there, I have feedback about ${SITE_NAME}: [Your Feedback Here]`}
+          messageSubject={`Send ${SITE_NAME} Feedback`}
+          titleText={`Send ${SITE_NAME} Feedback`}
         />
         <a
           href="https://github.com/kevingorski/denodevs.io"
           target="_blank"
-          aria-label="Deno Devs repo on GitHub"
+          aria-label={`${SITE_NAME} repo on GitHub`}
         >
           <GitHub />
         </a>

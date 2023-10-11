@@ -5,7 +5,7 @@ import {
   assertEquals,
   assertFalse,
   assertInstanceOf,
-} from "std/testing/asserts.ts";
+} from "std/assert/mod.ts";
 
 const CONN_INFO: ServeHandlerInfo = {
   localAddr: { hostname: "localhost", port: 8000, transport: "tcp" },

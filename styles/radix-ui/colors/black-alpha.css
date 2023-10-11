@@ -1,0 +1,14 @@
+:root {
+  --black-a1: hsla(0, 0%, 0%, 0.012);
+  --black-a2: hsla(0, 0%, 0%, 0.024);
+  --black-a3: hsla(0, 0%, 0%, 0.055);
+  --black-a4: hsla(0, 0%, 0%, 0.078);
+  --black-a5: hsla(0, 0%, 0%, 0.106);
+  --black-a6: hsla(0, 0%, 0%, 0.133);
+  --black-a7: hsla(0, 0%, 0%, 0.169);
+  --black-a8: hsla(0, 0%, 0%, 0.267);
+  --black-a9: hsla(0, 0%, 0%, 0.447);
+  --black-a10: hsla(0, 0%, 0%, 0.498);
+  --black-a11: hsla(0, 0%, 0%, 0.608);
+  --black-a12: hsla(0, 0%, 0%, 0.875);
+}

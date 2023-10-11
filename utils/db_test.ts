@@ -1,17 +1,17 @@
 import {
   createDeveloper,
-  type Developer,
   getDeveloper,
   getDeveloperByEmail,
   getManyDevelopers,
   newDeveloperProps,
   updateDeveloper,
 } from "./db.ts";
+import { type Developer } from "@/types/Developer.ts";
 import {
   assertArrayIncludes,
   assertEquals,
   assertRejects,
-} from "std/testing/asserts.ts";
+} from "std/assert/mod.ts";
 
 function genNewDeveloper(): Developer {
   return {

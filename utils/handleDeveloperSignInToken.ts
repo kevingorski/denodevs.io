@@ -10,7 +10,6 @@ import { setCookie } from "std/http/cookie.ts";
 import {
   SESSION_COOKIE_LIFETIME_MS,
   SIGN_IN_TOKEN_LIFETIME_MS,
-  USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
 import {
@@ -18,6 +17,7 @@ import {
   redirectToDeveloperSignIn,
   redirectToDeveloperSignUp,
 } from "@/utils/redirect.ts";
+import { USE_SECURE_COOKIES } from "@/utils/config.ts";
 
 export default async function handleDeveloperSignInToken(
   req: Request,

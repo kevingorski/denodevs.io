@@ -2,10 +2,10 @@ import { getCookies, setCookie } from "std/http/cookie.ts";
 import {
   SIGN_IN_HELP_COOKIE_LIFETIME_MS,
   SIGN_IN_HELP_COOKIE_NAME,
-  USE_SECURE_COOKIES,
 } from "@/utils/constants.ts";
 import SignInHelp from "@/types/SignInHelp.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
+import { USE_SECURE_COOKIES } from "@/utils/config.ts";
 
 export function setSignInHelpCookie(
   response: Response,
