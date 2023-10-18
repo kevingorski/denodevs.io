@@ -52,6 +52,7 @@ export const handler: Handlers<Props, AccountState> = {
     const developer = ctx.state.developer;
     const fullNameEntryValue = form.get("fullName");
     const locationEntryValue = form.get("location");
+    const countryCodeEntryValue = form.get("countryCode");
     const bioEntryValue = form.get("bio");
     const availableToWorkStartDateEntryValue = form.get(
       "availableToWorkStartDate",
@@ -67,6 +68,10 @@ export const handler: Handlers<Props, AccountState> = {
 
     if (locationEntryValue) {
       developer.location = locationEntryValue.valueOf().toString();
+    }
+
+    if (countryCodeEntryValue) {
+      developer.countryCode = countryCodeEntryValue.valueOf().toString();
     }
 
     if (bioEntryValue) {

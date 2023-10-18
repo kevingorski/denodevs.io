@@ -12,6 +12,7 @@ export interface Developer extends DeveloperRequiredFields {
   availableToWorkStartDate: string | null;
   bio: string | null;
   location: string | null;
+  countryCode: string | null;
   name: string | null;
   openToContract: boolean;
   openToFullTime: boolean;

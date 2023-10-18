@@ -21,6 +21,7 @@
     "basic_auth": "https://deno.land/x/basic_auth@v1.1.1/mod.ts",
     "case": "https://deno.land/x/case@2.1.1/mod.ts",
     "chart.js": "https://esm.sh/stable/chart.js@4.3.0/auto?target=es2022",
+    "countries": "https://deno.land/x/countries@v1.1.2/mod.ts",
     "fast-blurhash": "npm:fast-blurhash@^1.1.2",
     "gravatar": "npm:gravatar@^1.8.2",
     "kv_insights": "https://deno.land/x/deno_kv_insights@v0.5.0-alpha/mod.ts",

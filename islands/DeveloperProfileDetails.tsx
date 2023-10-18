@@ -6,6 +6,7 @@ import { ExpiringUUID } from "@/types/ExpiringUUID.ts";
 import { Developer } from "@/types/Developer.ts";
 import { CSRFInput } from "@/components/CRSFInput.tsx";
 import { TargetedEvent } from "preact/compat/src/index.js";
+import { ICountry, isoCountries } from "countries";
 
 interface RowProps {
   title: string;
@@ -38,6 +39,9 @@ export default function DeveloperProfileDetails(
   );
   const [status, setStatus] = useState(
     developer.status,
+  );
+  const [countryCode, setCountryCode] = useState(
+    developer.countryCode,
   );
   const [openToFullTime, setOpenToFullTime] = useState(
     developer.openToFullTime,
@@ -108,6 +112,20 @@ export default function DeveloperProfileDetails(
             />
           )
           : (developer.name || "N/A")}
+      </Row>
+      <Row title="Country">
+        <select
+          disabled={!isEditing.value}
+          name="countryCode"
+          value={countryCode ?? undefined}
+        >
+          <option />
+          {isoCountries.map((country: ICountry) => (
+            <option key={country.countryCode} value={country.countryCode}>
+              {country.countryName}
+            </option>
+          ))}
+        </select>
       </Row>
       <Row title="Location">
         {isEditing.value

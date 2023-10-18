@@ -378,6 +378,7 @@ export function newDeveloperProps(): Developer {
   return {
     availableToWorkStartDate: null,
     bio: null,
+    countryCode: null,
     email: "",
     emailConfirmed: false,
     id: ulid(),
