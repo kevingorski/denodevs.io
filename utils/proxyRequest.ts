@@ -24,8 +24,6 @@ export default async function proxyRequest(
     originalForwardedFor !== null ? originalForwardedFor + "," : ""
   }${ctx.remoteAddr.hostname}`;
 
-  console.dir(ctx.remoteAddr);
-
   const headers = new Headers();
   headers.set("host", proxiedUrl.hostname);
   headers.set(
