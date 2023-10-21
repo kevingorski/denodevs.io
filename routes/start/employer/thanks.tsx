@@ -2,6 +2,7 @@ import type { Handlers } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { UserType } from "@/types/UserType.ts";
 import SignUpSupportLink from "@/components/SignUpSupportLink.tsx";
+import { SITE_NAME } from "@/utils/constants.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -17,8 +18,8 @@ export default function EmployerThanksPage() {
       </h1>
 
       <p>
-        You should receive a confirmation email from DenoDevs shortly, which
-        will let you get started.
+        You should receive a confirmation email from {SITE_NAME}{" "}
+        shortly, which will let you get started.
       </p>
 
       <ul>

@@ -1,6 +1,6 @@
 import type { Handlers } from "$fresh/server.ts";
 import type { State } from "@/routes/_middleware.ts";
-import { SITE_VERSION } from "@/utils/constants.ts";
+import { SITE_NAME, SITE_VERSION } from "@/utils/constants.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -16,8 +16,8 @@ export default function HomePage() {
       </h1>
 
       <p>
-        DenoDevs helps developers find their next job or contract working with
-        Deno.
+        {SITE_NAME}{" "}
+        helps developers find their next job or contract working with Deno.
       </p>
       <p>
         Fill out your profile and what you're looking for and interested

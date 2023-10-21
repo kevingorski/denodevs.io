@@ -43,8 +43,8 @@ export default function AboutPage() {
             <a href="/start/developer">Create your free developer profile</a>
           </li>
           <li>
-            DenoDevs promotes your profile to employers that match your
-            preferences
+            {SITE_NAME}{" "}
+            promotes your profile to employers that match your preferences
           </li>
           <li>
             Employers reach out to you with jobs or contracts
@@ -93,7 +93,7 @@ export default function AboutPage() {
         </ol>
         <p>
           <a href="https://github.com/kevingorski/denodevs.io" target="_blank">
-            DenoDevs is open source!
+            {SITE_NAME} is open source!
           </a>
           <iframe
             src="https://github.com/sponsors/kevingorski/button"

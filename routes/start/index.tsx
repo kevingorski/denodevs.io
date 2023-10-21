@@ -1,5 +1,6 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
+import { SITE_NAME } from "@/utils/constants.ts";
 
 export const handler: Handlers<State, State> = {
   GET(_, ctx) {
@@ -14,7 +15,7 @@ export default function StartPage(props: PageProps<State>) {
   return (
     <main>
       <h1>
-        What brings you to DenoDevs today?
+        What brings you to {SITE_NAME} today?
       </h1>
 
       <h2>

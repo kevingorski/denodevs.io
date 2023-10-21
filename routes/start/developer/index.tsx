@@ -14,6 +14,7 @@ import {
   readPostDataAndValidateCsrfToken,
 } from "@/utils/csrf.ts";
 import { CSRFInput } from "@/components/CRSFInput.tsx";
+import { SITE_NAME } from "@/utils/constants.ts";
 
 interface Props extends State, ProtectedForm {}
 
@@ -75,9 +76,9 @@ export default function DeveloperPage(props: PageProps<Props>) {
 
       <p>
         Your email address will be used to confirm your identity and send you
-        updates about job matches and DenoDevs updates. If the email address on
-        your GitHub account is not the one you'd like to use, it can be updated
-        after the initial setup.
+        updates about job matches and {SITE_NAME}{" "}
+        updates. If the email address on your GitHub account is not the one
+        you'd like to use, it can be updated after the initial setup.
       </p>
 
       <p>

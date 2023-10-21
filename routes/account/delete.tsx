@@ -41,16 +41,17 @@ export default function DeleteAccountPage(props: PageProps<Props>) {
     <main>
       <h1>Delete Account</h1>
       <p>
-        Here at DenoDevs I always want to respect your privacy and maintain that
-        your data is yours, I'm only borrowing it. If it's really time, here's
-        the big red button:
+        Here at {SITE_NAME}{" "}
+        I always want to respect your privacy and maintain that your data is
+        yours, I'm only borrowing it. If it's really time, here's the big red
+        button:
       </p>
       <form method="post">
         <CSRFInput csrfToken={props.data.csrfToken} />
         <DeleteAccountButton />
       </form>
       <p>
-        If something isn't quite right with your DenoDevs experience, please
+        If something isn't quite right with your {SITE_NAME} experience, please
         {" "}
         <ContactSupportLink
           linkText="email Kevin"
