@@ -17,7 +17,7 @@ export default function Footer(
       </span>
       <nav class="SiteNav">
         <AuthenticationLinks {...props} />
-        <a href="/start/employer">Hiring Deno devs?</a>
+        <a href="/hiring">Hiring Deno devs?</a>
         <a href="/about">About</a>
         <a href="/privacyPolicy">Privacy</a>
         <ContactSupportLink

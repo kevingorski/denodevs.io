@@ -65,25 +65,17 @@ export default function DeveloperPage(props: PageProps<Props>) {
       </h1>
 
       <p>
-        Already got an account? <a href="/signin">Sign in here</a>.
-      </p>
-
-      <p>
-        To start creating your profile, first sign in with your GitHub account.
-        The details of your GitHub account will be used to create your profile,
-        but you can edit it and connect other accounts to it afterward.
+        Already have an account? <a href="/signin">Sign in here</a>.
       </p>
 
       <p>
         Your email address will be used to confirm your identity and send you
-        updates about job matches and {SITE_NAME}{" "}
-        updates. If the email address on your GitHub account is not the one
-        you'd like to use, it can be updated after the initial setup.
+        updates about job matches and {SITE_NAME}.
       </p>
 
       <p>
-        In the future, you'll be able to showcase work on GitHub through this
-        integration.
+        After initial sign up, you'll be able to connect and sign in with OAuth
+        2.0 providers.
       </p>
 
       <form method="post">
@@ -100,10 +92,6 @@ export default function DeveloperPage(props: PageProps<Props>) {
         </label>
         <button type="submit">Sign up</button>
       </form>
-
-      <h2>
-        <a href="/">Home</a>
-      </h2>
     </main>
   );
 }

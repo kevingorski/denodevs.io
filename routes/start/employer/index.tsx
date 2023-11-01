@@ -64,30 +64,13 @@ export default function EmployerSignUpPage(props: PageProps<Props>) {
       </h1>
 
       <p>
-        Welcome to{" "}
-        {SITE_NAME}! Here you can sign up to be matched with developers for your
-        open position or contract.
+        Already have an account? <a href="/employerSignIn">Sign in here</a>.
       </p>
 
       <p>
-        Already got an account? <a href="/employerSignIn">Sign in here</a>.
+        Your email address will be used to confirm your identity and send you
+        updates about candidates and {SITE_NAME}.
       </p>
-
-      <p>
-        {SITE_NAME}{" "}
-        is still in its early stages, which presents some unique challenges and
-        opportunities for employers like yourself:
-      </p>
-
-      <ul>
-        <li>There are few developers on the platform (for now)</li>
-        <li>There will be some rough edges as the platform matures</li>
-        <li>
-          Your input is early and more likely to direct {SITE_NAME}{" "}
-          toward your needs
-        </li>
-        <li>There's no cost to you to sign up</li>
-      </ul>
 
       <form method="post">
         <CSRFInput csrfToken={props.data.csrfToken} />

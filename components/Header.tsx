@@ -11,7 +11,7 @@ export default function Header(
       </h1>
       <nav class="SiteNav">
         <AuthenticationLinks {...props} />
-        <a href="/start/employer">Hiring Deno devs?</a>
+        <a href="/hiring">Hiring Deno devs?</a>
         <a href="/about">About</a>
       </nav>
     </header>
