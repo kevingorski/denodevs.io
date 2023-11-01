@@ -47,7 +47,7 @@ a, a:link, a:visited {
   color: var(--highlight-color);
 }
 
-a:hover, a:focus, a:active {
+a[href]:hover, a:focus, a:active {
   background-color: var(--bar-background-color);
   outline: 0.25rem solid var(--bar-background-color);
   color: var(--highlight-active-color);
