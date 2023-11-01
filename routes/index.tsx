@@ -8,6 +8,16 @@ export const handler: Handlers<State, State> = {
   },
 };
 
+function CTA() {
+  return (
+    <div class="cta">
+      <a class="button" href="/start/developer">
+        Get your free profile now
+      </a>
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <main>
@@ -36,35 +46,41 @@ export default function HomePage() {
           customize it for jobs working with Deno and the latest skills
           employers are looking for.
         </li>
+        <li>
+          Don't sign yourself up for an email version of an untargeted job board
+          – {SITE_NAME}{" "}
+          will only send you jobs that match criteria that you set, and will
+          even let you know when you could increase your matches (if you
+          opt-in).
+        </li>
       </ul>
 
-      <div class="cta">
-        <a class="button" href="/start/developer">
-          Get your free profile now
-        </a>
-      </div>
+      {CTA()}
 
       <h2>
-        Get your free profile and you'll be matched with employers that are
-        hiring
+        Finding a job on {SITE_NAME}
       </h2>
-      <p>
-        Fill out your profile and what you're looking for and interested
-        companies and projects will reach out to you.
-      </p>
+      <ol>
+        <li>
+          <a href="/start/developer">Create your free developer profile</a>{" "}
+          in less than 10 minutes
+        </li>
+        <li>Set your job preferences</li>
+        <li>
+          Wait while {SITE_NAME}{" "}
+          promotes your anonymized profile to employers that match your
+          preferences
+        </li>
+        <li>
+          Interested employers message you with jobs and you decide if you want
+          to interview
+        </li>
+        <li>
+          If you're hired (🎉), {SITE_NAME} is rewarded 💵
+        </li>
+      </ol>
 
-      <div class="cta">
-        <a class="button" href="/start/developer">
-          Get your free profile now
-        </a>
-      </div>
-
-      <h2>Need more details?</h2>
-      <p>
-        <a href="/about">
-          Learn how {SITE_NAME} works differently from other job boards
-        </a>.
-      </p>
+      {CTA()}
     </main>
   );
 }

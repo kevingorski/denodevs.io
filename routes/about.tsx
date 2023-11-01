@@ -30,41 +30,11 @@ export default function AboutPage() {
         </h1>
         <p>
           The Deno developer community is growing, but it's still rare to find
-          relevant jobs and contracts. Stop searching for a needle in a
-          haystack, let {SITE_NAME} help!
+          relevant job listings. Stop searching for a needle in a haystack,{" "}
+          <a href="/start">
+            let {SITE_NAME} help
+          </a>!
         </p>
-      </section>
-      <section>
-        <h2>
-          <a id="ForDenoDevelopers">For Deno Developers</a>
-        </h2>
-        <ol>
-          <li>
-            <a href="/start/developer">Create your free developer profile</a>
-          </li>
-          <li>
-            {SITE_NAME}{" "}
-            promotes your profile to employers that match your preferences
-          </li>
-          <li>
-            Employers reach out to you with jobs or contracts
-          </li>
-        </ol>
-        <p>
-          <a href="/start/developer">Create your free developer profile now!</a>
-        </p>
-      </section>
-      <section>
-        <h2>
-          <a id="ForEmployers">For Employers</a>
-        </h2>
-        <p>Find out more here!</p>
-
-        <div>
-          <a href="/start/employer">
-            Sign up to get matched with your ideal Deno developers!
-          </a>
-        </div>
       </section>
       <section>
         <h2>
@@ -82,28 +52,33 @@ export default function AboutPage() {
             </a>
           </li>
           <li>
-            <a href="https://deno.com/saaskit">Deno SaaSKit</a>
+            Kickstarted with <a href="https://deno.com/saaskit">Deno SaaSKit</a>
           </li>
           <li>
-            <a href="https://deno.com/deploy">Deno Deploy</a>
+            Running on <a href="https://deno.com/deploy">Deno Deploy</a>
           </li>
           <li>
             <a href="https://deno.com/kv">Deno KV</a>
           </li>
+          <li>
+            <a
+              href="https://github.com/kevingorski/denodevs.io"
+              target="_blank"
+            >
+              {SITE_NAME} is open source!
+            </a>
+          </li>
+          <li>
+            <iframe
+              src="https://github.com/sponsors/kevingorski/button"
+              title="Sponsor kevingorski"
+              height="32"
+              width="114"
+              style="border: 0; border-radius: 6px;"
+            >
+            </iframe>
+          </li>
         </ol>
-        <p>
-          <a href="https://github.com/kevingorski/denodevs.io" target="_blank">
-            {SITE_NAME} is open source!
-          </a>
-          <iframe
-            src="https://github.com/sponsors/kevingorski/button"
-            title="Sponsor kevingorski"
-            height="32"
-            width="114"
-            style="border: 0; border-radius: 6px;"
-          >
-          </iframe>
-        </p>
       </section>
       <section>
         <h2>
@@ -130,7 +105,7 @@ export default function AboutPage() {
           I decided to build {SITE_NAME}{" "}
           when I was researching the possibility of working with Deno more
           professionally and found that a lot of platforms didn't even list it
-          yet, despite being around for several years.
+          yet, despite Deno being around for several years.
         </p>
         <p>
           <a href="https://railsdevs.com" target="_blank" rel="noreferrer">
