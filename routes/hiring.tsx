@@ -8,6 +8,16 @@ export const handler: Handlers<State, State> = {
   },
 };
 
+function CTA() {
+  return (
+    <div class="cta">
+      <a class="button" href="/start/employer">
+        Get your free account now
+      </a>
+    </div>
+  );
+}
+
 export default function HiringPage() {
   return (
     <main>
@@ -27,6 +37,8 @@ export default function HiringPage() {
         work wiith Deno and start filling your open positions.
       </p>
 
+      {CTA()}
+
       <h2>A note about the {SITE_NAME} {SITE_VERSION}</h2>
       <p>
         {SITE_NAME}{" "}
@@ -43,6 +55,8 @@ export default function HiringPage() {
         </li>
         <li>There's no cost to you to sign up</li>
       </ul>
+
+      {CTA()}
     </main>
   );
 }
