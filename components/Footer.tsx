@@ -1,4 +1,4 @@
-import { SITE_NAME } from "@/utils/constants.ts";
+import { SITE_NAME, SITE_VERSION } from "@/utils/constants.ts";
 import { GitHub } from "./Icons.tsx";
 import AuthenticationLinks from "@/components/AuthenticationLinks.tsx";
 import ContactSupportLink from "@/components/ContactSupportLink.tsx";
@@ -11,9 +11,13 @@ export default function Footer(
 ) {
   return (
     <footer class="SiteBar">
-      <p>© {SITE_NAME}</p>
+      <span class="SiteNav">
+        <span>© {SITE_NAME}</span>
+        <span>Currently in {SITE_VERSION}</span>
+      </span>
       <nav class="SiteNav">
         <AuthenticationLinks {...props} />
+        <a href="/start/employer">Hiring Deno devs?</a>
         <a href="/about">About</a>
         <a href="/privacyPolicy">Privacy</a>
         <ContactSupportLink
