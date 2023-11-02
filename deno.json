@@ -1,11 +1,12 @@
 {
   "lock": false,
+  "unstable": ["kv"],
   "tasks": {
     "init:stripe": "deno run --allow-read --allow-env --allow-net tools/init_stripe.ts",
     "db:dump": "deno run --allow-read --allow-env --unstable tools/dump_kv.ts",
     "db:seed": "deno run --allow-read --allow-env --allow-net --unstable tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env --unstable tools/reset_kv.ts",
-    "start": "deno run --unstable -A --watch=styles/,routes/,utils/ dev.ts",
+    "start": "deno run --unstable -A --env --watch=styles/,routes/,utils/ dev.ts",
     "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id deno test -A --unstable",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",
@@ -44,5 +45,5 @@
   },
   "exclude": ["cov/", "**/_fresh/*"],
   "lint": { "rules": { "tags": ["fresh", "recommended"] } },
-  "tea": "deno.land^1.37.0 github.com/evilmartians/lefthook^1.5.0"
+  "tea": "deno.land^1.38.0 github.com/evilmartians/lefthook^1.5.0"
 }
