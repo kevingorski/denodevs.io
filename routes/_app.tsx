@@ -10,7 +10,7 @@ import {
 import { CLICKY_SITE_ID } from "@/utils/config.ts";
 
 export default function App(props: AppProps) {
-  if (props.url.pathname === "/kv-insights") {
+  if (props.url.pathname.startsWith("/kv-insights")) {
     return <props.Component />;
   }
 

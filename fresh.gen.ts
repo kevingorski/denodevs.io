@@ -44,7 +44,9 @@ import * as $$2 from "./islands/DeleteAccountButton.tsx";
 import * as $$3 from "./islands/DeveloperAccountTabs.tsx";
 import * as $$4 from "./islands/DeveloperProfileDetails.tsx";
 import * as $$5 from "./islands/EntriesManagement.tsx";
-import * as $$6 from "./islands/VerifyEmailButton.tsx";
+import * as $$6 from "./islands/EntryManagement.tsx";
+import * as $$7 from "./islands/QueueManagement.tsx";
+import * as $$8 from "./islands/VerifyEmailButton.tsx";
 
 const manifest = {
   routes: {
@@ -92,7 +94,9 @@ const manifest = {
     "./islands/DeveloperAccountTabs.tsx": $$3,
     "./islands/DeveloperProfileDetails.tsx": $$4,
     "./islands/EntriesManagement.tsx": $$5,
-    "./islands/VerifyEmailButton.tsx": $$6,
+    "./islands/EntryManagement.tsx": $$6,
+    "./islands/QueueManagement.tsx": $$7,
+    "./islands/VerifyEmailButton.tsx": $$8,
   },
   baseUrl: import.meta.url,
 };
