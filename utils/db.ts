@@ -2,6 +2,11 @@ import { chunk } from "std/collections/chunk.ts";
 import { ulid } from "std/ulid/mod.ts";
 import { Developer } from "@/types/Developer.ts";
 import { ExpiringUUID } from "@/types/ExpiringUUID.ts";
+import {
+  CSRF_TOKEN_LIFETIME_MS,
+  SESSION_COOKIE_LIFETIME_MS,
+  SIGN_IN_TOKEN_LIFETIME_MS,
+} from "@/utils/constants.ts";
 
 const KV_PATH_KEY = "KV_PATH";
 let path = undefined;
@@ -217,7 +222,9 @@ async function createSession(
     ...token,
   };
   const sessionsKey = [TopLevelKeys.sessions, entityType, token.uuid];
-  const res = await kv.set(sessionsKey, session);
+  const res = await kv.set(sessionsKey, session, {
+    expireIn: SESSION_COOKIE_LIFETIME_MS,
+  });
   if (!res.ok) {
     throw new Error(`Failed to create session: ${session}`);
   }
@@ -296,7 +303,9 @@ export async function deleteDeveloperSession(sessionId: string) {
 export async function createCsrfToken() {
   const token = generateExpiringUUID();
   const csrfTokenKey = [TopLevelKeys.csrf_tokens, token.uuid];
-  const res = await kv.set(csrfTokenKey, token);
+  const res = await kv.set(csrfTokenKey, token, {
+    expireIn: CSRF_TOKEN_LIFETIME_MS,
+  });
   if (!res.ok) {
     throw new Error(`Failed to create CSRF token: ${token}`);
   }
@@ -327,7 +336,9 @@ async function createSignInToken(
     TopLevelKeys.sign_in_tokens,
     token.uuid,
   ];
-  const res = await kv.set(signInTokensKey, signInToken);
+  const res = await kv.set(signInTokensKey, signInToken, {
+    expireIn: SIGN_IN_TOKEN_LIFETIME_MS,
+  });
   if (!res.ok) {
     throw new Error(`Failed to create sign in token: ${signInToken}`);
   }
