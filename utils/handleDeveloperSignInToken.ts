@@ -11,13 +11,17 @@ import {
   SESSION_COOKIE_LIFETIME_MS,
   SIGN_IN_TOKEN_LIFETIME_MS,
 } from "@/utils/constants.ts";
-import { SITE_COOKIE_NAME } from "kv_oauth/src/core.ts";
 import {
   redirect,
   redirectToDeveloperSignIn,
   redirectToDeveloperSignUp,
 } from "@/utils/redirect.ts";
 import { USE_SECURE_COOKIES } from "@/utils/config.ts";
+import {
+  getCookieName,
+  isHttps,
+  SITE_COOKIE_NAME,
+} from "kv_oauth/lib/_http.ts";
 
 export default async function handleDeveloperSignInToken(
   req: Request,
@@ -32,16 +36,21 @@ export default async function handleDeveloperSignInToken(
 
   const signInToken = await getDeveloperSignInToken(token);
   const signInResponse = redirectToDeveloperSignIn();
-  if (!signInToken) return signInResponse;
+  if (!signInToken) {
+    console.error(`Failed to find developer sign in token: ${token}`);
+    return signInResponse;
+  }
 
   await deleteSignInToken(token);
 
   if ((signInToken.generated + SIGN_IN_TOKEN_LIFETIME_MS) < Date.now()) {
+    console.error("Expired developer sign in token");
     return signInResponse;
   }
 
   const developer = await getDeveloper(signInToken.entityId);
   if (!developer) {
+    console.error(`Failed to find developer: ${signInToken.entityId}`);
     return redirectToDeveloperSignUp();
   }
   if (!developer.emailConfirmed) {
@@ -62,7 +71,7 @@ export default async function handleDeveloperSignInToken(
       secure: USE_SECURE_COOKIES,
       maxAge: SESSION_COOKIE_LIFETIME_MS,
       sameSite: "Strict",
-      name: SITE_COOKIE_NAME,
+      name: getCookieName(SITE_COOKIE_NAME, isHttps(req.url)),
       value: session.uuid,
     },
   );

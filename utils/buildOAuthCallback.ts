@@ -2,8 +2,7 @@ import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { upgradeDeveloperOAuthSession } from "@/utils/db.ts";
 import { getDeveloperOrNullFromSessionId } from "@/utils/getDeveloperFromSessionId.ts";
-import { handleCallback } from "kv_oauth/mod.ts";
-import { OAuth2Client } from "kv_oauth/deps.ts";
+import { handleCallback, OAuth2ClientConfig } from "kv_oauth/mod.ts";
 import { defineRoute } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirectToDeveloperSignUp } from "@/utils/redirect.ts";
@@ -13,7 +12,7 @@ interface UserProfile {
 }
 
 interface OAuth2ProviderOptions<TUserData> {
-  client: OAuth2Client;
+  client: OAuth2ClientConfig;
   createProviderProfile: (userProfile: TUserData & UserProfile) => void;
   getProviderProfile: (
     userData: TUserData,
@@ -38,10 +37,11 @@ export default function defineOAuthCallbackRoute<
     const developer = await getDeveloperOrNullFromSessionId(
       ctx.state.sessionId,
     );
-    const { response, accessToken, sessionId } = await handleCallback(
-      req,
-      client,
-    );
+    const { response, sessionId, tokens: { accessToken } } =
+      await handleCallback(
+        req,
+        client,
+      );
     const userData = await getUserData(accessToken);
 
     if (!userData) {
