@@ -14,7 +14,7 @@ export default function VerifyEmailButton(props: { email: string }) {
     });
 
     if (res.status === 401) {
-      window.location.href = "/start/developer";
+      window.location.href = "/signin";
       return;
     }
     hasSent.value = true;

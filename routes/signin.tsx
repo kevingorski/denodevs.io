@@ -1,7 +1,7 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { State } from "./_middleware.ts";
 import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
-import { createDeveloperSignInToken, getDeveloperByEmail } from "@/utils/db.ts";
+import { createSignInToken, getDeveloperByEmail } from "@/utils/db.ts";
 import { sendDeveloperSignInEmailMessage } from "@/utils/email.ts";
 import EmailSignInForm from "@/components/EmailSignInForm.tsx";
 import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
@@ -50,7 +50,7 @@ export const handler: Handlers<DeveloperSignInPageData, State> = {
     if (developer) {
       signInResult = true;
 
-      const signInToken = await createDeveloperSignInToken(developer);
+      const signInToken = await createSignInToken(developer);
 
       await sendDeveloperSignInEmailMessage(developer, signInToken.uuid);
     }
@@ -95,24 +95,12 @@ export default function DeveloperSignInPage(
         successUrl={successUrl}
       />
 
-      <h2>Get a magic sign in link via email</h2>
-
-      <EmailSignInForm
-        email={email || ""}
-        hasSubmitted={hasSubmitted}
-        signInHelp={signInHelp}
-        userType={UserType.Developer}
-      />
-
       <ul>
         <li>
           <SignInFormSupportLink
             email={email}
             userType={UserType.Developer}
           />
-        </li>
-        <li>
-          <a href="/start/developer">Developer Sign Up</a>
         </li>
         <li>
           <a href="/employerSignIn">Employer Sign In</a>

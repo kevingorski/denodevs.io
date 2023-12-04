@@ -90,15 +90,16 @@ enum TopLevelKeys {
   developers_by_email = "developers_by_email",
   developers_created_count = "developers_created_count",
   developers_created_count_by_day = "developers_created_count_by_day",
+  developer_sessions = "developer_sessions",
   employers = "employers",
   employers_by_email = "employers_by_email",
   employers_created_count = "employers_created_count",
   employers_created_count_by_day = "employers_created_count_by_day",
+  employer_sessions = "employer_sessions",
   github_profiles = "github_profiles",
   github_profiles_by_developer = "github_profiles_by_developer",
   google_profiles = "google_profiles",
   google_profiles_by_developer = "google_profiles_by_developer",
-  sessions = "sessions",
   sign_in_tokens = "sign_in_tokens",
 }
 
@@ -110,12 +111,6 @@ export enum AllTimeMetric {
 export type DailyMetric =
   | TopLevelKeys.employers_created_count_by_day
   | TopLevelKeys.developers_created_count_by_day;
-
-enum TokenEntityType {
-  admin = "admin",
-  developer = "developer",
-  employer = "employer",
-}
 
 // Employer
 export interface Employer {
@@ -138,13 +133,12 @@ export function newEmployerProps(): Pick<
 
 export interface SignInToken {
   entityId: string;
-  entityType: TokenEntityType;
   generated: number;
   uuid: string;
 }
 
 // deno-lint-ignore no-empty-interface
-export interface Session extends SignInToken {}
+export interface EmployerSession extends SignInToken {}
 
 function generateExpiringUUID(): ExpiringUUID {
   return {
@@ -211,18 +205,13 @@ export async function deleteEmployer(employer: Employer) {
   if (!res.ok) throw new Error(`Failed to delete employer: ${employer}`);
 }
 
-async function createSession(
-  entityType: TokenEntityType,
-  entityId: string,
-  token: ExpiringUUID,
-) {
+export async function createEmployerSession(employerId: string) {
   const session = {
-    entityId,
-    entityType,
-    ...token,
+    entityId: employerId,
+    ...generateExpiringUUID(),
   };
-  const sessionsKey = [TopLevelKeys.sessions, entityType, token.uuid];
-  const res = await kv.set(sessionsKey, session, {
+  const employerSessionsKey = [TopLevelKeys.employer_sessions, session.uuid];
+  const res = await kv.set(employerSessionsKey, session, {
     expireIn: SESSION_COOKIE_LIFETIME_MS,
   });
   if (!res.ok) {
@@ -231,73 +220,14 @@ async function createSession(
   return session;
 }
 
-export async function createAdminSession() {
-  return await createSession(
-    TokenEntityType.admin,
-    "",
-    generateExpiringUUID(),
-  );
-}
+export async function getEmployerSession(sessionId: string) {
+  const sessionsKey = [TopLevelKeys.employer_sessions, sessionId];
 
-export async function createEmployerSession(employerId: string) {
-  return await createSession(
-    TokenEntityType.employer,
-    employerId,
-    generateExpiringUUID(),
-  );
-}
-
-export async function createDeveloperSession(developerId: string) {
-  return await createSession(
-    TokenEntityType.developer,
-    developerId,
-    generateExpiringUUID(),
-  );
-}
-
-export async function upgradeDeveloperOAuthSession(
-  developerId: string,
-  sessionId: string,
-) {
-  return await createSession(
-    TokenEntityType.developer,
-    developerId,
-    { generated: Date.now(), uuid: sessionId },
-  );
-}
-
-async function getSession(sessionId: string, tokenEntityType: TokenEntityType) {
-  const sessionsKey = [TopLevelKeys.sessions, tokenEntityType, sessionId];
-
-  return await getGetValue<Session>(sessionsKey);
-}
-
-export function getAdminSession(sessionId: string) {
-  return getSession(sessionId, TokenEntityType.admin);
-}
-
-export function getEmployerSession(sessionId: string) {
-  return getSession(sessionId, TokenEntityType.employer);
-}
-
-export function getDeveloperSession(sessionId: string) {
-  return getSession(sessionId, TokenEntityType.developer);
-}
-
-export async function deleteAdminSession(sessionId: string) {
-  await kv.delete([TopLevelKeys.sessions, TokenEntityType.admin, sessionId]);
+  return await getGetValue<EmployerSession>(sessionsKey);
 }
 
 export async function deleteEmployerSession(sessionId: string) {
-  await kv.delete([TopLevelKeys.sessions, TokenEntityType.employer, sessionId]);
-}
-
-export async function deleteDeveloperSession(sessionId: string) {
-  await kv.delete([
-    TopLevelKeys.sessions,
-    TokenEntityType.developer,
-    sessionId,
-  ]);
+  await kv.delete([TopLevelKeys.employer_sessions, sessionId]);
 }
 
 export async function createCsrfToken() {
@@ -322,14 +252,12 @@ export async function deleteCsrfToken(uuid: string) {
   await kv.delete(csrfTokenKey);
 }
 
-async function createSignInToken(
-  entity: Employer | Developer,
-  entityType: TokenEntityType,
+export async function createSignInToken(
+  entity: Developer | Employer,
 ): Promise<SignInToken> {
   const token = generateExpiringUUID();
   const signInToken = {
     entityId: entity.id,
-    entityType,
     ...token,
   };
   const signInTokensKey = [
@@ -345,40 +273,12 @@ async function createSignInToken(
   return signInToken;
 }
 
-export function createEmployerSignInToken(
-  employer: Employer,
-): Promise<SignInToken> {
-  return createSignInToken(employer, TokenEntityType.employer);
-}
-
-export function createDeveloperSignInToken(
-  developer: Developer,
-): Promise<SignInToken> {
-  return createSignInToken(developer, TokenEntityType.developer);
-}
-
-async function getSignInToken(uuid: string) {
+export async function getSignInToken(uuid: string) {
   const signInTokensKey = [
     TopLevelKeys.sign_in_tokens,
     uuid,
   ];
   return await getGetValue<SignInToken>(signInTokensKey);
-}
-
-export async function getEmployerSignInToken(uuid: string) {
-  const signInToken = await getSignInToken(uuid);
-  if (signInToken && signInToken.entityType !== TokenEntityType.employer) {
-    return null;
-  }
-  return signInToken;
-}
-
-export async function getDeveloperSignInToken(uuid: string) {
-  const signInToken = await getSignInToken(uuid);
-  if (signInToken && signInToken.entityType !== TokenEntityType.developer) {
-    return null;
-  }
-  return signInToken;
 }
 
 export async function deleteSignInToken(uuid: string) {
@@ -444,6 +344,8 @@ export async function createDeveloper(developer: Developer) {
       `Failed to create developer with email: ${developer.email}`,
     );
   }
+
+  return developer;
 }
 
 export async function updateDeveloper(developer: Developer) {
@@ -467,6 +369,30 @@ export async function getManyDevelopers(ids: string[]) {
   const keys = ids.map((id) => [TopLevelKeys.developers, id]);
   const res = await getManyValues<Developer>(keys);
   return res.filter(Boolean) as Developer[];
+}
+
+export async function createDeveloperSession(
+  sessionId: string,
+  developerId: string,
+) {
+  const developerSessionKey = [TopLevelKeys.developer_sessions, sessionId];
+  const res = await kv.atomic()
+    .check({ key: developerSessionKey, versionstamp: null })
+    .set(developerSessionKey, developerId)
+    .commit();
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to create developer session with id: ${sessionId}`,
+    );
+  }
+}
+
+export async function getDeveloperBySession(sessionId: string) {
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.developer_sessions, sessionId],
+    getDeveloper,
+  );
 }
 
 export interface GitHubProfile {

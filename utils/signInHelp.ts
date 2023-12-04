@@ -54,24 +54,6 @@ function addToResponse<TParam>(
   );
 }
 
-export function addDeveloperEmail(
-  signInHelp: SignInHelp,
-  email: string,
-): SignInHelp {
-  return {
-    ...signInHelp,
-    developerMaskedEmail: maskEmail(email),
-  };
-}
-
-export function addDeveloperEmailToResponse(
-  req: Request,
-  res: Response,
-  email: string,
-) {
-  addToResponse(req, res, addDeveloperEmail, email);
-}
-
 export function addOAuthProvider(
   signInHelp: SignInHelp,
   oauthProvider: OAuthProvider,

@@ -4,7 +4,7 @@ import { redirect } from "@/utils/redirect.ts";
 import {
   createCsrfToken,
   createEmployer,
-  createEmployerSignInToken,
+  createSignInToken,
   newEmployerProps,
 } from "@/utils/db.ts";
 import { sendWelcomeEmployerEmailMessage } from "@/utils/email.ts";
@@ -48,7 +48,7 @@ export const handler: Handlers<Props, State> = {
       return redirectToThanks;
     }
 
-    const loginToken = await createEmployerSignInToken(employer);
+    const loginToken = await createSignInToken(employer);
 
     await sendWelcomeEmployerEmailMessage(employer, loginToken.uuid);
 

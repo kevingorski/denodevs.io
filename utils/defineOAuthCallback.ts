@@ -1,11 +1,15 @@
 import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
-import { upgradeDeveloperOAuthSession } from "@/utils/db.ts";
 import { getDeveloperOrNullFromSessionId } from "@/utils/getDeveloperFromSessionId.ts";
 import { handleCallback, OAuth2ClientConfig } from "kv_oauth/mod.ts";
 import { defineRoute } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
-import { redirectToDeveloperSignUp } from "@/utils/redirect.ts";
+import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
+import {
+  createDeveloper,
+  createDeveloperSession,
+  newDeveloperProps,
+} from "@/utils/db.ts";
 
 interface UserProfile {
   developerId: string;
@@ -45,50 +49,59 @@ export default function defineOAuthCallbackRoute<
     const userData = await getUserData(accessToken);
 
     if (!userData) {
+      console.error(`Failed to get user data with access token ${accessToken}`);
       // NB: lookup failed, this might need to be handled differently
-      return redirectToDeveloperSignUp();
-    }
-
-    // Already authenticated, associate with developer
-    if (developer !== null) {
-      createProviderProfile({
-        ...userData,
-        developerId: developer.id,
-      });
-
-      return await upgradeSessionAndResponse(
-        provider,
-        developer.id,
-        sessionId,
-        req,
-        response,
-      );
+      return redirectToDeveloperSignIn();
     }
 
     const providerProfile = await getProviderProfile(userData);
-    if (!providerProfile) {
-      // Maybe grab email and pre-populate?
-      return redirectToDeveloperSignUp();
+
+    // Profile exists and dev is authenticated -> no-op
+    // Profile exists and dev is not authenticated -> sign in as that dev
+    // Profile does not exist and dev is authenticated -> create new profile
+    // Profile does not exist and dev is not authenticated -> create new dev and profile
+
+    if (providerProfile) {
+      return await handleOAuthSuccess(
+        sessionId,
+        developer !== null ? developer.id : providerProfile.developerId,
+        req,
+        response,
+        provider,
+      );
     }
 
-    return await upgradeSessionAndResponse(
-      provider,
-      providerProfile.developerId,
+    let developerId;
+    if (developer !== null) {
+      developerId = developer.id;
+    } else {
+      const newDeveloper = await createDeveloper(newDeveloperProps());
+      developerId = newDeveloper.id;
+    }
+
+    createProviderProfile({
+      ...userData,
+      developerId,
+    });
+
+    return await handleOAuthSuccess(
       sessionId,
+      developerId,
       req,
       response,
+      provider,
     );
   });
 }
 
-async function upgradeSessionAndResponse(
-  provider: OAuthProvider,
-  developerId: string,
+async function handleOAuthSuccess(
   sessionId: string,
+  developerId: string,
   req: Request,
   response: Response,
+  provider: OAuthProvider,
 ) {
-  await upgradeDeveloperOAuthSession(developerId, sessionId);
+  await createDeveloperSession(sessionId, developerId);
 
   addOAuthProviderToResponse(
     req,

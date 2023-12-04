@@ -1,6 +1,6 @@
 import type { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 import type { AccountState } from "@/routes/account/_middleware.ts";
-import { createDeveloperSignInToken } from "@/utils/db.ts";
+import { createSignInToken } from "@/utils/db.ts";
 import { sendDeveloperEmailVerificationMessage } from "@/utils/email.ts";
 
 async function postHandler(
@@ -12,7 +12,7 @@ async function postHandler(
     return new Response(null, { status: 400 });
   }
 
-  const token = await createDeveloperSignInToken(developer);
+  const token = await createSignInToken(developer);
   await sendDeveloperEmailVerificationMessage(developer, token.uuid);
 
   return new Response(null, { status: 200 });

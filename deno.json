@@ -7,7 +7,7 @@
     "db:seed": "deno run --allow-read --allow-env --allow-net --unstable tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env --unstable tools/reset_kv.ts",
     "start": "deno run --unstable -A --env --watch=styles/,routes/,utils/ dev.ts",
-    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id deno test -A --unstable",
+    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id GITHUB_CLIENT_ID=test GITHUB_CLIENT_SECRET=test GOOGLE_CLIENT_ID=test GOOGLE_CLIENT_SECRET=test deno test -A --unstable",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
     "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",
     "build": "deno run --unstable -A dev.ts build",

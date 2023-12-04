@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
-import { createEmployerSignInToken, getEmployerByEmail } from "@/utils/db.ts";
+import { createSignInToken, getEmployerByEmail } from "@/utils/db.ts";
 import { sendEmployerSignInEmailMessage } from "@/utils/email.ts";
 import EmailSignInForm from "@/components/EmailSignInForm.tsx";
 import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
@@ -38,7 +38,7 @@ export const handler: Handlers<EmployerSignInPageData, State> = {
     if (employer) {
       signInResult = true;
 
-      const signInToken = await createEmployerSignInToken(employer);
+      const signInToken = await createSignInToken(employer);
 
       await sendEmployerSignInEmailMessage(employer, signInToken.uuid);
     }

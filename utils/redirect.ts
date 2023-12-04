@@ -24,10 +24,6 @@ export function redirectToDeveloperSignIn(url = "/account") {
   return redirect(`/signin?from=${url}`);
 }
 
-export function redirectToDeveloperSignUp() {
-  return redirect("/start/developer");
-}
-
 export function redirectToEmployerSignIn(url = "/employer") {
   return redirect(`/employerSignIn?from=${url}`);
 }

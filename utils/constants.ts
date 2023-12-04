@@ -1,4 +1,4 @@
-import { DAY, HOUR, MINUTE } from "std/datetime/constants.ts";
+import { DAY, MINUTE } from "std/datetime/constants.ts";
 
 export const SITE_NAME = "Deno Devs";
 export const SITE_DESCRIPTION =
@@ -12,9 +12,6 @@ export const SIGN_IN_TOKEN_LIFETIME_MS = 10 * MINUTE;
 export const SESSION_COOKIE_LIFETIME_MS = 7 * DAY;
 
 export const EMPLOYER_SESSION_COOKIE_NAME = "employer-session";
-
-export const ADMIN_SESSION_COOKIE_LIFETIME_MS = 1 * HOUR;
-export const ADMIN_SESSION_COOKIE_NAME = "admin-session";
 
 export const SIGN_IN_HELP_COOKIE_LIFETIME_MS = 60 * DAY;
 export const SIGN_IN_HELP_COOKIE_NAME = "sign-in-help";

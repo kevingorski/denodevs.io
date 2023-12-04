@@ -11,7 +11,7 @@ export const handler: Handlers<State, State> = {
 function CTA() {
   return (
     <div class="cta">
-      <a class="button" href="/start/developer">
+      <a class="button" href="/signin">
         Get your free profile now
       </a>
     </div>
@@ -55,14 +55,14 @@ export default function HomePage() {
         </li>
       </ul>
 
-      {CTA()}
+      <CTA />
 
       <h2>
         Finding a job on {SITE_NAME}
       </h2>
       <ol>
         <li>
-          <a href="/start/developer">Create your free developer profile</a>{" "}
+          <a href="/signin">Create your free developer profile</a>{" "}
           in less than 10 minutes
         </li>
         <li>Set your job preferences</li>
@@ -80,7 +80,7 @@ export default function HomePage() {
         </li>
       </ol>
 
-      {CTA()}
+      <CTA />
     </main>
   );
 }

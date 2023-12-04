@@ -10,7 +10,7 @@ import {
   createEmployerSession,
   deleteSignInToken,
   getEmployer,
-  getEmployerSignInToken,
+  getSignInToken,
   updateEmployer,
 } from "@/utils/db.ts";
 import { setCookie } from "std/http/cookie.ts";
@@ -29,7 +29,7 @@ export const handler: Handlers<State, State> = {
     const token = requestUrl.searchParams.get("token");
     if (!token) return signInResponse;
 
-    const signInToken = await getEmployerSignInToken(token);
+    const signInToken = await getSignInToken(token);
     if (!signInToken) return signInResponse;
 
     await deleteSignInToken(token);

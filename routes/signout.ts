@@ -1,7 +1,7 @@
 import { defineRoute, RouteContext } from "$fresh/server.ts";
 import { UserType } from "@/types/UserType.ts";
 import type { State } from "./_middleware.ts";
-import { deleteDeveloperSession, deleteEmployerSession } from "@/utils/db.ts";
+import { deleteEmployerSession } from "@/utils/db.ts";
 import { signOut } from "kv_oauth";
 import { redirect } from "@/utils/redirect.ts";
 import { EMPLOYER_SESSION_COOKIE_NAME } from "@/utils/constants.ts";
@@ -26,9 +26,6 @@ export default defineRoute(
 
     switch (userType) {
       case UserType.Developer:
-        if (ctx.state.sessionId) {
-          await deleteDeveloperSession(ctx.state.sessionId);
-        }
         return await signOut(req);
 
       case UserType.Employer:

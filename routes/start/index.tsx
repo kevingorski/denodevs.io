@@ -10,7 +10,9 @@ export const handler: Handlers<State, State> = {
 
 export default function StartPage(props: PageProps<State>) {
   const devMessage = (
-    <a href="/start/developer">I'm a Deno developer looking for work</a>
+    <a href="/signin">
+      I'm a Deno developer looking for work
+    </a>
   );
   return (
     <main>
