@@ -27,6 +27,10 @@ jobs:
         run: "deno task build"
         env:
           CLICKY_SITE_ID: build_site_id
+          GITHUB_CLIENT_ID: test
+          GITHUB_CLIENT_SECRET: test
+          GOOGLE_CLIENT_ID: test
+          GOOGLE_CLIENT_SECRET: test 
           SITE_BASE_URL: http://localhost:8000
 
       - name: Upload to Deno Deploy
