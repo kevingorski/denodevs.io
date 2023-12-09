@@ -6,6 +6,11 @@ export default function denoDevsCsp(csp: ContentSecurityPolicy) {
   const { directives } = csp;
   directives.defaultSrc = [];
   directives.baseUri = ["'none'"];
+  if (!directives.connectSrc) {
+    directives.connectSrc = [];
+  }
+  directives.connectSrc.push("'self'");
+
   if (!directives.scriptSrc) {
     directives.scriptSrc = [];
   }
