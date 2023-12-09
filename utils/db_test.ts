@@ -1,7 +1,6 @@
 import {
   createDeveloper,
   getDeveloper,
-  getDeveloperByEmail,
   getManyDevelopers,
   newDeveloperProps,
   updateDeveloper,
@@ -24,12 +23,10 @@ Deno.test("[db] developer", async () => {
   const developer = genNewDeveloper();
 
   assertEquals(await getDeveloper(developer.id), null);
-  assertEquals(await getDeveloperByEmail(developer.email), null);
 
   await createDeveloper(developer);
   await assertRejects(async () => await createDeveloper(developer));
   assertEquals(await getDeveloper(developer.id), developer);
-  assertEquals(await getDeveloperByEmail(developer.email), developer);
 
   const developer1 = genNewDeveloper();
   await createDeveloper(developer1);
@@ -41,5 +38,4 @@ Deno.test("[db] developer", async () => {
   const newDeveloper: Developer = { ...developer };
   await updateDeveloper(newDeveloper);
   assertEquals(await getDeveloper(newDeveloper.id), newDeveloper);
-  assertEquals(await getDeveloperByEmail(newDeveloper.email), newDeveloper);
 });
