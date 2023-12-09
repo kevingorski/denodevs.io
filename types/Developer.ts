@@ -2,7 +2,6 @@ import { DeveloperStatus } from "@/types/DeveloperStatus.ts";
 
 // Developer
 interface DeveloperRequiredFields {
-  email: string;
   emailConfirmed: boolean;
   id: string;
 }
@@ -13,6 +12,7 @@ export interface Developer extends DeveloperRequiredFields {
   bio: string | null;
   location: string | null;
   countryCode: string | null;
+  email: string | null;
   name: string | null;
   openToContract: boolean;
   openToFullTime: boolean;

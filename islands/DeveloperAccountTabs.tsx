@@ -2,11 +2,11 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { GitHubProfile, GoogleProfile } from "@/utils/db.ts";
 import { Developer } from "@/types/Developer.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
-import VerifyEmailButton from "@/islands/VerifyEmailButton.tsx";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
 import DeveloperProfileDetails from "@/islands/DeveloperProfileDetails.tsx";
 import { ProtectedForm } from "@/utils/csrf.ts";
 import { GitHub } from "@/components/Icons.tsx";
+import DeveloperEmailDetails from "@/islands/DeveloperEmailDetails.tsx";
 
 enum TabsValue {
   Profile = "Profile",
@@ -21,14 +21,6 @@ interface Props extends ProtectedForm {
   googleProfile: GoogleProfile | null;
 }
 
-function VerifyEmailPrompt(props: { email: string }) {
-  return (
-    <div>
-      <VerifyEmailButton email={props.email} />
-    </div>
-  );
-}
-
 export default function DeveloperAccountTabs(
   { csrfToken, developer, gitHubProfile, googleProfile }: Props,
 ) {
@@ -40,21 +32,28 @@ export default function DeveloperAccountTabs(
   const handleTabChange = (value: string) => {
   };
 
+  const developerHasVerifiedEmail = developer.email && developer.emailConfirmed;
+
   return (
     <Tabs.Root
       className="TabsRoot"
-      defaultValue={TabsValue.Profile}
+      defaultValue={TabsValue.Email}
       onValueChange={handleTabChange}
     >
       <Tabs.List className="TabsList">
-        <Tabs.Trigger className="TabsTrigger" value={TabsValue.Profile}>
-          Profile
-        </Tabs.Trigger>
         <Tabs.Trigger className="TabsTrigger" value={TabsValue.Email}>
           Email
         </Tabs.Trigger>
         <Tabs.Trigger
           className="TabsTrigger"
+          disabled={!developerHasVerifiedEmail}
+          value={TabsValue.Profile}
+        >
+          Profile
+        </Tabs.Trigger>
+        <Tabs.Trigger
+          className="TabsTrigger"
+          disabled={!developerHasVerifiedEmail}
           value={TabsValue.ConnectedAccounts}
         >
           Connected Accounts
@@ -67,10 +66,7 @@ export default function DeveloperAccountTabs(
         <DeveloperProfileDetails csrfToken={csrfToken} developer={developer} />
       </Tabs.Content>
       <Tabs.Content className="TabsContent" value={TabsValue.Email}>
-        <div>{developer.email}</div>
-        {!developer.emailConfirmed && (
-          <VerifyEmailPrompt email={developer.email} />
-        )}
+        <DeveloperEmailDetails developer={developer} />
       </Tabs.Content>
       <Tabs.Content className="TabsContent" value={TabsValue.ConnectedAccounts}>
         <p>

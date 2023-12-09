@@ -39,7 +39,7 @@
     "react": "https://esm.sh/preact@10.18.1/compat",
     "react-dom": "https://esm.sh/preact@10.18.1/compat",
     "react/jsx-runtime": "https://esm.sh/preact@10.18.1/compat",
-    "std/": "https://deno.land/std@0.202.0/",
+    "std/": "https://deno.land/std@0.208.0/",
     "stripe": "./stripe.ts",
     "@radix-ui/react-tabs": "https://esm.sh/@radix-ui/react-tabs@1.0.4?alias=@types/react:preact/compat&external=react,react-dom&target=es2022"
   },

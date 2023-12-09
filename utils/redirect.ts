@@ -1,4 +1,4 @@
-import type { RedirectStatus, Status } from "std/http/http_status.ts";
+import { RedirectStatus, STATUS_CODE } from "std/http/status.ts";
 import { deleteCookie, getCookies, setCookie } from "std/http/cookie.ts";
 
 export const REDIRECT_URL_COOKIE_NAME = "redirect-url";
@@ -10,7 +10,7 @@ export const REDIRECT_URL_COOKIE_NAME = "redirect-url";
  */
 export function redirect(
   location: string,
-  status: Status.Created | RedirectStatus = 303,
+  status: RedirectStatus = STATUS_CODE.SeeOther,
 ) {
   return new Response(null, {
     headers: {

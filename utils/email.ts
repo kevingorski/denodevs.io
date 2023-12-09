@@ -19,6 +19,18 @@ export interface TemplateSample {
   message: EmailMessage;
 }
 
+export interface HasEmail {
+  email: string;
+}
+
+export function hasEmail<T extends { email: string | null }>(
+  t: T,
+): t is T & HasEmail {
+  return t.email !== null;
+}
+
+type DeveloperWithEmail = Developer & HasEmail;
+
 const sendEmail = (
   message: EmailMessage,
 ) => {
@@ -46,7 +58,7 @@ const sendEmail = (
 // Welcome Developer
 
 export const renderWelcomeDeveloperEmailMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ): EmailMessage => ({
   to: developer.email,
@@ -60,14 +72,14 @@ export const renderWelcomeDeveloperEmailMessage = (
 });
 
 export const sendWelcomeDeveloperEmailMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ) => sendEmail(renderWelcomeDeveloperEmailMessage(developer, token));
 
 // Developer Email Verification
 
 export const renderDeveloperEmailVerificationMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ): EmailMessage => ({
   to: developer.email,
@@ -81,14 +93,14 @@ export const renderDeveloperEmailVerificationMessage = (
 });
 
 export const sendDeveloperEmailVerificationMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ) => sendEmail(renderDeveloperEmailVerificationMessage(developer, token));
 
 // Developer Sign In
 
 export const renderDeveloperSignInEmailMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ): EmailMessage => ({
   to: developer.email,
@@ -102,7 +114,7 @@ export const renderDeveloperSignInEmailMessage = (
 });
 
 export const sendDeveloperSignInEmailMessage = (
-  developer: Developer,
+  developer: DeveloperWithEmail,
   token: string,
 ) => sendEmail(renderDeveloperSignInEmailMessage(developer, token));
 

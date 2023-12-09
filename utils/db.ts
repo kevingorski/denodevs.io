@@ -87,7 +87,6 @@ export function formatDate(date: Date) {
 enum TopLevelKeys {
   csrf_tokens = "csrf_tokens",
   developers = "developers",
-  developers_by_email = "developers_by_email",
   developers_created_count = "developers_created_count",
   developers_created_count_by_day = "developers_created_count_by_day",
   developer_sessions = "developer_sessions",
@@ -290,7 +289,7 @@ export function newDeveloperProps(): Developer {
     availableToWorkStartDate: null,
     bio: null,
     countryCode: null,
-    email: "",
+    email: null,
     emailConfirmed: false,
     id: ulid(),
     location: null,
@@ -318,10 +317,6 @@ export function newDeveloperProps(): Developer {
  */
 export async function createDeveloper(developer: Developer) {
   const developersKey = [TopLevelKeys.developers, developer.id];
-  const developersByEmailKey = [
-    TopLevelKeys.developers_by_email,
-    developer.email,
-  ];
   const developersCreatedCountKey = [
     TopLevelKeys.developers_created_count,
   ];
@@ -332,9 +327,7 @@ export async function createDeveloper(developer: Developer) {
 
   const res = await kv.atomic()
     .check({ key: developersKey, versionstamp: null })
-    .check({ key: developersByEmailKey, versionstamp: null })
     .set(developersKey, developer)
-    .set(developersByEmailKey, developer.id)
     .sum(developersCreatedCountKey, 1n)
     .sum(developersCreatedCountByDayKey, 1n)
     .commit();
@@ -356,13 +349,6 @@ export async function updateDeveloper(developer: Developer) {
 
 export async function getDeveloper(id: string) {
   return await getValue<Developer>([TopLevelKeys.developers, id]);
-}
-
-export async function getDeveloperByEmail(email: string) {
-  return await getSecondaryIndexValue(
-    [TopLevelKeys.developers_by_email, email],
-    getDeveloper,
-  );
 }
 
 export async function getManyDevelopers(ids: string[]) {
@@ -479,10 +465,6 @@ export async function getGoogleProfileByDeveloper(developerId: string) {
 
 export async function deleteDeveloper(developer: Developer) {
   const developersKey = [TopLevelKeys.developers, developer.id];
-  const developersByEmailKey = [
-    TopLevelKeys.developers_by_email,
-    developer.email,
-  ];
 
   const atomicOp = kv.atomic();
   const gitHubProfile = await getGitHubProfileByDeveloper(developer.id);
@@ -517,7 +499,6 @@ export async function deleteDeveloper(developer: Developer) {
 
   const res = await atomicOp
     .delete(developersKey)
-    .delete(developersByEmailKey)
     .commit();
 
   if (!res.ok) throw new Error(`Failed to delete developer: ${developer}`);

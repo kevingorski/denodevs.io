@@ -1,9 +1,6 @@
 import type { Handlers, PageProps } from "$fresh/server.ts";
 import type { State } from "./_middleware.ts";
-import { redirect, setRedirectUrlCookie } from "@/utils/redirect.ts";
-import { createSignInToken, getDeveloperByEmail } from "@/utils/db.ts";
-import { sendDeveloperSignInEmailMessage } from "@/utils/email.ts";
-import EmailSignInForm from "@/components/EmailSignInForm.tsx";
+import { redirect } from "@/utils/redirect.ts";
 import SignInFormSupportLink from "@/components/SignInFormSupportLink.tsx";
 import { UserType } from "@/types/UserType.ts";
 import SignInHelp from "@/types/SignInHelp.ts";
@@ -16,8 +13,6 @@ import { SITE_BASE_URL } from "@/utils/config.ts";
 
 interface DeveloperSignInPageData extends State {
   from: string | null;
-  email?: string;
-  hasSubmitted: boolean;
   signInHelp: SignInHelp | null;
 }
 
@@ -32,47 +27,14 @@ export const handler: Handlers<DeveloperSignInPageData, State> = {
 
     if (ctx.state.sessionId !== undefined) return redirect("/");
 
-    return ctx.render({ ...ctx.state, from, hasSubmitted: false, signInHelp });
-  },
-
-  async POST(req, ctx) {
-    const form = await req.formData();
-    const from = new URL(req.url).searchParams.get("from");
-    const email = form.get("email")?.toString();
-    const signInHelp = getSignInHelpFromCookie(req);
-
-    if (!email) {
-      return new Response(null, { status: 400 });
-    }
-    const developer = await getDeveloperByEmail(email);
-    let signInResult = false;
-
-    if (developer) {
-      signInResult = true;
-
-      const signInToken = await createSignInToken(developer);
-
-      await sendDeveloperSignInEmailMessage(developer, signInToken.uuid);
-    }
-
-    const response = await ctx.render({
-      ...ctx.state,
-      email,
-      from,
-      hasSubmitted: true,
-      signInHelp,
-    });
-    if (signInResult) {
-      setRedirectUrlCookie(req, response);
-    }
-    return response;
+    return ctx.render({ ...ctx.state, from, signInHelp });
   },
 };
 
 export default function DeveloperSignInPage(
   props: PageProps<DeveloperSignInPageData>,
 ) {
-  const { email, from, hasSubmitted, signInHelp } = props.data;
+  const { from, signInHelp } = props.data;
   const successUrl = from && from.startsWith(SITE_BASE_URL)
     ? from
     : `${SITE_BASE_URL}/account`;
@@ -98,7 +60,6 @@ export default function DeveloperSignInPage(
       <ul>
         <li>
           <SignInFormSupportLink
-            email={email}
             userType={UserType.Developer}
           />
         </li>
