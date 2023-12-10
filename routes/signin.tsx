@@ -25,7 +25,7 @@ export const handler: Handlers<DeveloperSignInPageData, State> = {
     const from = new URL(req.url).searchParams.get("from");
     const signInHelp = getSignInHelpFromCookie(req);
 
-    if (ctx.state.sessionId !== undefined) return redirect("/");
+    if (ctx.state.sessionId !== undefined) return redirect("/account");
 
     return ctx.render({ ...ctx.state, from, signInHelp });
   },

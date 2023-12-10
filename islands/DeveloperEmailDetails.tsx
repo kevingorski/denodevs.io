@@ -12,19 +12,22 @@ export default function DeveloperEmailDetails(
   { developer }: Props,
 ) {
   const isSaving = useSignal(false);
-  const email = useSignal(developer.email || "");
-  const headerText = useSignal(
-    developer.email === null
-      ? "Please set your email address"
-      : !developer.emailConfirmed
-      ? "Please verify your email address"
-      : "Email verified!",
-  );
+  const isEditing = useSignal(developer.email === null);
+  const email = useSignal(developer.email ?? "");
+  const headerText = (developer.email === null || isEditing.value)
+    ? "Please set your email address"
+    : !developer.emailConfirmed
+    ? "Please verify your email address"
+    : "Email verified!";
   const buttonText = useSignal(
     "Save",
   );
   // TODO: newsletter settings
 
+  function handleEditClick() {
+    isEditing.value = true;
+    email.value = "";
+  }
   function handleInputEmail(e: TargetedEvent<HTMLInputElement>) {
     email.value = e.currentTarget.value;
   }
@@ -52,7 +55,7 @@ export default function DeveloperEmailDetails(
   }
   return (
     <>
-      <h2>{headerText.value}</h2>
+      <h2>{headerText}</h2>
       <p>
         Without an email, {SITE_NAME}{" "}
         can't contact you when you've been matched to jobs with employers.
@@ -61,27 +64,42 @@ export default function DeveloperEmailDetails(
         Please add an email address where you can be reached and click the link
         in the email we send you.
       </p>
-      <form
-        disabled={isSaving.value}
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <label>Email address:</label>
-          <input
-            autoFocus
+      {isEditing.value
+        ? (
+          <form
             disabled={isSaving.value}
-            name="email"
-            onInput={handleInputEmail}
-            placeholder="Your email address"
-            required
-            type="email"
-            value={email.value}
-          />
-        </div>
-        <button disabled={isSaving.value} type="submit">
-          {buttonText.value}
-        </button>
-      </form>
+            onSubmit={handleSubmit}
+          >
+            <div>
+              <label>
+                Email address:
+                <input
+                  autoFocus
+                  disabled={isSaving.value}
+                  name="email"
+                  onInput={handleInputEmail}
+                  placeholder="Your email address"
+                  required
+                  type="email"
+                  value={email.value}
+                />
+              </label>
+            </div>
+            <button disabled={isSaving.value} type="submit">
+              {buttonText.value}
+            </button>
+          </form>
+        )
+        : (
+          <div>
+            <label>
+              Email address: {email.value} <span title="Verified">✅</span>
+            </label>
+            <button onClick={handleEditClick}>
+              Edit
+            </button>
+          </div>
+        )}
     </>
   );
 }
