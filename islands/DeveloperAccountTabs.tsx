@@ -29,16 +29,12 @@ export default function DeveloperAccountTabs(
   const googleSignInUrl =
     `/account/connectOAuth?provider=${OAuthProvider.GOOGLE}`;
 
-  const handleTabChange = (value: string) => {
-  };
-
   const developerHasVerifiedEmail = developer.email && developer.emailConfirmed;
 
   return (
     <Tabs.Root
       className="TabsRoot"
       defaultValue={TabsValue.Email}
-      onValueChange={handleTabChange}
     >
       <Tabs.List className="TabsList">
         <Tabs.Trigger className="TabsTrigger" value={TabsValue.Email}>
