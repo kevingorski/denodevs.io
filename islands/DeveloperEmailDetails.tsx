@@ -93,7 +93,9 @@ export default function DeveloperEmailDetails(
         : (
           <div>
             <label>
-              Email address: {email.value} <span title="Verified">✅</span>
+              Email address: {email.value} {developer.emailConfirmed
+                ? <span title="Verified">✅</span>
+                : <span title="Check your email to verify">📬</span>}
             </label>
             <button onClick={handleEditClick}>
               Edit
