@@ -45,5 +45,5 @@
   },
   "exclude": ["cov/", "**/_fresh/*"],
   "lint": { "rules": { "tags": ["fresh", "recommended"] } },
-  "tea": "deno.land^1.38.0 github.com/evilmartians/lefthook^1.5.0"
+  "pkgx": "deno.land^1.39.0 github.com/evilmartians/lefthook^1.5.0"
 }
