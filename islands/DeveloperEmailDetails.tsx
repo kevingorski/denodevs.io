@@ -56,14 +56,18 @@ export default function DeveloperEmailDetails(
   return (
     <>
       <h2>{headerText}</h2>
-      <p>
-        Without an email, {SITE_NAME}{" "}
-        can't contact you when you've been matched to jobs with employers.
-      </p>
-      <p>
-        Please add an email address where you can be reached and click the link
-        in the email we send you.
-      </p>
+      {!developer.emailConfirmed && (
+        <>
+          <p>
+            Without an email, {SITE_NAME}{" "}
+            can't contact you when you've been matched to jobs with employers.
+          </p>
+          <p>
+            Please add an email address where you can be reached and click the
+            link in the email we send you.
+          </p>
+        </>
+      )}
       {isEditing.value
         ? (
           <form
