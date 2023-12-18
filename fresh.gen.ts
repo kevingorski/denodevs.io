@@ -2,99 +2,100 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/335afc1fe2e63.ts";
-import * as $1 from "./routes/56ac6c4e308a9.ts";
-import * as $2 from "./routes/_404.tsx";
-import * as $3 from "./routes/_500.tsx";
-import * as $4 from "./routes/_app.tsx";
-import * as $5 from "./routes/_middleware.ts";
-import * as $6 from "./routes/about.tsx";
-import * as $7 from "./routes/account/_middleware.ts";
-import * as $8 from "./routes/account/connectOAuth.ts";
-import * as $9 from "./routes/account/delete.tsx";
-import * as $10 from "./routes/account/index.tsx";
-import * as $11 from "./routes/account/sendVerificationEmail.ts";
-import * as $12 from "./routes/admin/_middleware.ts";
-import * as $13 from "./routes/admin/emailTemplates.tsx";
-import * as $14 from "./routes/admin/index.tsx";
-import * as $15 from "./routes/employer/_middleware.ts";
-import * as $16 from "./routes/employer/delete.tsx";
-import * as $17 from "./routes/employer/index.tsx";
-import * as $18 from "./routes/employerCallback.ts";
-import * as $19 from "./routes/employerSignIn.tsx";
-import * as $20 from "./routes/gitHubCallback.ts";
-import * as $21 from "./routes/googleCallback.ts";
-import * as $22 from "./routes/hiring.tsx";
-import * as $23 from "./routes/index.tsx";
-import * as $24 from "./routes/kv-insights/_middleware.ts";
-import * as $25 from "./routes/privacyPolicy.tsx";
-import * as $26 from "./routes/signInOAuth.ts";
-import * as $27 from "./routes/signin.tsx";
-import * as $28 from "./routes/signout.ts";
-import * as $29 from "./routes/start/developer/thanks.tsx";
-import * as $30 from "./routes/start/employer/index.tsx";
-import * as $31 from "./routes/start/employer/thanks.tsx";
-import * as $32 from "./routes/start/index.tsx";
-import * as $33 from "./routes/verifyEmail.ts";
-import * as $$0 from "./islands/BlurHashedImage.tsx";
-import * as $$1 from "./islands/Chart.tsx";
-import * as $$2 from "./islands/DeleteAccountButton.tsx";
-import * as $$3 from "./islands/DeveloperAccountTabs.tsx";
-import * as $$4 from "./islands/DeveloperEmailDetails.tsx";
-import * as $$5 from "./islands/DeveloperProfileDetails.tsx";
-import * as $$6 from "./islands/EntriesManagement.tsx";
-import * as $$7 from "./islands/EntryManagement.tsx";
-import * as $$8 from "./islands/QueueManagement.tsx";
+import * as $_335afc1fe2e63 from "./routes/335afc1fe2e63.ts";
+import * as $_56ac6c4e308a9 from "./routes/56ac6c4e308a9.ts";
+import * as $_404 from "./routes/_404.tsx";
+import * as $_500 from "./routes/_500.tsx";
+import * as $_app from "./routes/_app.tsx";
+import * as $_middleware from "./routes/_middleware.ts";
+import * as $about from "./routes/about.tsx";
+import * as $account_middleware from "./routes/account/_middleware.ts";
+import * as $account_connectOAuth from "./routes/account/connectOAuth.ts";
+import * as $account_delete from "./routes/account/delete.tsx";
+import * as $account_index from "./routes/account/index.tsx";
+import * as $account_sendVerificationEmail from "./routes/account/sendVerificationEmail.ts";
+import * as $admin_middleware from "./routes/admin/_middleware.ts";
+import * as $admin_emailTemplates from "./routes/admin/emailTemplates.tsx";
+import * as $admin_index from "./routes/admin/index.tsx";
+import * as $employer_middleware from "./routes/employer/_middleware.ts";
+import * as $employer_delete from "./routes/employer/delete.tsx";
+import * as $employer_index from "./routes/employer/index.tsx";
+import * as $employerCallback from "./routes/employerCallback.ts";
+import * as $employerSignIn from "./routes/employerSignIn.tsx";
+import * as $gitHubCallback from "./routes/gitHubCallback.ts";
+import * as $googleCallback from "./routes/googleCallback.ts";
+import * as $hiring from "./routes/hiring.tsx";
+import * as $index from "./routes/index.tsx";
+import * as $kv_insights_middleware from "./routes/kv-insights/_middleware.ts";
+import * as $privacyPolicy from "./routes/privacyPolicy.tsx";
+import * as $signInOAuth from "./routes/signInOAuth.ts";
+import * as $signin from "./routes/signin.tsx";
+import * as $signout from "./routes/signout.ts";
+import * as $start_developer_thanks from "./routes/start/developer/thanks.tsx";
+import * as $start_employer_index from "./routes/start/employer/index.tsx";
+import * as $start_employer_thanks from "./routes/start/employer/thanks.tsx";
+import * as $start_index from "./routes/start/index.tsx";
+import * as $verifyEmail from "./routes/verifyEmail.ts";
+import * as $BlurHashedImage from "./islands/BlurHashedImage.tsx";
+import * as $Chart from "./islands/Chart.tsx";
+import * as $DeleteAccountButton from "./islands/DeleteAccountButton.tsx";
+import * as $DeveloperAccountTabs from "./islands/DeveloperAccountTabs.tsx";
+import * as $DeveloperEmailDetails from "./islands/DeveloperEmailDetails.tsx";
+import * as $DeveloperProfileDetails from "./islands/DeveloperProfileDetails.tsx";
+import * as $EntriesManagement from "./islands/EntriesManagement.tsx";
+import * as $EntryManagement from "./islands/EntryManagement.tsx";
+import * as $QueueManagement from "./islands/QueueManagement.tsx";
+import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
-    "./routes/335afc1fe2e63.ts": $0,
-    "./routes/56ac6c4e308a9.ts": $1,
-    "./routes/_404.tsx": $2,
-    "./routes/_500.tsx": $3,
-    "./routes/_app.tsx": $4,
-    "./routes/_middleware.ts": $5,
-    "./routes/about.tsx": $6,
-    "./routes/account/_middleware.ts": $7,
-    "./routes/account/connectOAuth.ts": $8,
-    "./routes/account/delete.tsx": $9,
-    "./routes/account/index.tsx": $10,
-    "./routes/account/sendVerificationEmail.ts": $11,
-    "./routes/admin/_middleware.ts": $12,
-    "./routes/admin/emailTemplates.tsx": $13,
-    "./routes/admin/index.tsx": $14,
-    "./routes/employer/_middleware.ts": $15,
-    "./routes/employer/delete.tsx": $16,
-    "./routes/employer/index.tsx": $17,
-    "./routes/employerCallback.ts": $18,
-    "./routes/employerSignIn.tsx": $19,
-    "./routes/gitHubCallback.ts": $20,
-    "./routes/googleCallback.ts": $21,
-    "./routes/hiring.tsx": $22,
-    "./routes/index.tsx": $23,
-    "./routes/kv-insights/_middleware.ts": $24,
-    "./routes/privacyPolicy.tsx": $25,
-    "./routes/signInOAuth.ts": $26,
-    "./routes/signin.tsx": $27,
-    "./routes/signout.ts": $28,
-    "./routes/start/developer/thanks.tsx": $29,
-    "./routes/start/employer/index.tsx": $30,
-    "./routes/start/employer/thanks.tsx": $31,
-    "./routes/start/index.tsx": $32,
-    "./routes/verifyEmail.ts": $33,
+    "./routes/335afc1fe2e63.ts": $_335afc1fe2e63,
+    "./routes/56ac6c4e308a9.ts": $_56ac6c4e308a9,
+    "./routes/_404.tsx": $_404,
+    "./routes/_500.tsx": $_500,
+    "./routes/_app.tsx": $_app,
+    "./routes/_middleware.ts": $_middleware,
+    "./routes/about.tsx": $about,
+    "./routes/account/_middleware.ts": $account_middleware,
+    "./routes/account/connectOAuth.ts": $account_connectOAuth,
+    "./routes/account/delete.tsx": $account_delete,
+    "./routes/account/index.tsx": $account_index,
+    "./routes/account/sendVerificationEmail.ts": $account_sendVerificationEmail,
+    "./routes/admin/_middleware.ts": $admin_middleware,
+    "./routes/admin/emailTemplates.tsx": $admin_emailTemplates,
+    "./routes/admin/index.tsx": $admin_index,
+    "./routes/employer/_middleware.ts": $employer_middleware,
+    "./routes/employer/delete.tsx": $employer_delete,
+    "./routes/employer/index.tsx": $employer_index,
+    "./routes/employerCallback.ts": $employerCallback,
+    "./routes/employerSignIn.tsx": $employerSignIn,
+    "./routes/gitHubCallback.ts": $gitHubCallback,
+    "./routes/googleCallback.ts": $googleCallback,
+    "./routes/hiring.tsx": $hiring,
+    "./routes/index.tsx": $index,
+    "./routes/kv-insights/_middleware.ts": $kv_insights_middleware,
+    "./routes/privacyPolicy.tsx": $privacyPolicy,
+    "./routes/signInOAuth.ts": $signInOAuth,
+    "./routes/signin.tsx": $signin,
+    "./routes/signout.ts": $signout,
+    "./routes/start/developer/thanks.tsx": $start_developer_thanks,
+    "./routes/start/employer/index.tsx": $start_employer_index,
+    "./routes/start/employer/thanks.tsx": $start_employer_thanks,
+    "./routes/start/index.tsx": $start_index,
+    "./routes/verifyEmail.ts": $verifyEmail,
   },
   islands: {
-    "./islands/BlurHashedImage.tsx": $$0,
-    "./islands/Chart.tsx": $$1,
-    "./islands/DeleteAccountButton.tsx": $$2,
-    "./islands/DeveloperAccountTabs.tsx": $$3,
-    "./islands/DeveloperEmailDetails.tsx": $$4,
-    "./islands/DeveloperProfileDetails.tsx": $$5,
-    "./islands/EntriesManagement.tsx": $$6,
-    "./islands/EntryManagement.tsx": $$7,
-    "./islands/QueueManagement.tsx": $$8,
+    "./islands/BlurHashedImage.tsx": $BlurHashedImage,
+    "./islands/Chart.tsx": $Chart,
+    "./islands/DeleteAccountButton.tsx": $DeleteAccountButton,
+    "./islands/DeveloperAccountTabs.tsx": $DeveloperAccountTabs,
+    "./islands/DeveloperEmailDetails.tsx": $DeveloperEmailDetails,
+    "./islands/DeveloperProfileDetails.tsx": $DeveloperProfileDetails,
+    "./islands/EntriesManagement.tsx": $EntriesManagement,
+    "./islands/EntryManagement.tsx": $EntryManagement,
+    "./islands/QueueManagement.tsx": $QueueManagement,
   },
   baseUrl: import.meta.url,
-};
+} satisfies Manifest;
 
 export default manifest;
