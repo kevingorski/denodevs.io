@@ -2,7 +2,6 @@
   "lock": false,
   "unstable": ["kv"],
   "tasks": {
-    "init:stripe": "deno run --allow-read --allow-env --allow-net tools/init_stripe.ts",
     "db:dump": "deno run --allow-read --allow-env --unstable tools/dump_kv.ts",
     "db:seed": "deno run --allow-read --allow-env --allow-net --unstable tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env --unstable tools/reset_kv.ts",
