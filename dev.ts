@@ -2,15 +2,17 @@
 
 import dev from "$fresh/dev.ts";
 import "std/dotenv/load.ts";
-import { bundle } from "lightningcss";
+import { browserslistToTargets, bundle } from "lightningcss";
+import browserslist from "browserslist";
 
+const targets = browserslistToTargets(
+  browserslist("last 2 versions, not dead, > 0.2%"),
+);
 const { code, map } = bundle({
-  drafts: {
-    nesting: true,
-  },
   filename: "./styles/index.css",
   minify: true,
   sourceMap: true,
+  targets,
 });
 
 if (!map) throw new Error("No source map");
