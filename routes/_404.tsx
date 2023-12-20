@@ -13,7 +13,7 @@ export default function NotFoundPage({ url }: PageProps) {
     <>
       {/* NB: 404 page can't have custom handler to pass title into */}
       <Head>
-        <title>{buildPageTitle("Page not found")}</title>
+        <title>{buildPageTitle("Page not found ∅")}</title>
       </Head>
       <main>
         <h1>Page not found ∅</h1>
@@ -24,7 +24,6 @@ export default function NotFoundPage({ url }: PageProps) {
             linkText="contact Kevin"
             messageBody={supportMessageBody}
             messageSubject="Deno Devs Page Not Found"
-            titleText="Contact Kevin"
           />.
         </p>
         <p>
