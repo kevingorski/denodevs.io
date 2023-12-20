@@ -1,5 +1,5 @@
 import { State } from "@/routes/_middleware.ts";
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { FreshContext } from "$fresh/server.ts";
 import { Developer } from "@/types/Developer.ts";
 import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
 import getDeveloperFromSessionId, {
@@ -14,7 +14,7 @@ export interface AccountState extends State {
 
 export async function handler(
   req: Request,
-  ctx: MiddlewareHandlerContext<AccountState>,
+  ctx: FreshContext<AccountState>,
 ) {
   const redirectResponse = redirectToDeveloperSignIn(req.url);
   const { sessionId } = ctx.state;

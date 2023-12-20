@@ -1,4 +1,4 @@
-import { defineRoute, Handlers, PageProps } from "$fresh/server.ts";
+import { defineRoute } from "$fresh/server.ts";
 import { marked } from "marked";
 import { SITE_NAME } from "@/utils/constants.ts";
 

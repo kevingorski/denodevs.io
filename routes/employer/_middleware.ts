@@ -1,5 +1,4 @@
 import { State } from "@/routes/_middleware.ts";
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
 import {
   deleteEmployerSession,
   Employer,
@@ -8,6 +7,7 @@ import {
 } from "@/utils/db.ts";
 import { redirectToEmployerSignIn } from "@/utils/redirect.ts";
 import { SESSION_COOKIE_LIFETIME_MS } from "@/utils/constants.ts";
+import { FreshContext } from "$fresh/server.ts";
 
 export interface EmployerState extends State {
   employerSessionId: string;
@@ -16,7 +16,7 @@ export interface EmployerState extends State {
 
 export async function handler(
   req: Request,
-  ctx: MiddlewareHandlerContext<EmployerState>,
+  ctx: FreshContext<EmployerState>,
 ) {
   const redirectResponse = redirectToEmployerSignIn(req.url);
   const { employerSessionId } = ctx.state;

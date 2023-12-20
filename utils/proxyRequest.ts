@@ -1,4 +1,4 @@
-import { HandlerContext } from "$fresh/server.ts";
+import { FreshContext } from "$fresh/server.ts";
 
 const excludedIncomingHeaders = [
   "accept-encoding",
@@ -10,7 +10,7 @@ const excludedIncomingHeaders = [
 export default async function proxyRequest(
   proxiedUrl: URL,
   req: Request,
-  ctx: HandlerContext,
+  ctx: FreshContext,
 ) {
   const { headers: originalHeaders, method: originalMethod, url: originalUrl } =
     req;
