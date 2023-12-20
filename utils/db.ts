@@ -99,6 +99,8 @@ enum TopLevelKeys {
   github_profiles_by_developer = "github_profiles_by_developer",
   google_profiles = "google_profiles",
   google_profiles_by_developer = "google_profiles_by_developer",
+  linked_in_profiles = "linked_in_profiles",
+  linked_in_profiles_by_developer = "linked_in_profiles_by_developer",
   sign_in_tokens = "sign_in_tokens",
 }
 
@@ -463,6 +465,48 @@ export async function getGoogleProfileByDeveloper(developerId: string) {
   );
 }
 
+export interface LinkedInProfile {
+  developerId: string;
+  linkedInId: string;
+}
+
+export async function createLinkedInProfile(
+  profile: LinkedInProfile,
+) {
+  const linkedInProfileKey = [
+    TopLevelKeys.linked_in_profiles,
+    profile.linkedInId,
+  ];
+  const linkedInProfilesByDeveloperKey = [
+    TopLevelKeys.linked_in_profiles_by_developer,
+    profile.developerId,
+  ];
+  const res = await kv.atomic()
+    .check({ key: linkedInProfileKey, versionstamp: null })
+    .check({ key: linkedInProfilesByDeveloperKey, versionstamp: null })
+    .set(linkedInProfileKey, profile)
+    .set(linkedInProfilesByDeveloperKey, profile.linkedInId)
+    .commit();
+
+  if (!res.ok) {
+    throw new Error(`Failed to create LinkedIn profile: ${profile}`);
+  }
+}
+
+export async function getLinkedInProfile(linkedInId: string) {
+  return await getValue<LinkedInProfile>([
+    TopLevelKeys.linked_in_profiles,
+    linkedInId,
+  ]);
+}
+
+export async function getLinkedInProfileByDeveloper(developerId: string) {
+  return await getSecondaryIndexValue(
+    [TopLevelKeys.linked_in_profiles_by_developer, developerId],
+    getLinkedInProfile,
+  );
+}
+
 export async function deleteDeveloper(developer: Developer) {
   const developersKey = [TopLevelKeys.developers, developer.id];
 
@@ -495,6 +539,21 @@ export async function deleteDeveloper(developer: Developer) {
     ];
     atomicOp.delete(googleProfileKey);
     atomicOp.delete(googleProfilesByDeveloperKey);
+  }
+
+  const linkedInProfile = await getLinkedInProfileByDeveloper(developer.id);
+
+  if (linkedInProfile) {
+    const linkedInProfileKey = [
+      TopLevelKeys.linked_in_profiles,
+      linkedInProfile.linkedInId,
+    ];
+    const linkedInProfileByDeveloperKey = [
+      TopLevelKeys.linked_in_profiles_by_developer,
+      developer.id,
+    ];
+    atomicOp.delete(linkedInProfileKey);
+    atomicOp.delete(linkedInProfileByDeveloperKey);
   }
 
   const res = await atomicOp

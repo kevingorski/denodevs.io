@@ -5,8 +5,10 @@ import {
   createCsrfToken,
   getGitHubProfileByDeveloper,
   getGoogleProfileByDeveloper,
+  getLinkedInProfileByDeveloper,
   GitHubProfile,
   GoogleProfile,
+  LinkedInProfile,
   updateDeveloper,
 } from "@/utils/db.ts";
 import { DeveloperStatus } from "@/types/DeveloperStatus.ts";
@@ -24,26 +26,34 @@ import { redirect } from "@/utils/redirect.ts";
 interface Props extends AccountState, ProtectedForm {
   gitHubProfile: GitHubProfile | null;
   googleProfile: GoogleProfile | null;
+  linkedInProfile: LinkedInProfile | null;
 }
 
 export const handler: Handlers<Props, AccountState> = {
   async GET(req, ctx) {
-    const csrfToken = await createCsrfToken();
-    ctx.state.title = "Account";
-
     const developerId = ctx.state.developer.id;
-    const gitHubProfile = await getGitHubProfileByDeveloper(
-      developerId,
-    );
-    const googleProfile = await getGoogleProfileByDeveloper(
-      developerId,
-    );
+    const [csrfToken, gitHubProfile, googleProfile, linkedInProfile] =
+      await Promise.all([
+        createCsrfToken(),
+        getGitHubProfileByDeveloper(
+          developerId,
+        ),
+        getGoogleProfileByDeveloper(
+          developerId,
+        ),
+        getLinkedInProfileByDeveloper(
+          developerId,
+        ),
+      ]);
+
+    ctx.state.title = "Account";
 
     return ctx.render({
       ...ctx.state,
       csrfToken,
       gitHubProfile,
       googleProfile,
+      linkedInProfile,
     });
   },
 

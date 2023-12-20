@@ -8,6 +8,7 @@ import { getSignInHelpFromCookie } from "@/utils/signInHelp.ts";
 import {
   GitHubOAuthSignInButton,
   GoogleOAuthSignInButton,
+  LinkedInOAuthSignInButton,
 } from "@/components/OAuthSignInButton.tsx";
 import { SITE_BASE_URL } from "@/utils/config.ts";
 
@@ -53,6 +54,11 @@ export default function DeveloperSignInPage(
       />
 
       <GoogleOAuthSignInButton
+        signInHelp={signInHelp}
+        successUrl={successUrl}
+      />
+
+      <LinkedInOAuthSignInButton
         signInHelp={signInHelp}
         successUrl={successUrl}
       />

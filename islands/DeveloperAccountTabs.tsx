@@ -1,5 +1,5 @@
 import * as Tabs from "@radix-ui/react-tabs";
-import { GitHubProfile, GoogleProfile } from "@/utils/db.ts";
+import { GitHubProfile, GoogleProfile, LinkedInProfile } from "@/utils/db.ts";
 import { Developer } from "@/types/Developer.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
@@ -19,15 +19,19 @@ interface Props extends ProtectedForm {
   developer: Developer;
   gitHubProfile: GitHubProfile | null;
   googleProfile: GoogleProfile | null;
+  linkedInProfile: LinkedInProfile | null;
 }
 
 export default function DeveloperAccountTabs(
-  { csrfToken, developer, gitHubProfile, googleProfile }: Props,
+  { csrfToken, developer, gitHubProfile, googleProfile, linkedInProfile }:
+    Props,
 ) {
   const gitHubSignInUrl =
     `/account/connectOAuth?provider=${OAuthProvider.GITHUB}`;
   const googleSignInUrl =
     `/account/connectOAuth?provider=${OAuthProvider.GOOGLE}`;
+  const linkedInSignInUrl =
+    `/account/connectOAuth?provider=${OAuthProvider.LINKED_IN}`;
 
   const developerHasVerifiedEmail = developer.email && developer.emailConfirmed;
 
@@ -81,6 +85,13 @@ export default function DeveloperAccountTabs(
           <div>
             <a class="button" href={googleSignInUrl}>
               G Connect with Google
+            </a>
+          </div>
+        )}
+        {!linkedInProfile && (
+          <div>
+            <a class="button" href={linkedInSignInUrl}>
+              Sign in with LinkedIn
             </a>
           </div>
         )}

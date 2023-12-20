@@ -27,6 +27,7 @@ import * as $googleCallback from "./routes/googleCallback.ts";
 import * as $hiring from "./routes/hiring.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $kv_insights_middleware from "./routes/kv-insights/_middleware.ts";
+import * as $linkedInCallback from "./routes/linkedInCallback.ts";
 import * as $privacyPolicy from "./routes/privacyPolicy.tsx";
 import * as $signInOAuth from "./routes/signInOAuth.ts";
 import * as $signin from "./routes/signin.tsx";
@@ -74,6 +75,7 @@ const manifest = {
     "./routes/hiring.tsx": $hiring,
     "./routes/index.tsx": $index,
     "./routes/kv-insights/_middleware.ts": $kv_insights_middleware,
+    "./routes/linkedInCallback.ts": $linkedInCallback,
     "./routes/privacyPolicy.tsx": $privacyPolicy,
     "./routes/signInOAuth.ts": $signInOAuth,
     "./routes/signin.tsx": $signin,

@@ -46,3 +46,13 @@ export function GoogleOAuthSignInButton(
     </OAuthSignInButton>
   );
 }
+
+export function LinkedInOAuthSignInButton(
+  props: Omit<Props, "children" | "oAuthProvider">,
+) {
+  return (
+    <OAuthSignInButton {...props} oAuthProvider={OAuthProvider.LINKED_IN}>
+      Sign in with LinkedIn
+    </OAuthSignInButton>
+  );
+}
