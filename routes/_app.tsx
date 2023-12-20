@@ -8,16 +8,14 @@ import {
   SITE_VERSION,
 } from "../utils/constants.ts";
 import { CLICKY_SITE_ID } from "@/utils/config.ts";
+import buildPageTitle from "@/utils/pageTitle.ts";
 
 export default function App(props: AppProps) {
   if (props.url.pathname.startsWith("/kv-insights")) {
     return <props.Component />;
   }
 
-  const siteName = `${SITE_NAME} ${SITE_VERSION}`;
-  const title = props.data?.title
-    ? `${props.data.title} 🦕💼 ${siteName}`
-    : siteName;
+  const title = buildPageTitle(props.data?.title);
 
   return (
     <html lang="en">

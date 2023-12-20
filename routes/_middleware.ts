@@ -1,4 +1,4 @@
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { FreshContext } from "$fresh/server.ts";
 import { getSessionId } from "kv_oauth";
 import type { MetaProps } from "@/components/Meta.tsx";
 import { EMPLOYER_SESSION_COOKIE_NAME } from "@/utils/constants.ts";
@@ -9,7 +9,7 @@ export interface State extends MetaProps {
   sessionId?: string;
 }
 
-async function setState(req: Request, ctx: MiddlewareHandlerContext<State>) {
+async function setState(req: Request, ctx: FreshContext<State>) {
   if (ctx.destination !== "route") return await ctx.next();
 
   const sessionId = await getSessionId(req);
