@@ -1,7 +1,7 @@
 import { addOAuthProviderToResponse } from "@/utils/signInHelp.ts";
 import { OAuthProvider } from "@/types/OAuthProvider.ts";
 import { getDeveloperOrNullFromSessionId } from "@/utils/getDeveloperFromSessionId.ts";
-import { handleCallback, OAuth2ClientConfig } from "kv_oauth/mod.ts";
+import { getRequiredEnv, handleCallback, OAuth2ClientConfig } from "kv_oauth";
 import { defineRoute } from "$fresh/server.ts";
 import { State } from "@/routes/_middleware.ts";
 import { redirectToDeveloperSignIn } from "@/utils/redirect.ts";
@@ -10,6 +10,7 @@ import {
   createDeveloperSession,
   newDeveloperProps,
 } from "@/utils/db.ts";
+import { SITE_BASE_URL } from "@/utils/config.ts";
 
 interface UserProfile {
   developerId: string;
@@ -45,6 +46,15 @@ export default function defineOAuthCallbackRoute<
       await handleCallback(
         req,
         client,
+        {
+          requestOptions: {
+            body: {
+              client_id: getRequiredEnv("LINKED_IN_CLIENT_ID"),
+              client_secret: getRequiredEnv("LINKED_IN_CLIENT_SECRET"),
+              redirect_uri: `${SITE_BASE_URL}/linkedInCallback`,
+            },
+          },
+        },
       );
     const userData = await getUserData(accessToken);
 
