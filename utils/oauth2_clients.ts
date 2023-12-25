@@ -25,6 +25,12 @@ export const linkedInOAuth2Client: OAuth2ClientConfig = {
   redirectUri: `${SITE_BASE_URL}/linkedInCallback`,
   tokenUri: "https://www.linkedin.com/oauth/v2/accessToken",
   defaults: {
+    requestOptions: {
+      body: {
+        client_id: getRequiredEnv("LINKED_IN_CLIENT_ID"),
+        client_secret: getRequiredEnv("LINKED_IN_CLIENT_SECRET"),
+      },
+    },
     scope: [
       "email",
       "openid",
