@@ -28,7 +28,7 @@ export default function Footer(
         />
         <a href="https://techhub.social/@denodevs" rel="me">Mastodon</a>
         <a
-          href="https://github.com/kevingorski/denodevs.io"
+          href="https://github.com/kevingorski/denodevs.com"
           target="_blank"
           aria-label={`${SITE_NAME} repo on GitHub`}
         >
