@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-22.04
-          - windows-2022
-          - macOS-12
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
 
     steps:
       - name: Setup repo
