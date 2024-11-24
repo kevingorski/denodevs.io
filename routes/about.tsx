@@ -62,7 +62,7 @@ export default function AboutPage() {
           </li>
           <li>
             <a
-              href="https://github.com/kevingorski/denodevs.io"
+              href="https://github.com/kevingorski/denodevs.com"
               target="_blank"
             >
               {SITE_NAME} is open source!

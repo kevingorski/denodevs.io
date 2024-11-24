@@ -24,7 +24,7 @@ These require manual setup (but are optional):
 1. Clone the repo:
 
    ```bash
-   git clone https://github.com/kevingorski/denodevs.io.git
+   git clone https://github.com/kevingorski/denodevs.com.git
    cd denodevs
    ```
 
