@@ -45,7 +45,7 @@ import * as $DeveloperProfileDetails from "./islands/DeveloperProfileDetails.tsx
 import * as $EntriesManagement from "./islands/EntriesManagement.tsx";
 import * as $EntryManagement from "./islands/EntryManagement.tsx";
 import * as $QueueManagement from "./islands/QueueManagement.tsx";
-import { type Manifest } from "$fresh/server.ts";
+import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {

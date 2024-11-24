@@ -43,12 +43,12 @@ export default function DeveloperEmailDetails(
     });
 
     if (res.status === STATUS_CODE.Unauthorized) {
-      window.location.href = "/signin";
+      globalThis.location.href = "/signin";
       return;
     }
     if (res.status === STATUS_CODE.NotModified) {
       // Email has already been verified
-      window.location.reload();
+      globalThis.location.reload();
     }
 
     buttonText.value = "📬 Email sent! Check your inbox.";

@@ -136,7 +136,6 @@ export interface SignInToken {
   uuid: string;
 }
 
-// deno-lint-ignore no-empty-interface
 export interface EmployerSession extends SignInToken {}
 
 function generateExpiringUUID(): ExpiringUUID {

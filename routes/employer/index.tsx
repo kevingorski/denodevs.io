@@ -24,7 +24,7 @@ export default function EmployerHomePage(props: PageProps<EmployerState>) {
 
       <p>
         In the meantime, if you have any questions about Deno Devs, you can{" "}
-        <a href="mailto:kevin@denodevs.io" title="Email Kevin re: Deno Devs">
+        <a href="mailto:kevin@denodevs.com" title="Email Kevin re: Deno Devs">
           email the me (founder of Deno Devs) directly here
         </a>.
       </p>

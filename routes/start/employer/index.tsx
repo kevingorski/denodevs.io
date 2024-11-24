@@ -23,7 +23,7 @@ export const handler: Handlers<Props, State> = {
     return ctx.render({ ...ctx.state, csrfToken });
   },
 
-  async POST(req, ctx) {
+  async POST(req, _ctx) {
     const form = await readPostDataAndValidateCsrfToken(req);
     const email = form.get("email")?.toString();
     const name = form.get("name")?.toString();
