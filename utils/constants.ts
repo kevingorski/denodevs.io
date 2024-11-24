@@ -16,5 +16,5 @@ export const EMPLOYER_SESSION_COOKIE_NAME = "employer-session";
 export const SIGN_IN_HELP_COOKIE_LIFETIME_MS = 60 * DAY;
 export const SIGN_IN_HELP_COOKIE_NAME = "sign-in-help";
 
-export const KEVINS_EMAIL_ADDRESS = "kevin@denodevs.io";
+export const KEVINS_EMAIL_ADDRESS = "kevin@denodevs.com";
 export const SUPPORT_EMAIL_ADDRESS = KEVINS_EMAIL_ADDRESS;

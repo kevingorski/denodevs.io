@@ -1,6 +1,6 @@
 # Deno Devs Reverse Job Board
 
-[Deno Devs](https://denodevs.io) is a reverse job board for developers looking
+[Deno Devs](https://denodevs.com) is a reverse job board for developers looking
 to work with Deno.
 
 ## Getting Started Locally

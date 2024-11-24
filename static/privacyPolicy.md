@@ -1,9 +1,9 @@
-Visitor privacy is paramount at Deno Devs (https://denodevs.io). This privacy
+Visitor privacy is paramount at Deno Devs (https://denodevs.com). This privacy
 policy document contains types of information that is collected and recorded by
 Deno Devs and it is used.
 
 If you have additional questions or require more information about our Privacy
-Policy, <a href="mailto:kevin@denodevs.io">email me at kevin@denodevs.io</a>.
+Policy, <a href="mailto:kevin@denodevs.com">email me at kevin@denodevs.com</a>.
 
 ## Consent
 
@@ -90,4 +90,4 @@ offline or via channels other than this website.
 
 Should you have any questions about our privacy practices or this privacy
 policy, or if you would like to exercise any of the rights available to you,
-please <a href="mailto:kevin@denodevs.io">email me at kevin@denodevs.io</a>.
+please <a href="mailto:kevin@denodevs.com">email me at kevin@denodevs.com</a>.

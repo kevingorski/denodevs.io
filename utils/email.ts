@@ -5,7 +5,7 @@ import { SITE_BASE_URL } from "@/utils/config.ts";
 
 const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const shouldSendToConsole = Deno.env.get("SEND_EMAIL_TO_CONSOLE") === "true";
-const defaultFromAddress = `${SITE_NAME} <notifications@denodevs.io>`;
+const defaultFromAddress = `${SITE_NAME} <notifications@denodevs.com>`;
 
 export interface EmailMessage {
   from?: string;
