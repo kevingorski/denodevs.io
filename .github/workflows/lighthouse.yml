@@ -12,16 +12,16 @@ jobs:
       URL: ${{ github.event.deployment_status.environment_url }}
 
     steps:
-    - name: Setup repo
-      uses: actions/checkout@v4
+      - name: Setup repo
+        uses: actions/checkout@v4
 
-    - name: Audit URLs using Lighthouse
-      uses: treosh/lighthouse-ci-action@v11
-      with:
-        urls: |
-          $URL
-          $URL/about
-          $URL/signin
-        temporaryPublicStorage: true
-      env:
-        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            $URL
+            $URL/about
+            $URL/signin
+          temporaryPublicStorage: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

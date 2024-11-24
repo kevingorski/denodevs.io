@@ -14,7 +14,7 @@ type Props =
   };
 
 export default function (props: Props) {
-  const { blurhash, onLoad, style, ...imageProps } = props;
+  const { blurhash, style, ...imageProps } = props;
   const hasLoadedImage = useSignal(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 

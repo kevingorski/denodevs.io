@@ -14,7 +14,6 @@ import SignOutLink from "@/components/SignOutLink.tsx";
 import { UserType } from "@/types/UserType.ts";
 import denoDevsCsp from "@/utils/csp.ts";
 import { SITE_NAME } from "@/utils/constants.ts";
-import DeveloperAccountTabs from "@/islands/DeveloperAccountTabs.tsx";
 import {
   ProtectedForm,
   readPostDataAndValidateCsrfToken,
@@ -27,7 +26,7 @@ interface Props extends AccountState, ProtectedForm {
 }
 
 export const handler: Handlers<Props, AccountState> = {
-  async GET(req, ctx) {
+  async GET(_req, ctx) {
     const csrfToken = await createCsrfToken();
     ctx.state.title = "Account";
 
@@ -100,13 +99,13 @@ export const handler: Handlers<Props, AccountState> = {
   },
 };
 
-export default function AccountPage(props: PageProps<Props>) {
+export default function AccountPage(_props: PageProps<Props>) {
   useCSP(denoDevsCsp);
 
   return (
     <main>
       <h1>Welcome to your {SITE_NAME} profile!</h1>
-      <DeveloperAccountTabs {...props.data} />
+      {/* <DeveloperAccountTabs {...props.data} /> */}
       <SignOutLink userType={UserType.Developer} />
     </main>
   );

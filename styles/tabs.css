@@ -1,6 +1,3 @@
-@import 'radix-ui/colors/black-alpha.css';
-/* TODO: Use Radix colors and update variable refs */
-
 .TabsRoot {
   display: flex;
   flex-direction: column;
@@ -37,7 +34,7 @@
 .TabsTrigger:hover {
   color: var(--violet-11);
 }
-.TabsTrigger[data-state='active'] {
+.TabsTrigger[data-state="active"] {
   color: var(--violet-11);
   box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
 }

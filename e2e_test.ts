@@ -1,4 +1,4 @@
-import { createHandler, ServeHandlerInfo } from "$fresh/server.ts";
+import { createHandler } from "$fresh/server.ts";
 import manifest from "@/fresh.gen.ts";
 import {
   assert,
@@ -7,16 +7,11 @@ import {
   assertInstanceOf,
 } from "std/assert/mod.ts";
 
-const CONN_INFO: ServeHandlerInfo = {
-  localAddr: { hostname: "localhost", port: 8000, transport: "tcp" },
-  remoteAddr: { hostname: "localhost", port: 53496, transport: "tcp" },
-};
-
 Deno.test("[http]", async (test) => {
   const handler = await createHandler(manifest);
 
   await test.step("GET /", async () => {
-    const response = await handler(new Request("http://localhost"), CONN_INFO);
+    const response = await handler(new Request("http://localhost"));
 
     assert(response.ok);
     assertInstanceOf(response.body, ReadableStream);
@@ -30,7 +25,6 @@ Deno.test("[http]", async (test) => {
   await test.step("GET /account", async () => {
     const response = await handler(
       new Request("http://localhost/account"),
-      CONN_INFO,
     );
 
     assertFalse(response.ok);
@@ -45,7 +39,6 @@ Deno.test("[http]", async (test) => {
   await test.step("GET /signout", async () => {
     const response = await handler(
       new Request("http://localhost/signout"),
-      CONN_INFO,
     );
 
     assertFalse(response.ok);

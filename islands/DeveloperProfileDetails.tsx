@@ -37,10 +37,10 @@ export default function DeveloperProfileDetails(
   >(
     developer.availableToWorkStartDate ?? undefined,
   );
-  const [status, setStatus] = useState(
+  const [status, _setStatus] = useState(
     developer.status,
   );
-  const [countryCode, setCountryCode] = useState(
+  const [countryCode, _setCountryCode] = useState(
     developer.countryCode,
   );
   const [openToFullTime, setOpenToFullTime] = useState(
