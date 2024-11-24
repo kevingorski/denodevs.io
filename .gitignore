@@ -1,6 +1,7 @@
 .env
 *.DS_Store
 cov/
+coverage/
 cov.lcov
 .idea
 # Ignore fresh build directory

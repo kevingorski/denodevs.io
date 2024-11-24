@@ -38,9 +38,9 @@
     "db:seed": "deno run --allow-read --allow-env --allow-net tools/seed_submissions.ts",
     "db:reset": "deno run --allow-read --allow-env tools/reset_kv.ts",
     "start": "deno run -A --env --watch=styles/,routes/,utils/ dev.ts",
-    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id GITHUB_CLIENT_ID=test GITHUB_CLIENT_SECRET=test GOOGLE_CLIENT_ID=test GOOGLE_CLIENT_SECRET=test deno test -A --unstable",
+    "test": "KV_PATH=:memory: SITE_BASE_URL=http://localhost:8000 CLICKY_SITE_ID=site_id GITHUB_CLIENT_ID=test GITHUB_CLIENT_SECRET=test GOOGLE_CLIENT_ID=test GOOGLE_CLIENT_SECRET=test deno test -A --coverage",
     "ok": "deno fmt --check && deno lint && deno check main.ts && deno task test",
-    "cov": "deno coverage ./cov/ --lcov --exclude='test.ts' > cov.lcov",
+    "cov": "deno coverage coverage --lcov --exclude='.tsx' --output=cov.lcov",
     "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
     "update:fresh": "deno run -A -r https://fresh.deno.dev/update ."
